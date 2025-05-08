@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to JunkHUB - Access your account">
+    <title>Welcome - JunkHUB</title>
+    <link rel="icon" type="image/pnglogo" href="../Images/teallogo22619-foad-200h.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="C:/Users/Administrator/Desktop/FRONT END JUNKHUB/Sign Up/reset.css">
+    <link rel="stylesheet" href="./prompt.css">
+  </head>
+  <body>
+    <main class="login-container">
+      <div class="login-wrapper">
+        <!-- Left panel -->
+        <section class="left-panel">
+          
+          <a href="../Landing Page/index.html" class="brand-link">
+            <div class="brand">
+              <img src="../Images/teallogo22619-foad-200h.png" alt="JunkHUB Logo" class="brand-logo">
+              <h1 class="brand-name">
+                <span class="brand-highlight">Junk</span>HUB
+              </h1>
+            </div>
+          </a>
+          
+          <div class="welcome-content">
+            <h2 class="welcome-title">Hello!</h2>
+            <p class="welcome-text">
+              Select your account type to access your personalized dashboard and manage your junk removal services
+            </p>
+          </div>
+          
+          <!-- Decorative elements -->
+          <div class="decorative-elements" aria-hidden="true">
+            <div class="deco-rect-1"></div>
+            <div class="deco-rect-2"></div>
+            <div class="deco-rect-3"></div>
+          </div>
+        </section>
+        
+        <!-- Right panel - Login form -->
+        <section class="form-panel">
+          <div class="form-content">
+            <h2 class="form-title">Continue as:</h2>
+            <p class="form-subtitle">Select your account type to proceed</p>
+            
+            <div class="account-selection">
+              <button type="button" class="account-button user-button" onclick="location.href='./sign_in.html'">
+                <div class="button-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                  </svg>
+                </div>
+                <div class="button-text">
+                  <span class="button-title">User</span>
+                  <span class="button-description">I need junk removal services</span>
+                </div>
+              </button>
+              
+              <button type="button" class="account-button owner-button" onclick="location.href='../Error Page/404.html'">
+                <div class="button-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
+                  </svg>
+                </div>
+                <div class="button-text">
+                  <span class="button-title">Owner</span>
+                  <span class="button-description">I provide junk removal services</span>
+                </div>
+              </button>
+            </div>
+            
+            <div class="account-help">
+              <p>Not sure which to choose? <a href="#">Learn about account types</a></p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
