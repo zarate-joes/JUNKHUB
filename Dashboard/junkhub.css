@@ -18,38 +18,38 @@ a {
   background: #f5f7fa;
   margin-top: 55px;
   margin-left: 225px;
-  height: calc(100% - 55px); /* take full height minus header */
-  width: calc(100% - 225px); /* take full width minus sidebar */  
+  height: calc(100% - 55px);
+  width: calc(100% - 225px);
   overflow-x: hidden;
   z-index: 1;
 }
 
 .header {
-  position: fixed; /* <-- make header fixed */
+  position: fixed;
   top: 0;
   right: 0;
   width: 100%;
   height: 55px;
   background: white;
-  width: calc(100% - 225px); /* take full width minus sidebar */
+  width: calc(100% - 225px);
   z-index: 2;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
 
 }
   
 .sidebar {
-  position: fixed; /* <-- make sidebar fixed */
+  position: fixed;
   top: 0;
   left: 0;
   width: 225px;
-  height: 100vh; /* full viewport height */
+  height: 100vh;
   background: linear-gradient(to right, #C9AA00, #FFD700);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 50px;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
-  overflow: hidden; /* prevent sidebar content from scrolling */
+  overflow: hidden;
   z-index: 3;
 }
 
@@ -192,7 +192,7 @@ a {
 }
 
 .notification-icon.clicked {
-  color: #FFD700; /* Color when clicked */
+  color: #FFD700;
 }
 
 .badge {
@@ -208,7 +208,7 @@ a {
 
 
 .arrow {
-  position: absolute; /* NOT fixed */
+  position: absolute;
   margin-top: 175px;
   transform: translateY(-50%);
   width: 50px;
