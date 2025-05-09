@@ -221,7 +221,7 @@ a {
   justify-content: center;
   cursor: pointer;
   border-radius: 50%;
-  z-index: 1; /* keep above slides */
+  z-index: 1; 
   user-select: none;
   transition: background 0.3s, transform 0.2s;
 }
