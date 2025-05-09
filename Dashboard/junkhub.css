@@ -4,12 +4,7 @@ body {
   background: white;
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
-  /* Remove the two lines below */
-  /* height: 100vh; */
-  /* display: flex; */
 }
-
-
 
 a {
   text-decoration: none;
@@ -21,7 +16,7 @@ a {
   bottom: 0;
   height: 100vh;
   background: #f5f7fa;
-  margin-top: 55px; /* height of header */
+  margin-top: 55px;
   margin-left: 225px;
   height: calc(100% - 55px); /* take full height minus header */
   width: calc(100% - 225px); /* take full width minus sidebar */  
