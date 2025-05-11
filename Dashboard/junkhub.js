@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const popupName = document.getElementById('popup-name');
   const popupPrice = document.getElementById('popup-price');
   const popupAvailable = document.getElementById('popup-available');
+  const popupShopName = document.getElementById('popup-shop-name');
 
   document.querySelectorAll('.product-container').forEach(container => {
     container.addEventListener('click', () => {
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
       popupName.textContent = container.dataset.name;
       popupPrice.textContent = container.dataset.price;
       popupAvailable.textContent = container.dataset.available;
+      popupShopName.textContent = container.dataset.shop;
 
       overlay.style.display = 'flex';
     });
@@ -37,7 +39,17 @@ if (backButton) {
 }
 
 
+ 
+document.querySelector('.Cart-icon').addEventListener('click', function () {
+  document.getElementById('cartOverlay').style.display = 'flex';
+});
 
+// Optional: close overlay on click outside cart-content
+document.getElementById('cartOverlay').addEventListener('click', function (e) {
+  if (!e.target.closest('.cart-content')) {
+    this.style.display = 'none';
+  }
+});
 
 
   let currentIndex = 0;
