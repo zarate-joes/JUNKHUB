@@ -12,16 +12,45 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  document.querySelectorAll('.product-container0, .product-container').forEach(item => {
-    item.addEventListener('click', () => {
-      if (item.classList.contains('clicked')) {
-        item.classList.remove('clicked');
-      } else {
-        document.querySelectorAll('.product-container0, .product-container').forEach(el => el.classList.remove('clicked'));
-        item.classList.add('clicked');
-      }
+
+  const overlay = document.getElementById('overlay');
+  const popupImg = document.getElementById('popup-img');
+  const popupName = document.getElementById('popup-name');
+  const popupPrice = document.getElementById('popup-price');
+  const popupAvailable = document.getElementById('popup-available');
+
+  document.querySelectorAll('.product-container').forEach(container => {
+    container.addEventListener('click', () => {
+      popupImg.src = container.dataset.img;
+      popupName.textContent = container.dataset.name;
+      popupPrice.textContent = container.dataset.price;
+      popupAvailable.textContent = container.dataset.available;
+
+      overlay.style.display = 'flex';
     });
   });
+
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   let currentIndex = 0;
   const slides = document.getElementById("slides");
