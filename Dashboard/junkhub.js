@@ -30,9 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  document.getElementById('closeBtn').addEventListener('click', () => {
-    overlay.style.display = 'none';
-  });
 
 
 

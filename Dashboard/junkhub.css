@@ -498,9 +498,64 @@ a {
 
 /* Popup styling */
 .popup {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  text-align: center;
+  display: flex; /* Make popup layout side-by-side */
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  text-align: left;
+  line-height: 0.3;
+  gap: 25px; /* Space between image and text */
+}
+
+.popup-left {
+  flex: 1;
+}
+
+.popup-left img {
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+}
+
+#popup-name {
+  font-size: 18px;       /* Adjust size */
+  font-weight: bold;     /* Make it bold */
+  color: #000000;           /* Optional: adjust color */
+  margin: 20px 0 0 0;        /* Optional: adjust spacing */
+}
+
+.popup-right {
+  width: 450px;
+  display: flex;
+    flex-direction: column; /* Stack children vertically */
+      align-items: flex-start; /* Align to the left */
+
+
+}
+
+.description-box {
+  background: #f3f3f3;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Ensure it fills the .popup-right section */
+  height: 200px;
+
+}
+
+.add-to-cart {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-to-cart:hover {
+  background-color: #0056b3;
 }
