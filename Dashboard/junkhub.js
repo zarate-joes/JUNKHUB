@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-
   const overlay = document.getElementById('overlay');
   const popupImg = document.getElementById('popup-img');
   const popupName = document.getElementById('popup-name');
@@ -29,21 +28,13 @@ document.addEventListener('DOMContentLoaded', function () {
       overlay.style.display = 'flex';
     });
   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+const backButton = document.getElementById('back-button');
+if (backButton) {
+  backButton.addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+}
 
 
 
