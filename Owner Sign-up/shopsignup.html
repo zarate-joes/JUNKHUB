@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JunkHUB - Create Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shopsignup.css">
+</head>
+<body>
+  <div class="signup-container">
+    <div class="signup-wrapper">
+      <!-- Top Panel (formerly Left Panel / Brand section) -->
+      <div class="top-panel">
+        <div class="brand-container">
+          <a href="../Landing Page/index.html" class="brand-link">
+            <h1 class="brand-name">Welcome to 
+                <img src="https://c.animaapp.com/X9op69Wd/img/teallogo-2@2x.png" alt="JunkHUB Logo" class="brand-logo">
+                <span class="brand-highlight">Junk</span>
+                HUB</h1>
+          </a>
+          
+          <div class="welcome-content">
+            <h2 class="welcome-title">Set up your shop to start selling recyclable materials</h2>
+            <p class="welcome-text">Create your shop profile to connect with customers looking for recyclable materials.</p>
+          </div>
+        </div>
+        
+        <div class="decorative-elements">
+          <div class="deco-rect-1"></div>
+          <div class="deco-rect-2"></div>
+        </div>
+      </div>
+      
+      <!-- Form Panel -->
+      <div class="form-panel">
+        <!-- Progress indicator -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-completed"></div>
+          </div>
+          <div class="progress-steps">
+            <div class="step active">
+              <div class="step-number">1</div>
+              <div class="step-label">Shop Details</div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-label">Materials</div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-label">Review & Launch</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Form sections -->
+        <div class="form-content">
+          <section class="form-section">
+            <h2 class="section-title">Basic Information</h2>
+            
+            <div class="form-group">
+              <label for="shopName">Shop Name <span class="required">*</span></label>
+              <input type="text" id="shopName" placeholder="Enter your shop name" required>
+              <p class="form-hint">This will be displayed to customers on JunkHub</p>
+            </div>
+            
+            <div class="form-group">
+              <label for="shopDescription">Shop Description</label>
+              <textarea id="shopDescription" rows="4" placeholder="Describe your shop and what you offer"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="shopLogo">Shop Logo</label>
+              <div class="file-upload-container">
+                <div class="file-upload-box">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                  <p class="upload-title">Drag and drop your logo here</p>
+                  <p class="upload-subtitle">or click to browse files</p>
+                  <p class="upload-info">Recommended size: 500 x 500 pixels</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <section class="form-section">
+            <h2 class="section-title">Contact Information</h2>
+            
+            <div class="form-group">
+              <label for="contactPhone">Contact Phone <span class="required">*</span></label>
+              <input type="tel" id="contactPhone" placeholder="Enter your phone number" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="contactEmail">Contact Email <span class="required">*</span></label>
+              <input type="email" id="contactEmail" placeholder="Enter your email address" required>
+            </div>
+          </section>
+          
+          <section class="form-section">
+            <h2 class="section-title">Location</h2>
+            
+            <div class="form-group">
+              <label for="fullAddress">Full Address <span class="required">*</span></label>
+              <input type="text" id="fullAddress" placeholder="Enter your full address" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="barangay">Barangay <span class="required">*</span></label>
+              <select id="barangay" required>
+                <option value="" disabled selected>Select your barangay</option>
+                <option value="barangay1">Barangay 1</option>
+                <option value="barangay2">Barangay 2</option>
+                <option value="barangay3">Barangay 3</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>Pin Your Location</label>
+              <div class="map-container">
+                <p class="map-placeholder">Map Placeholder<br>Click to set your exact location</p>
+              </div>
+              <p class="form-hint">This helps buyers find your shop easily</p>
+            </div>
+          </section>
+          
+          
+          <section class="form-section">
+            <h2 class="section-title">Business Hours</h2>
+            
+            <div class="form-group">
+              <label for="businessHours">When are you open for business?</label>
+              <select id="businessHours">
+                <option value="everyday">Everyday (8 AM - 5 PM)</option>
+                <option value="weekdays">Weekdays (8 AM - 5 PM)</option>
+                <option value="weekends">Weekends (8 AM - 5 PM)</option>
+                <option value="custom">Custom Hours</option>
+              </select>
+            </div>
+          </section>
+          
+          <div class="form-actions">
+            <button class="back-button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              BACK
+            </button>
+            <button class="continue-button">
+              CONTINUE
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

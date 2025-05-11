@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./reset.css">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <main class="sign-up-container">
@@ -50,30 +50,35 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required>
+                <input type="text" id="firstName" name="firstName" placeholder="ex. Chidrick" required>
               </div>
               
               <div class="form-group">
                 <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                <input type="text" id="lastName" name="lastName" placeholder="ex. Galario" required>
               </div>
             </div>
             
             <div class="form-group">
               <label for="contactNumber">Contact Number:</label>
-              <input type="tel" id="contactNumber" name="contactNumber" placeholder="Enter your mobile number" pattern="[0-9]+" required>
+              <input type="tel" id="contactNumber" name="contactNumber" placeholder="ex. 09123456789" pattern="[0-9]+" required>
             </div>
             
             <div class="form-group">
               <label for="email">Email:</label>
-              <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+              <input type="email" id="email" name="email" placeholder="ex. your@email.com" required>
             </div>
             
             <div class="form-group">
               <label for="password">Password:</label>
               <input type="password" id="password" name="password" placeholder="Create a secure password" required minlength="8">
             </div>
-            
+            <ul class="passreq" aria-label="Password requirements">
+              <li>•  At least 12 characters long.</li>
+              <li>•  Include uppercase (A-Z) and lowercase (a-z) letters.</li>
+              <li>•  Include numbers (0-9).</li>
+            </ul>
+
             <div class="form-group checkbox-group">
               <input type="checkbox" id="terms" name="terms" required>
               <label for="terms">

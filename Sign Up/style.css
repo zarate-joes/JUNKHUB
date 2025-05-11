@@ -2,7 +2,7 @@
 
 /* Base variables */
 :root {
-  --color-primary: #FFE664;
+  --color-primary: #ffe664;
   --color-primary-dark: #FFD700;
   --color-primary1: #FFF68E;
   --color-secondary: #3f00ff;
@@ -253,6 +253,11 @@ a:hover {
 .login-link {
   margin-top: var(--spacing-xl);
   text-align: center;
+  font-size: 0.9rem;
+}
+
+.passreq {
+  text-align: left;
   font-size: 0.9rem;
 }
 
