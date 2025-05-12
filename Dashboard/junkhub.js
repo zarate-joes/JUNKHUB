@@ -30,29 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
       overlay.style.display = 'flex';
     });
   });
-<<<<<<< HEAD
-=======
-  
-const backButton = document.getElementById('back-button');
-if (backButton) {
-  backButton.addEventListener('click', () => {
-    overlay.style.display = 'none';
-  });
-}
-
-
- 
-document.querySelector('.Cart-icon').addEventListener('click', function () {
-  document.getElementById('cartOverlay').style.display = 'flex';
-});
-
-// Optional: close overlay on click outside cart-content
-document.getElementById('cartOverlay').addEventListener('click', function (e) {
-  if (!e.target.closest('.cart-content')) {
-    this.style.display = 'none';
-  }
-});
->>>>>>> c500c4a02f795acfd8f9addd11c6aa706040d43c
 
   const backButton = document.getElementById('back-button');
   if (backButton) {
