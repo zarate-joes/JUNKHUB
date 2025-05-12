@@ -144,3 +144,8 @@ document.querySelector('.add-to-cart').addEventListener('click', function () {
     cartBadge.style.display = 'inline-block';
   });
 });
+
+
+
+
+
