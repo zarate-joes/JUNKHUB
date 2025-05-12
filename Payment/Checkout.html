@@ -227,7 +227,7 @@
             creditCardFields.style.display = 'none';
             paypalNotice.classList.remove('hidden');
             
-            
+            // Make credit card fields not required
             document.querySelectorAll('#credit-card-fields input').forEach(input => {
               input.required = false;
             });
