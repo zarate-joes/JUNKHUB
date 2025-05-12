@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout</title>
+  <link rel="stylesheet" href="Checkout.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
@@ -113,35 +114,31 @@
           <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div class="space-y-4">
               <div class="flex items-center">
-                <input type="radio" id="credit-card" name="payment" checked class="h-4 w-4 text-yellow-500 focus:ring-yellow-400">
-                <label for="credit-card" class="ml-3 block text-sm font-medium text-gray-700">Credit Card</label>
+                <input type="radio" id="gcash" name="payment" checked class="h-4 w-4 text-yellow-500 focus:ring-yellow-400">
+                <label for="gcash" class="ml-3 block text-sm font-medium text-gray-700">G-Cash</label>
               </div>
-              <div id="credit-card-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div class="md:col-span-2">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Card Number *</label>
-                  <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Expiration Date *</label>
-                  <input type="text" id="expiry-date" placeholder="MM/YY" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Security Code *</label>
-                  <input type="text" id="cvc" placeholder="CVC" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-                </div>
+              <div class="flex items-center">
+                <input type="radio" id="cod" name="payment" class="h-4 w-4 text-yellow-500 focus:ring-yellow-400">
+                <label for="cod" class="ml-3 block text-sm font-medium text-gray-700">Cash on Delivery (COD)</label>
               </div>
-              
-              <div class="border-t pt-4 mt-4">
-                <div class="flex items-center">
-                  <input type="radio" id="paypal" name="payment" class="h-4 w-4 text-yellow-500 focus:ring-yellow-400">
-                  <label for="paypal" class="ml-3 block text-sm font-medium text-gray-700">PayPal</label>
-                </div>
-                <div id="paypal-notice" class="bg-yellow-100 border-l-4 border-yellow-400 p-4 mt-4 hidden">
-                  <p class="text-sm text-yellow-700">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    You will be redirected to PayPal to complete your payment
-                  </p>
-                </div>
+
+              <!-- GCash Notice -->
+              <div id="gcash-notice" class="bg-yellow-100 border-l-4 border-yellow-400 p-4 mt-4">
+                <p class="text-sm text-yellow-700">
+                  <i class="fas fa-info-circle mr-2"></i>
+                  You will receive G-Cash payment instructions after placing the order.
+                </p>
+              </div>
+
+              <!-- GCash Number Input (Initially hidden) -->
+              <div id="gcash-input-box" class="gcash-slide hidden mt-4">
+                <!-- COD Address Input (Initially hidden) -->
+<div id="cod-address-box" class="hidden mt-4">
+  <label for="cod-address" class="block text-sm font-medium text-gray-700">Confirm Delivery Address for COD</label>
+  <textarea id="cod-address" name="cod-address" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500" placeholder="Your address for delivery..."></textarea>
+</div>
+                <label for="gcash-number" class="block text-sm font-medium text-gray-700">Enter G-Cash Number</label>
+                <input type="text" id="gcash-number" name="gcash-number" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500" placeholder="Enter G-Cash number">
               </div>
             </div>
           </div>
@@ -197,273 +194,81 @@
           <span>Secure checkout</span>
         </div>
       </div>
+      <form id="checkout-form">
+  <!-- Include inputs with required fields like name, address, etc. -->
+  <!-- Payment radio buttons -->
+  <input type="radio" name="payment" id="credit-card" value="credit-card" required>
+  <input type="radio" name="payment" id="paypal" value="paypal" required>
+  <input type="radio" name="payment" id="gcash" value="gcash" required>
+  <input type="radio" name="payment" id="cod" value="cod" required>
+
+  <!-- Payment Fields -->
+  <div id="credit-card-fields">
+    <input type="text" id="card-number" required>
+    <input type="text" id="expiry-date" required>
+    <input type="text" id="cvc" required>
+  </div>
+
+  <div id="paypal-notice">PayPal selected. You will be redirected after confirmation.</div>
+  <div id="gcash-input-box"><input type="text" required placeholder="GCash Number"></div>
+
+  <button type="submit" id="complete-order">Complete Order</button>
+</form>
     </aside>
   </main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // DOM Elements
-      const checkoutForm = document.getElementById('checkout-form');
-      const completeOrderBtn = document.getElementById('complete-order');
-      const paymentMethods = document.querySelectorAll('input[name="payment"]');
-      const creditCardFields = document.getElementById('credit-card-fields');
-      const paypalNotice = document.getElementById('paypal-notice');
-      
-      // Initialize
-      paypalNotice.style.display = 'none';
-      
-      // Payment method toggle
-      paymentMethods.forEach(method => {
-        method.addEventListener('change', function() {
-          if (this.id === 'credit-card') {
-            creditCardFields.style.display = 'grid';
-            paypalNotice.classList.add('hidden');
-            
-            // Make credit card fields required
-            document.querySelectorAll('#credit-card-fields input').forEach(input => {
-              input.required = true;
-            });
-          } else if (this.id === 'paypal') {
-            creditCardFields.style.display = 'none';
-            paypalNotice.classList.remove('hidden');
-            
-            // Make credit card fields not required
-            document.querySelectorAll('#credit-card-fields input').forEach(input => {
-              input.required = false;
-            });
-          }
-        });
-      });
-      
-      
-      checkoutForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (validateForm()) {
-          
-          completeOrderBtn.disabled = true;
-          completeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-          
-         
-          processPayment()
-            .then(orderDetails => {
-              // On success
-              showSuccessMessage(orderDetails);
-              completeOrderBtn.innerHTML = 'Order Complete!';
-              
-              // In a real app, you would redirect to confirmation page
-              // window.location.href = '/order-confirmation.html';
-            })
-            .catch(error => {
-              // On error
-              showErrorMessage(error);
-              completeOrderBtn.disabled = false;
-              completeOrderBtn.innerHTML = 'Complete Order';
-            });
+  document.addEventListener('DOMContentLoaded', function() {
+    const checkoutForm = document.getElementById('checkout-form');
+    const gcashRadio = document.getElementById('gcash');
+    const codRadio = document.getElementById('cod');
+    const gcashNotice = document.getElementById('gcash-notice');
+    const gcashInputBox = document.getElementById('gcash-input-box');
+    const codAddressBox = document.getElementById('cod-address-box');
+    const completeOrderButton = document.getElementById('complete-order');
+
+    function togglePaymentSections() {
+      if (gcashRadio.checked) {
+        gcashNotice.style.display = 'block';
+        gcashInputBox.classList.remove('hidden');
+        codAddressBox.classList.add('hidden');
+      } else if (codRadio.checked) {
+        gcashNotice.style.display = 'none';
+        gcashInputBox.classList.add('hidden');
+        codAddressBox.classList.remove('hidden');
+      }
+    }
+
+    gcashRadio.addEventListener('change', togglePaymentSections);
+    codRadio.addEventListener('change', togglePaymentSections);
+
+    checkoutForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const paymentMethod = document.querySelector('input[name="payment"]:checked').id;
+
+      if (paymentMethod === 'gcash') {
+        const gcashNumber = document.getElementById('gcash-number').value.trim();
+        if (!gcashNumber) {
+          alert('Please enter your G-Cash number.');
+          return;
         }
-      });
-      
-      
-      function validateForm() {
-        let isValid = true;
-        const requiredFields = checkoutForm.querySelectorAll('[required]');
-        
-        // Reset error states
-        document.querySelectorAll('.border-red-500').forEach(el => {
-          el.classList.remove('border-red-500');
-        });
-        document.querySelectorAll('.error-message').forEach(el => {
-          el.remove();
-        });
-        
-        // Validate required fields
-        requiredFields.forEach(field => {
-          if (!field.value.trim()) {
-            field.classList.add('border-red-500');
-            isValid = false;
-            
-            // Create error message if it doesn't exist
-            const errorMsg = document.createElement('p');
-            errorMsg.className = 'error-message text-red-500 text-xs mt-1';
-            errorMsg.textContent = 'This field is required';
-            field.parentNode.appendChild(errorMsg);
-          }
-        });
-        
-        // Additional credit card validation if selected
-        if (document.getElementById('credit-card').checked) {
-          const cardNumber = document.getElementById('card-number').value.replace(/\s+/g, '');
-          const expiryDate = document.getElementById('expiry-date').value;
-          const cvc = document.getElementById('cvc').value;
-          
-          if (!validateCardNumber(cardNumber)) {
-            document.getElementById('card-number').classList.add('border-red-500');
-            const errorMsg = document.createElement('p');
-            errorMsg.className = 'error-message text-red-500 text-xs mt-1';
-            errorMsg.textContent = 'Invalid card number';
-            document.getElementById('card-number').parentNode.appendChild(errorMsg);
-            isValid = false;
-          }
-          
-          if (!validateExpiryDate(expiryDate)) {
-            document.getElementById('expiry-date').classList.add('border-red-500');
-            const errorMsg = document.createElement('p');
-            errorMsg.className = 'error-message text-red-500 text-xs mt-1';
-            errorMsg.textContent = 'Invalid expiration date';
-            document.getElementById('expiry-date').parentNode.appendChild(errorMsg);
-            isValid = false;
-          }
-          
-          if (!validateCVC(cvc)) {
-            document.getElementById('cvc').classList.add('border-red-500');
-            const errorMsg = document.createElement('p');
-            errorMsg.className = 'error-message text-red-500 text-xs mt-1';
-            errorMsg.textContent = 'Invalid security code';
-            document.getElementById('cvc').parentNode.appendChild(errorMsg);
-            isValid = false;
-          }
+      } else if (paymentMethod === 'cod') {
+        const codAddress = document.getElementById('cod-address').value.trim();
+        if (!codAddress) {
+          alert('Please enter your address for COD.');
+          return;
         }
-        
-        return isValid;
       }
-      
-      // Card validation helpers
-      function validateCardNumber(number) {
-        // Simple Luhn algorithm check
-        return /^\d{13,19}$/.test(number) && luhnCheck(number);
-      }
-      
-      function validateExpiryDate(date) {
-        if (!/^\d{2}\/\d{2}$/.test(date)) return false;
-        
-        const [month, year] = date.split('/').map(Number);
-        const currentYear = new Date().getFullYear() % 100;
-        const currentMonth = new Date().getMonth() + 1;
-        
-        if (year < currentYear || (year === currentYear && month < currentMonth)) {
-          return false;
-        }
-        
-        return month >= 1 && month <= 12;
-      }
-      
-      function validateCVC(cvc) {
-        return /^\d{3,4}$/.test(cvc);
-      }
-      
-      function luhnCheck(number) {
-        let sum = 0;
-        let alternate = false;
-        
-        for (let i = number.length - 1; i >= 0; i--) {
-          let digit = parseInt(number.charAt(i), 10);
-          
-          if (alternate) {
-            digit *= 2;
-            if (digit > 9) {
-              digit -= 9;
-            }
-          }
-          
-          sum += digit;
-          alternate = !alternate;
-        }
-        
-        return sum % 10 === 0;
-      }
-      
-      // Simulate payment processing
-      function processPayment() {
-        return new Promise((resolve, reject) => {
-          // Simulate API call delay
-          setTimeout(() => {
-            // 80% chance of success for demo purposes
-            if (Math.random() < 0.8) {
-              resolve({
-                orderId: 'ORD-' + Math.floor(Math.random() * 1000000),
-                amount: document.querySelector('.order-total').textContent,
-                date: new Date().toLocaleString()
-              });
-            } else {
-              reject(new Error('Payment processing failed. Please try again or use a different payment method.'));
-            }
-          }, 2000);
-        });
-      }
-      
-      // Show success message
-      function showSuccessMessage(orderDetails) {
-        const successHTML = `
-          <div class="bg-green-100 border-l-4 border-green-500 p-4 mb-6">
-            <div class="flex">
-              <div class="flex-shrink-0">
-                <i class="fas fa-check-circle text-green-500"></i>
-              </div>
-              <div class="ml-3">
-                <h3 class="text-sm font-medium text-green-800">Order successful!</h3>
-                <div class="mt-2 text-sm text-green-700">
-                  <p>Order ID: ${orderDetails.orderId}</p>
-                  <p>Amount: ${orderDetails.amount}</p>
-                  <p>Date: ${orderDetails.date}</p>
-                  <p class="mt-2">A confirmation has been sent to your email.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        document.getElementById('messages-container').innerHTML = successHTML;
-      }
-      
-      // Show error message
-      function showErrorMessage(error) {
-        const errorHTML = `
-          <div class="bg-red-100 border-l-4 border-red-500 p-4 mb-6">
-            <div class="flex">
-              <div class="flex-shrink-0">
-                <i class="fas fa-exclamation-circle text-red-500"></i>
-              </div>
-              <div class="ml-3">
-                <h3 class="text-sm font-medium text-red-800">Payment Error</h3>
-                <div class="mt-2 text-sm text-red-700">
-                  <p>${error.message}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        document.getElementById('messages-container').innerHTML = errorHTML;
-      }
-      
-      // Format card number input
-      const cardNumberInput = document.getElementById('card-number');
-      if (cardNumberInput) {
-        cardNumberInput.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/\s+/g, '');
-          if (value.length > 16) value = value.substr(0, 16);
-          
-          // Add space every 4 digits
-          value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-          e.target.value = value;
-        });
-      }
-      
-      // Format expiry date input
-      const expiryDateInput = document.getElementById('expiry-date');
-      if (expiryDateInput) {
-        expiryDateInput.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/\D/g, '');
-          if (value.length > 4) value = value.substr(0, 4);
-          
-          // Add slash after 2 digits
-          if (value.length > 2) {
-            value = value.replace(/^(\d{2})/, '$1/');
-          }
-          e.target.value = value;
-        });
-      }
+
+      alert('Order placed successfully!');
     });
-  </script>
+
+    // Initialize on page load
+    togglePaymentSections();
+  });
+</script>
+
+  <script src="../Payment/Checkout.js"></script> <!-- Link to the external JS file -->
+
 </body>
 </html>

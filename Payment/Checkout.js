@@ -5,39 +5,53 @@ document.addEventListener('DOMContentLoaded', function() {
   const paymentMethods = document.querySelectorAll('input[name="payment"]');
   const creditCardFields = document.getElementById('credit-card-fields');
   const paypalNotice = document.getElementById('paypal-notice');
+  const gcashRadio = document.getElementById('gcash');
+  const codRadio = document.getElementById('cod');
+  const gcashInputBox = document.getElementById('gcash-input-box');
   
   // Initialize
   paypalNotice.style.display = 'none';
-  
+  gcashInputBox.style.display = 'none'; // Initially hide GCash input box
+
   // Payment method toggle
   paymentMethods.forEach(method => {
     method.addEventListener('change', function() {
       if (this.id === 'credit-card') {
         creditCardFields.style.display = 'block';
         paypalNotice.style.display = 'none';
+        gcashInputBox.style.display = 'none'; // Hide GCash input when Credit Card is selected
       } else if (this.id === 'paypal') {
         creditCardFields.style.display = 'none';
         paypalNotice.style.display = 'block';
+        gcashInputBox.style.display = 'none'; // Hide GCash input when PayPal is selected
+      } else if (this.id === 'gcash') {
+        gcashInputBox.style.display = 'block'; // Show GCash input box
+        creditCardFields.style.display = 'none'; // Hide Credit Card fields
+        paypalNotice.style.display = 'none'; // Hide PayPal notice
+      } else if (this.id === 'cod') {
+        gcashInputBox.style.display = 'none'; // Hide GCash input box
+        creditCardFields.style.display = 'none'; // Hide Credit Card fields
+        paypalNotice.style.display = 'none'; // Hide PayPal notice
       }
     });
   });
-  
+
   // Form validation
   checkoutForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     if (validateForm()) {
       // Show loading state
       completeOrderBtn.disabled = true;
       completeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-      
+
       // Simulate payment processing
       processPayment()
         .then(orderDetails => {
           // On success
           showSuccessMessage(orderDetails);
           completeOrderBtn.innerHTML = 'Order Complete!';
-          
+
           // In a real app, you would redirect to confirmation page
           // window.location.href = '/order-confirmation.html';
         })
@@ -49,20 +63,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
   });
-  
+
   // Form validation function
   function validateForm() {
     let isValid = true;
     const requiredFields = checkoutForm.querySelectorAll('[required]');
-    
+
     // Validate required fields
     requiredFields.forEach(field => {
       field.classList.remove('border-red-500');
-      
+
       if (!field.value.trim()) {
         field.classList.add('border-red-500');
         isValid = false;
-        
+
         // Create error message if it doesn't exist
         if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('error-message')) {
           const errorMsg = document.createElement('p');
@@ -77,77 +91,77 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     });
-    
+
     // Additional credit card validation if selected
     if (document.getElementById('credit-card').checked) {
       const cardNumber = document.getElementById('card-number').value.replace(/\s+/g, '');
       const expiryDate = document.getElementById('expiry-date').value;
       const cvc = document.getElementById('cvc').value;
-      
+
       if (!validateCardNumber(cardNumber)) {
         document.getElementById('card-number').classList.add('border-red-500');
         isValid = false;
       }
-      
+
       if (!validateExpiryDate(expiryDate)) {
         document.getElementById('expiry-date').classList.add('border-red-500');
         isValid = false;
       }
-      
+
       if (!validateCVC(cvc)) {
         document.getElementById('cvc').classList.add('border-red-500');
         isValid = false;
       }
     }
-    
+
     return isValid;
   }
-  
+
   // Card validation helpers
   function validateCardNumber(number) {
     // Simple Luhn algorithm check
     return /^\d{13,19}$/.test(number) && luhnCheck(number);
   }
-  
+
   function validateExpiryDate(date) {
     if (!/^\d{2}\/\d{2}$/.test(date)) return false;
-    
+
     const [month, year] = date.split('/').map(Number);
     const currentYear = new Date().getFullYear() % 100;
     const currentMonth = new Date().getMonth() + 1;
-    
+
     if (year < currentYear || (year === currentYear && month < currentMonth)) {
       return false;
     }
-    
+
     return month >= 1 && month <= 12;
   }
-  
+
   function validateCVC(cvc) {
     return /^\d{3,4}$/.test(cvc);
   }
-  
+
   function luhnCheck(number) {
     let sum = 0;
     let alternate = false;
-    
+
     for (let i = number.length - 1; i >= 0; i--) {
       let digit = parseInt(number.charAt(i), 10);
-      
+
       if (alternate) {
         digit *= 2;
         if (digit > 9) {
           digit -= 9;
         }
       }
-      
+
       sum += digit;
       alternate = !alternate;
     }
-    
+
     return sum % 10 === 0;
   }
-  
+
   // Simulate payment processing
   function processPayment() {
     return new Promise((resolve, reject) => {
@@ -166,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 2000);
     });
   }
-  
+
   // Show success message
   function showSuccessMessage(orderDetails) {
     const successHTML = `
@@ -187,10 +201,10 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
     `;
-    
+
     document.getElementById('messages-container').innerHTML = successHTML;
   }
-  
+
   // Show error message
   function showErrorMessage(error) {
     const errorHTML = `
@@ -208,30 +222,30 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
     `;
-    
+
     document.getElementById('messages-container').innerHTML = errorHTML;
   }
-  
+
   // Format card number input
   const cardNumberInput = document.getElementById('card-number');
   if (cardNumberInput) {
     cardNumberInput.addEventListener('input', function(e) {
       let value = e.target.value.replace(/\s+/g, '');
       if (value.length > 16) value = value.substr(0, 16);
-      
+
       // Add space every 4 digits
       value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
       e.target.value = value;
     });
   }
-  
+
   // Format expiry date input
   const expiryDateInput = document.getElementById('expiry-date');
   if (expiryDateInput) {
     expiryDateInput.addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
       if (value.length > 4) value = value.substr(0, 4);
-      
+
       // Add slash after 2 digits
       if (value.length > 2) {
         value = value.replace(/^(\d{2})/, '$1/');
