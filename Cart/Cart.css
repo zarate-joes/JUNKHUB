@@ -27,7 +27,6 @@ a {
 .mainbg {
   display: flex;
   justify-content: center;
-  align-items: center;
   height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #ffe664 100%);
   overflow-x: hidden;
@@ -36,10 +35,11 @@ a {
 }
 
 .container {
-    position: absolute;
-display: flex;
-  width: 80%; /* or any fixed/relative size */
-  height: 100vh; /* or any fixed/relative size */
+  position: relative;
+  display: flex;
+  flex-direction: column; /* stack items vertically */
+  width: 80%;
+  height: 100vh;
   background: white;
   border-radius: 5px;
   z-index: 1;
@@ -238,21 +238,17 @@ display: flex;
   color: #FFD700; 
 }
 
-.divider-line1 {
-  position: relative;
-  top: 120px;
-  right:auto;
-  height: 1px;
-  width: 95%;
-  background-color: #858383;
-  z-index: 1;
-  bottom: 0;
+.text-cart {
+  margin-top: 70px;
+  margin-left: 20px;
+  font-size: 25px;
+  color: #000;
+  white-space: nowrap;
 }
-
-.text-cart{
-margin-top: 65px;
-margin-left: 20px;
-font-size: 25px;
-color: #000;
-
+.divider-line1 {
+  margin-top: 0px;
+  margin-left: 20px;
+  width: 60%; /* aligns with h1 left margin */
+  height: 1px;
+  background-color: #858383;
 }
