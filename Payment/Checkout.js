@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
   // DOM Elements
   const checkoutForm = document.getElementById('checkout-form');
