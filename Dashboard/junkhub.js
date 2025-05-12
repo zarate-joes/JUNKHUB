@@ -14,24 +14,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Popup functionality
 
-  const overlay = document.getElementById('overlay');
-  const popupImg = document.getElementById('popup-img');
-  const popupName = document.getElementById('popup-name');
-  const popupPrice = document.getElementById('popup-price');
-  const popupAvailable = document.getElementById('popup-available');
-  const popupShopName = document.getElementById('popup-shop-name');
+ const overlay = document.getElementById('overlay');
+const popupImg = document.getElementById('popup-img');
+const popupName = document.getElementById('popup-name');
+const popupPrice = document.getElementById('popup-price');
+const popupAvailable = document.getElementById('popup-available');
+const popupShopName = document.getElementById('popup-shop-name');
 
-  document.querySelectorAll('.product-container').forEach(container => {
-    container.addEventListener('click', () => {
-      popupImg.src = container.dataset.img;
-      popupName.textContent = container.dataset.name;
-      popupPrice.textContent = container.dataset.price;
-      popupAvailable.textContent = container.dataset.available;
-      popupShopName.textContent = container.dataset.shop;
+// Updated selector to include both `.product-container` and `.product-container0`
+document.querySelectorAll('.product-container, .product-container0').forEach(container => {
+  container.addEventListener('click', () => {
+    popupImg.src = container.dataset.img;
+    popupName.textContent = container.dataset.name;
+    popupPrice.textContent = container.dataset.price;
+    popupAvailable.textContent = container.dataset.available;
+    popupShopName.textContent = container.dataset.shop;
 
-      overlay.style.display = 'flex';
-    });
+    overlay.style.display = 'flex';
   });
+});
 
 
   // Back button functionality
@@ -129,13 +130,14 @@ document.querySelector('.add-to-cart').addEventListener('click', function () {
   flyIcon.style.setProperty('--y', `${deltaY}px`);
 
   requestAnimationFrame(() => {
-    flyIcon.style.animation = 'fly-to-cart 1.5s ease-in-out forwards';
+    flyIcon.style.animation = 'fly-to-cart 1s ease-in-out forwards';
   });
 
   flyIcon.addEventListener('animationend', () => {
     flyIcon.remove();
 
     // Show and update badge
+
     let count = parseInt(cartBadge.textContent) || 0;
     count++;
     cartBadge.textContent = count;

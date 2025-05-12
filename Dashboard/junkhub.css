@@ -18,7 +18,7 @@ a {
   right: 0;
   bottom: 0;
   height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #f1df88 100%);
+  background: white;
   margin-top: 55px;
   margin-left: 225px;
   height: calc(100% - 55px);
@@ -404,7 +404,7 @@ a {
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
   width: 450px;
   height: 200px;
-  margin-left: 60px;
+  margin-left: 0px;
   color: #000;
   border: 0.5px solid #000000;
   cursor: pointer;
