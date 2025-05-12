@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // Popup functionality
+  
   const overlay = document.getElementById('overlay');
   const popupImg = document.getElementById('popup-img');
   const popupName = document.getElementById('popup-name');
@@ -31,12 +33,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+
+  // Back button functionality
+
   const backButton = document.getElementById('back-button');
   if (backButton) {
     backButton.addEventListener('click', () => {
       overlay.style.display = 'none';
     });
   }
+
+  // Slides
 
   let currentIndex = 0;
   const slides = document.getElementById("slides");
@@ -94,21 +101,5 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   showSlide(currentIndex);
-
-  const addToCartButton = document.querySelector('.add-to-cart');
-  if (addToCartButton) {
-    addToCartButton.addEventListener('click', function () {
-      window.location.href = '../Cart/Cart.html'; 
-    });
-  }
-  const cartIcon = document.querySelector('.Cart-icon');
-if (cartIcon) {
-  const goToCart = () => window.location.href = '../Cart/Cart.html'; 
-
-  cartIcon.addEventListener('click', goToCart);
-  cartIcon.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') goToCart();
-  });
-}
 
 });
