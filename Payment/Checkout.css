@@ -3,7 +3,7 @@ body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
-  background: linear-gradient(to right, #fdfbfb, #ebedee);
+  background: linear-gradient(135deg, #f5f7fa 0%, #ffe664 100%);
 }
 
 main {
