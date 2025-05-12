@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard - JunkHub</title>
@@ -13,9 +13,8 @@
 </head>
 <body>
 
-
-  <div class="sidebar" onclick="window.location.href='../Dashboard/junkhub.html'" style="cursor: pointer;"> 
-    <img src="./pngs/Logoo.png" alt="Logo">
+  <div class="sidebar"> 
+    <img src="./pngs/Logoo.png" alt="Logo" onclick="window.location.href='../Error Page/404.html'" style="cursor: pointer;">
     <h1 class="brand-name">
       <span class="text-gold">Junk</span><span class="text-black">HUB</span>
     </h1>
@@ -49,7 +48,7 @@
 
       </div>
 
-      <div class="search-container">
+      <div class="search-container"> 
         <input type="text" placeholder="Search...">
       </div>
   
@@ -57,12 +56,12 @@
         <img src="./pngs/prof.png" alt="Profile">
       </div>
   
-      <div class="Cart-icon" role="button" tabindex="0">
-  <i class="fas fa-shopping-cart"></i>
-</div>
+      <a href="../Cart/Cart.html">
     <div class="Cart-icon">
       <i class="fas fa-shopping-cart"></i>
+        <span class="cart-icon-badge">0</span>
     </div>
+    </a>
 
       <div class="notification-icon">
         <i class="fas fa-bell"></i>  
@@ -74,9 +73,7 @@
   
 </div>   
 </div>   
-
-
-
+ 
 <div class="mainbg">
 
   <h2 style="font-weight: 600; margin-left: 60px;">Shops</h2>
@@ -209,14 +206,6 @@
                 </div> 
   
 
-
-<div class="cart-overlay" id="cartOverlay">
-  <div class="cart-content">
-    <!-- Cart content here -->
-    <p>Your cart is empty.</p>
-  </div>
-</div>
-
  <div class="overlay" id="overlay">
   <div class="popup">
     
@@ -246,9 +235,10 @@
     Buy <i class="fas fa-hand-holding-usd"></i> 
   </button>
 
-    <button class="add-to-cart">
+ <button class="add-to-cart">
   Add to <i class="fas fa-shopping-cart"></i>
 </button>
+
 
 </div>
 
