@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
       overlay.style.display = 'flex';
     });
   });
+<<<<<<< HEAD
+=======
   
 const backButton = document.getElementById('back-button');
 if (backButton) {
@@ -50,7 +52,14 @@ document.getElementById('cartOverlay').addEventListener('click', function (e) {
     this.style.display = 'none';
   }
 });
+>>>>>>> c500c4a02f795acfd8f9addd11c6aa706040d43c
 
+  const backButton = document.getElementById('back-button');
+  if (backButton) {
+    backButton.addEventListener('click', () => {
+      overlay.style.display = 'none';
+    });
+  }
 
   let currentIndex = 0;
   const slides = document.getElementById("slides");
@@ -83,7 +92,6 @@ document.getElementById('cartOverlay').addEventListener('click', function (e) {
     autoSlide = setInterval(showNextSlide, 3000);
   }
 
-  // Optional navigation buttons (if you have them)
   const nextBtn = document.getElementById("next");
   const prevBtn = document.getElementById("prev");
 
@@ -101,7 +109,6 @@ document.getElementById('cartOverlay').addEventListener('click', function (e) {
     });
   }
 
-  // Make dots clickable
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
       showSlide(index);
@@ -109,6 +116,22 @@ document.getElementById('cartOverlay').addEventListener('click', function (e) {
     });
   });
 
-  // Initial setup
   showSlide(currentIndex);
+
+  const addToCartButton = document.querySelector('.add-to-cart');
+  if (addToCartButton) {
+    addToCartButton.addEventListener('click', function () {
+      window.location.href = '../Cart/Cart.html'; 
+    });
+  }
+  const cartIcon = document.querySelector('.Cart-icon');
+if (cartIcon) {
+  const goToCart = () => window.location.href = '../Cart/Cart.html'; 
+
+  cartIcon.addEventListener('click', goToCart);
+  cartIcon.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') goToCart();
+  });
+}
+
 });
