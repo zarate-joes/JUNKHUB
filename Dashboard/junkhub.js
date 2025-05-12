@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Popup functionality
-  
+
   const overlay = document.getElementById('overlay');
   const popupImg = document.getElementById('popup-img');
   const popupName = document.getElementById('popup-name');
@@ -102,4 +102,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
   showSlide(currentIndex);
 
+});
+
+// Add to cart animation
+
+document.querySelector('.add-to-cart').addEventListener('click', function () {
+  const icon = this.querySelector('i');
+  const cartIcon = document.querySelector('.Cart-icon');
+  const cartBadge = document.querySelector('.cart-icon-badge');
+
+  const iconRect = icon.getBoundingClientRect();
+  const cartRect = cartIcon.getBoundingClientRect();
+
+  const flyIcon = icon.cloneNode(true);
+  flyIcon.classList.add('flying-icon');
+  document.body.appendChild(flyIcon);
+  overlay.style.display = 'none';
+
+  flyIcon.style.left = iconRect.left + 'px';
+  flyIcon.style.top = iconRect.top + 'px';
+
+  const deltaX = cartRect.left - iconRect.left;
+  const deltaY = cartRect.top - iconRect.top;
+
+  flyIcon.style.setProperty('--x', `${deltaX}px`);
+  flyIcon.style.setProperty('--y', `${deltaY}px`);
+
+  requestAnimationFrame(() => {
+    flyIcon.style.animation = 'fly-to-cart 1.5s ease-in-out forwards';
+  });
+
+  flyIcon.addEventListener('animationend', () => {
+    flyIcon.remove();
+
+    // Show and update badge
+    let count = parseInt(cartBadge.textContent) || 0;
+    count++;
+    cartBadge.textContent = count;
+    cartBadge.style.display = 'inline-block';
+  });
 });
