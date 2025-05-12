@@ -1,21 +1,24 @@
 body {
   padding: 0;
   margin: 0;
-  background: white;
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
+  background: linear-gradient(to right, #fdfbfb, #ebedee);
 }
 
 a {
   text-decoration: none;
 }
 
+.text-gold { color: #FFE664; }
+.text-black { color: black; }
+
 .mainbg {
   top: 0;
   right: 0;
   bottom: 0;
   height: 100vh;
-  background: #f5f7fa;
+  background: linear-gradient(135deg, #f5f7fa 0%, #f1df88 100%);
   margin-top: 55px;
   margin-left: 225px;
   height: calc(100% - 55px);
@@ -47,21 +50,24 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 50px;
+  padding-top: 70px;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   z-index: 3;
 }
 
 .sidebar img {
-  width: 90px;
+  width: 70px;
   height: auto;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
-.junkhub-img {
-  filter: drop-shadow(0 8px 5px rgba(0, 0, 0, 0.3));
-  
+.brand-name {
+  margin: 0px;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.75vw, 2rem);
+  letter-spacing: -0.04em;
 }
 
 .circle1 {
@@ -170,8 +176,30 @@ a {
   opacity: 0.9;
 }
 
-.Cart-icon.clicked {
-  color: #FFD700; /* Color when clicked */
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  backdrop-filter: blur(7px);
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.cart-content {
+  display: flex; /* Make popup layout side-by-side */
+  background: white;
+  width: 70%;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 0.3;
+  gap: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .notification-icon {
@@ -411,22 +439,29 @@ a {
   font-size: 16px;
   color: black;
 }
+.text4{
+  position: absolute;
+  top: 135px;
+  right: 97px;
+  font-size: 14px;
+  color: rgb(56, 56, 56);
+}
 
 
 .underline-divider1 {
   border: none;
-  height: 2px;
+  height: 1.5px;
   width: 100%;
-  background-color: #FFD700;
+  background-color: #292927;
   z-index: 1;
   margin-top: 40px;
 }
 
 .underline-divider0 {
   border: none;
-  height: 2px;
+  height: 1.5px;
   width: 100%;
-  background-color: #FFD700;
+  background-color: #292927;
   z-index: 1;
   margin-top: 40px;
 
@@ -465,6 +500,14 @@ a {
   color: black;
 }
 
+.shop-name {
+  position: absolute;
+  top: 285px;
+  right: center;
+  font-size: 14px;
+  color: rgb(56, 56, 56);
+}
+
 .product-container {
   position: relative;
   background: white;
@@ -492,8 +535,8 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(5px);
-  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(7px);
+  background-color: rgba(0, 0, 0, 0.5);
   display: none;
   justify-content: center;
   align-items: center;
@@ -528,8 +571,14 @@ a {
 #popup-name {
   font-size: 18px;       /* Adjust size */
   font-weight: bold;     /* Make it bold */
-  color: #000000;           /* Optional: adjust color */
+  color: rgb(0, 0, 0);          /* Optional: adjust color */
   margin: 20px 0 0 0;        /* Optional: adjust spacing */
+}
+
+#popup-shop-name {
+  font-size: 14px;       /* Adjust size */
+  color: rgb(56, 56, 56);          /* Optional: adjust color */
+  margin: 5px 0 0 0;        /* Optional: adjust spacing */
 }
 
 .popup-right {
@@ -570,6 +619,8 @@ a {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+
 }
 
 .add-to-cart:hover , .buy-now:hover, .sell-now:hover {
@@ -592,6 +643,8 @@ a {
     font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+
 
 }
 

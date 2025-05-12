@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const popupName = document.getElementById('popup-name');
   const popupPrice = document.getElementById('popup-price');
   const popupAvailable = document.getElementById('popup-available');
+  const popupShopName = document.getElementById('popup-shop-name');
 
   document.querySelectorAll('.product-container').forEach(container => {
     container.addEventListener('click', () => {
@@ -24,10 +25,34 @@ document.addEventListener('DOMContentLoaded', function () {
       popupName.textContent = container.dataset.name;
       popupPrice.textContent = container.dataset.price;
       popupAvailable.textContent = container.dataset.available;
+      popupShopName.textContent = container.dataset.shop;
 
       overlay.style.display = 'flex';
     });
   });
+<<<<<<< HEAD
+=======
+  
+const backButton = document.getElementById('back-button');
+if (backButton) {
+  backButton.addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+}
+
+
+ 
+document.querySelector('.Cart-icon').addEventListener('click', function () {
+  document.getElementById('cartOverlay').style.display = 'flex';
+});
+
+// Optional: close overlay on click outside cart-content
+document.getElementById('cartOverlay').addEventListener('click', function (e) {
+  if (!e.target.closest('.cart-content')) {
+    this.style.display = 'none';
+  }
+});
+>>>>>>> c500c4a02f795acfd8f9addd11c6aa706040d43c
 
   const backButton = document.getElementById('back-button');
   if (backButton) {
