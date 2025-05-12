@@ -20,8 +20,10 @@
       <div class="profile-icon">
         <img src="./pngs/prof.png" alt="Profile"></div>
 
-        <div class="Cart-icon">
-      <i class="fas fa-shopping-cart"></i></div>
+<div class="Cart-icon">
+  <i class="fas fa-shopping-cart"></i>
+  <span class="cart-icon-badge">0</span> <!-- This should be present in both files -->
+</div>
 
       <div class="notification-icon">
         <i class="fas fa-bell"></i></div>
@@ -64,30 +66,33 @@
 
       <div class="container-cart">
 
+      
       <h1 class="text-cart">Your Cart</h1>
 
       <div class="divider-line1"></div>
+
+      <div class="cart-items-container"></div>
 
         </div>
 
       <div class="summary-cart">
 
-              <div class="divider-line2"></div>
-              
+    <div class="divider-line2"></div>
+
 <div class="summary-container">
   <div class="summary-box">
     <h2>Summary</h2>
     <div class="summary-item">
-      <span>Subtotal (1 Item)</span>
-      <span>$10.00</span>
+      <span>Subtotal</span>
+      <span>$</span>
     </div>
     <div class="summary-item">
       <span>Shipping Discount</span>
-      <span class="discount">- $2.00</span>
+      <span class="discount">- $</span>
     </div>
     <div class="summary-item">
       <span>Shipping & Handling</span>
-      <span>$4.00</span>
+      <span>$</span>
     </div>
     <div class="summary-item">
       <span>Tax (Calculated at checkout)</span>
@@ -96,9 +101,12 @@
     <hr />
     <div class="summary-total">
       <strong>Balance</strong>
-      <strong>$12.00</strong>
+      <strong>$</strong>
     </div>
-    <button class="checkout-btn">Checkout</button>
+    <a href="../Payment/Checkout.html">
+    <button class="checkout-btn">Checkout
+    </button>
+    </a>
   </div>
 </div>
 
