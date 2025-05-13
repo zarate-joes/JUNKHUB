@@ -137,7 +137,10 @@ a {
   outline: none;
   width: 300px;
   height: 32px;
+  font-weight: 400; /* normal */
+
 }
+
 
 .search-container input[type="text"]:focus {
   border-color: #FFD700;
