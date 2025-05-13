@@ -1,15 +1,17 @@
-# Use official PHP + Apache image
 FROM php:8.1-apache
 
-# Enable mod_rewrite (if your .htaccess or routing needs it)
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mbstring
 RUN a2enmod rewrite
 
-# Copy all files from the current repo into Apache's web root
+# Copy files
 COPY . /var/www/html/
 
-# Set permissions (optional, helps prevent permission errors)
+# Set working directory
+WORKDIR /var/www/html
+
+# Permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Expose port 80 (used by Apache)
 EXPOSE 80
