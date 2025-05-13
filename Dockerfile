@@ -8,8 +8,13 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     zip \
-    unzip \
-    && docker-php-ext-install pdo pdo_mysql mbstring
+    unzip
+
+# Install PHP extensions
+# Split up the extension installation to make debugging easier if one fails
+RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install zip gd
 
 # Enable Apache modules
 RUN a2enmod rewrite
