@@ -44,7 +44,6 @@ document.querySelector('.logo').addEventListener('click', function(e) {
   }
 });
 
-
   // Popup functionality
 
 const overlay = document.getElementById('overlay');
@@ -129,10 +128,6 @@ document.querySelector('.add-to-cart').addEventListener('click', function() {
     flyIcon.remove();
   });
 });
-
-
-
-
 
   // Back button functionality
 

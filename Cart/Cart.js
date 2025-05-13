@@ -8,6 +8,7 @@ function updateCartBadge() {
   }
 }
 
+
 document.addEventListener('DOMContentLoaded', function() {
   const cartItemsContainer = document.querySelector('.cart-items-container');
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];

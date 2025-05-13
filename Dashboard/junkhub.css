@@ -325,11 +325,23 @@ a {
 }
 
 .arrow.left {
-  left: 20%; /* adjust as needed */
+  left: 15%; /* adjust as needed */
 }
 
 .arrow.right {
-  right: 20%; /* adjust as needed */
+  right: 15%; /* adjust as needed */
+}
+
+.arrow-container {
+  position: relative;
+  top: 185px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 1;
 }
 
 .slider {
@@ -371,11 +383,10 @@ a {
 }
 
 .indicators {
-  position: absolute;
-  bottom: 245px;
-  text-align: center;
-  left: 45%;
-  right: 45%;
+  display: flex;
+  justify-content: center;
+  margin-top: 15px; /* space below the slider */
+  z-index: 2;
 }
 
 .dot {
@@ -522,21 +533,21 @@ a {
 .underline-divider1 {
   border: none;
   height: 1.5px;
-  width: 100%;
-  background-color: #292927;
+  width: 98%;
+  background-color: #5f5f5e;
   z-index: 1;
-  margin-top: 40px;
+  margin: 40px auto 0 auto; /* top, horizontal, bottom */
 }
 
 .underline-divider0 {
   border: none;
   height: 1.5px;
-  width: 100%;
-  background-color: #292927;
+  width: 98%;
+  background-color: #5f5f5e#5f5f5e;
   z-index: 1;
-  margin-top: 40px;
-
+  margin: 40px auto 0 auto; /* top, horizontal, bottom */
 }
+
 .product-wrapper {
   position: relative;
   flex-wrap: wrap;
@@ -613,6 +624,17 @@ a {
   z-index: 1000;
 }
 
+@keyframes slideFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Popup styling */
 .popup {
   display: flex; /* Make popup layout side-by-side */
@@ -623,8 +645,9 @@ a {
   text-align: left;
   line-height: 0.3;
   gap: 20px; /* Space between image and text */
-}
+  animation: slideFromTop 0.4s ease-out forwards;
 
+}
 .popup-left {
   flex: 1;
 }
