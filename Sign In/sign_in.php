@@ -1,3 +1,15 @@
+<?php
+
+session_start();
+if (isset($_SESSION['errors'])) {
+  $errors = $_SESSION['errors'];
+}
+
+if (isset($_SESSION['success'])) {
+  $success = $_SESSION['success'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,7 +22,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../Sign Up/reset.css">
-    <link rel="stylesheet" href="./sign_in.css">
+    <link rel="stylesheet" href="sign_in.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   </head>
   <body>
     <main class="login-container">
@@ -43,16 +56,41 @@
         <!-- Right panel - Login form -->
         <section class="form-panel">
           <h2 class="form-title">Login</h2>
-          
-          <form id="login-form" class="login-form" novalidate>
+
+          <?php
+            if (isset($success['success'])) {
+              echo '<div class="success-message"><p>' . $success['success'] . '</p></div>';
+              unset($success['success']);
+            }
+          ?>
+
+          <?php
+            if (isset($errors['login'])) {
+              echo '<div class="error-main"><p>' . $errors['login'] . '</p></div>';
+              unset($errors['login']);
+            }
+          ?>
+
+          <form id="login-form" class="login-form" method="POST" action="../Backend/user-account.php" novalidate>
             <div class="form-group">
               <label for="email">Email:</label>
               <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+              <?php
+                if (isset($errors['email'])) {
+                  echo ' <div class="error"> <p>' . $errors['email'] . '</p></div>';
+                }
+              ?>
             </div>
             
             <div class="form-group">
               <label for="password">Password:</label>
               <input type="password" id="password" name="password" placeholder="Enter your password" required>
+              <i class="fa fa-eye" id="eye" aria-label="Show password" role="button"></i>
+              <?php
+                if (isset($errors['password'])) {
+                  echo ' <div class="error"><p>' . $errors['password'] . '</p></div>';
+                }
+              ?>
             </div>
             
             <div class="form-options">
@@ -64,14 +102,21 @@
               <a href="#" class="forgot-password">Forgot Password?</a>
             </div>
             
-            <button type="button" class="login-button" onclick="location.href='../Dashboard/junkhub.html'">LOGIN</button>
+            <button type="submit" class="login-button" name="signin" value="LOGIN">LOGIN</button>
             
             <p class="signup-link">
-              Don't have an account? <a href="../Sign Up/sign_up.html" class="highlight-link">Sign up here</a>
+              Don't have an account? <a href="../Sign Up/sign_up.php" class="highlight-link">Sign up here</a>
             </p>
           </form>
         </section>
       </div>
     </main>
+    <script src="../Sign Up/toogle.js" defer></script>
   </body>
 </html>
+
+<?php
+if (isset($_SESSION['errors'])) {
+  unset($_SESSION['errors']);
+}
+?>
