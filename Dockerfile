@@ -7,12 +7,17 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    pkg-config \
     zip \
     unzip
+
+# Force pkg-config to find oniguruma
+RUN ln -s /usr/lib/x86_64-linux-gnu/pkgconfig/libonig.pc /usr/lib/x86_64-linux-gnu/pkgconfig/oniguruma.pc || true
 
 # Install PHP extensions
 # Split up the extension installation to make debugging easier if one fails
 RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-configure mbstring --with-onig=/usr
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install zip gd
 
