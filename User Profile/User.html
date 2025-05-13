@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <script src="User.js"></script>
 </head>
 <body>
 
@@ -25,10 +25,10 @@
         <i class="fas fa-shopping-cart"></i>
         </a>
 </div>
-
+      <a href="../Notfication/Notification.html">
       <div class="notification-icon">
         <i class="fas fa-bell"></i></div>
-
+  </a>
         <div class="search-container"> 
         <input type="text" placeholder="Search..."></div>
 
@@ -77,135 +77,219 @@
     <main class="flex-1 p-8 bg-white text-black" style="margin-top: 55px;">
 
       <!-- Manage My Account -->
-      <div id="account-section" class="space-y-10">
+      <div id="personal-profile" class="space-y-4">
+  <div class="flex justify-between items-center">
+    <h3 class="text-xl font-semibold flex items-center">
+      <span class="bg-yellow-400 text-black w-8 h-8 rounded-full flex items-center justify-center mr-3">1</span>
+      Personal Profile
+    </h3>
+    <button class="edit-btn bg-gray-200 text-black px-4 py-1.5 rounded hover:bg-yellow-400 transition" onclick="toggleEdit('personal-profile')">Edit</button>
+  </div>
 
-        <!-- Personal Profile -->
-        <div id="personal-profile" class="space-y-4">
-          <div class="flex justify-between items-center">
-            <h3 class="text-xl font-semibold flex items-center">
-              <span class="bg-yellow-400 text-black w-8 h-8 rounded-full flex items-center justify-center mr-3">1</span>
-              Personal Profile
-            </h3>
-            <button class="edit-btn bg-gray-200 text-black px-4 py-1.5 rounded hover:bg-yellow-400 transition" onclick="toggleEdit('personal-profile')">Edit</button>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-                <input type="text" value="FirstName" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-                <input type="text" value="LastName" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-              <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                <input type="email" value="email@mail.com" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Shipping Address -->
-        <div id="shipping-address" class="space-y-4 mt-10">
-          <div class="flex justify-between items-center">
-            <h3 class="text-xl font-semibold flex items-center">
-              <span class="bg-yellow-400 text-black w-8 h-8 rounded-full flex items-center justify-center mr-3">2</span>
-              Shipping Address
-            </h3>
-            <button class="edit-btn bg-gray-200 text-black px-4 py-1.5 rounded hover:bg-yellow-400 transition" onclick="toggleEdit('shipping-address')">Edit</button>
-          </div>
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-                <input type="text" value="FirstName" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-                <input type="text" value="LastName" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-              <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Address *</label>
-                <input type="text" value="123 Sample Street" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">City *</label>
-                <input type="text" value="City" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Postal Code *</label>
-                <input type="text" value="12345" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-              <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                <input type="tel" value="+123 456 7890" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+        <input type="text" id="first-name" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
       </div>
-
-      <!-- My Orders Section -->
-      <div id="orders-section" class="hidden">
-        <h3 class="font-bold text-xl mb-4">Orders</h3>
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="border-b">
-              <th class="py-2">Order #</th>
-              <th class="py-2">Place On</th>
-              <th class="py-2">Items</th>
-              <th class="py-2">Total</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div>
+        <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+        <input type="text" id="last-name" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
       </div>
-
-      <!-- Wishlist -->
-<div id="wishlist-section" class="hidden">
-  <h3 class="font-bold text-xl mb-6">My Wishlist</h3>
-
-  <!-- Example Wishlist Entry -->
-  <div class="space-y-8">
-    <!-- Each shop group -->
-    <div class="bg-yellow-500 border:bg-yellow-500 p-2 rounded">
-      <h4 class="font-semibold text-white px-4">Shop Name</h4>
-    </div>
-
-    <!-- Wishlist Card -->
-    <div class="border-2 border-blue-400 rounded-lg overflow-hidden bg-white shadow-sm flex items-center justify-between p-4">
-      <!-- Left: Image -->
-      <img src="../User Profile/pngs/Mother Board.png" alt="Unused Cardboards" class="w-24 h-24 object-contain rounded">
-
-      <!-- Middle: Info -->
-      <div class="flex-1 px-6">
-        <h5 class="font-semibold text-lg">Unused Mother Boards</h5>
-        <p class="text-sm text-gray-600">Available: 1000.0 kg</p>
-        <button class="text-red-500 mt-1 hover:text-red-700">
-          <i class="fas fa-trash-alt"></i>
-        </button>
+      <div class="md:col-span-2">
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+        <input type="email" id="email" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
       </div>
-
-      <!-- Right: Price & Cart -->
-      <div class="flex flex-col items-end justify-between h-full">
-        <p class="font-bold text-lg text-black">₱26.01</p>
-        <button class="bg-yellow-400 hover:bg-yellow-500 p-3 rounded">
-          <i class="fas fa-cart-plus text-black"></i>
-        </button>
+      <div class="md:col-span-2">
+        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+        <input type="tel" id="phone" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
       </div>
     </div>
 
-    
-
+    <div class="mt-6">
+      <button id="save-btn" class="bg-yellow-400 text-black px-6 py-2 rounded hover:bg-yellow-500 transition">Save</button>
+    </div>
   </div>
 </div>
 
+
+        <div id="shipping-address" class="space-y-4">
+      <div class="flex justify-between items-center">
+      <h3 class="text-xl font-semibold flex items-center">
+      <span class="bg-yellow-400 text-black w-8 h-8 rounded-full flex items-center justify-center mr-3">2</span>
+      Shipping Address
+      </h3>
+    <button class="edit-btn bg-gray-200 text-black px-4 py-1.5 rounded hover:bg-yellow-400 transition" onclick="toggleEdit('shipping-address')">Edit</button>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label for="address-line" class="block text-sm font-medium text-gray-700 mb-1">Street Address *</label>
+        <input type="text" id="address-line" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+      </div>
+      <div>
+        <label for="barangay" class="block text-sm font-medium text-gray-700 mb-1">Barangay *</label>
+        <input type="text" id="barangay" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+      </div>
+      <div>
+        <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City *</label>
+        <input type="text" id="city" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+      </div>
+      <div>
+        <label for="postal-code" class="block text-sm font-medium text-gray-700 mb-1">Postal Code *</label>
+        <input type="text" id="postal-code" required class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+      </div>
+    </div>
+
+      <div class="mt-6">
+        <button id="save-shipping-btn" class="bg-yellow-400 text-black px-6 py-2 rounded hover:bg-yellow-500 transition">Save</button>
+      </div>
+    </div>
+  </div>
+      
+      
+    <!-- My Orders Section -->
+      <div id="orders-section" class="hidden max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 text-yellow-500">My Orders</h1>
+        <!-- Order Cards go here -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+          <div class="flex justify-between items-center p-4 border-b">
+            <div>
+              <p class="text-sm text-gray-600">Order # <span class="font-semibold">JH102938</span></p>
+              <p class="text-xs text-gray-500">Placed on: April 28, 2025</p>
+            </div>
+            <span class="text-sm px-3 py-1 rounded-full bg-green-100 text-green-600 font-medium">Delivered</span>
+          </div>
+          <div class="p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-medium">Recycled Steel</p>
+                <p class="text-sm text-gray-500">Qty: 2 | ₱500 each</p>
+              </div>
+              <p class="font-bold text-gray-800">₱1,000</p>
+            </div>
+            <div class="text-right text-sm text-gray-500">Shipping via: GCash Express</div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+          <div class="flex justify-between items-center p-4 border-b">
+            <div>
+              <p class="text-sm text-gray-600">Order # <span class="font-semibold">JH102567</span></p>
+              <p class="text-xs text-gray-500">Placed on: April 20, 2025</p>
+            </div>
+            <span class="text-sm px-3 py-1 rounded-full bg-yellow-100 text-yellow-600 font-medium">Pending</span>
+          </div>
+          <div class="p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-medium">Used Plastic Bottles</p>
+                <p class="text-sm text-gray-500">Qty: 10kg | ₱20 per kg</p>
+              </div>
+              <p class="font-bold text-gray-800">₱200</p>
+            </div>
+            <div class="text-right text-sm text-gray-500">Shipping via: Cash On Delivery</div>
+          </div>
+        </div>
+      </div>
+
+ <div id="wishlist-section" class="hidden mt-8">
+        <h3 class="font-bold text-xl mb-6">My Wishlist</h3>
+        <div class="space-y-6">
+          <div class="bg-yellow-500 p-2 rounded">
+            <h4 class="font-semibold text-white px-2">Shop Name</h4>
+          </div>
+
+          <div class="border-2 border-blue-400 rounded-lg overflow-hidden bg-white shadow-sm flex items-center justify-between p-4">
+            <img src="../User Profile/pngs/Mother Board.png" alt="Mother Board" class="w-24 h-24 object-contain rounded">
+            <div class="flex-1 px-6">
+              <h5 class="font-semibold text-lg">Unused Mother Boards</h5>
+              <p class="text-sm text-gray-600">Available: 1000.0 kg</p>
+              <button class="text-red-500 mt-2 hover:text-red-700">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
-
+  </div>
   <script>
-   s
-  </script>
+  function showSection(section) {
+    const sections = ['account-section', 'orders-section', 'wishlist-section'];
+    sections.forEach(id => {
+      document.getElementById(id).classList.add('hidden');
+    });
+
+    if (section === 'account') {
+      document.getElementById('account-section').classList.remove('hidden');
+    } else if (section === 'orders') {
+      document.getElementById('orders-section').classList.remove('hidden');
+    } else if (section === 'wishlist') {
+      document.getElementById('wishlist-section').classList.remove('hidden');
+    }
+  }
+
+  function signOut() {
+    // Redirect to login or home page
+    window.location.href = '../Landing Page/index.html'; // or replace with your actual page
+  }
+  document.getElementById('save-btn').addEventListener('click', function () {
+    const inputs = document.querySelectorAll('#personal-profile input');
+    let hasError = false;
+
+    inputs.forEach(input => {
+      input.classList.remove('border-red-500');
+
+      // Check if empty
+      if (!input.value.trim()) {
+        input.classList.add('border-red-500');
+        hasError = true;
+        return;
+      }
+
+      // Specific checks
+      if (input.type === 'email' && !/\S+@\S+\.\S+/.test(input.value)) {
+        input.classList.add('border-red-500');
+        hasError = true;
+      }
+
+      if (input.type === 'tel' && !/^09\d{9}$/.test(input.value)) {
+        input.classList.add('border-red-500');
+        hasError = true;
+      }
+    });
+
+    if (!hasError) {
+      alert('Profile information saved successfully!');
+      // You can now proceed to save to backend or show confirmation
+    }
+  });
+
+  document.getElementById('save-shipping-btn').addEventListener('click', function () {
+    const inputs = document.querySelectorAll('#shipping-address input');
+    let hasError = false;
+
+    inputs.forEach(input => {
+      input.classList.remove('border-red-500');
+
+      if (!input.value.trim()) {
+        input.classList.add('border-red-500');
+        hasError = true;
+      }
+
+      if (input.id === 'postal-code' && !/^\d{4}$/.test(input.value.trim())) {
+        input.classList.add('border-red-500');
+        hasError = true;
+      }
+    });
+
+    if (!hasError) {
+      alert('Shipping address saved successfully!');
+    }
+  });
+</script>
 </body>
 </html>
