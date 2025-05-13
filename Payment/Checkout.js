@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
       processPayment()
         .then(orderDetails => {
           // On success
+          
           showSuccessMessage(orderDetails);
           completeOrderBtn.innerHTML = 'Order Complete!';
 
