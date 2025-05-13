@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
-// Sidebar toggle button (explicitly close sidebar)
 document.querySelector('.sidebar-toggle').addEventListener('click', function(e) {
   e.stopPropagation();
 
@@ -26,7 +25,6 @@ document.querySelector('.sidebar-toggle').addEventListener('click', function(e) 
 
 });
 
-// Logo click to toggle sidebar
 document.querySelector('.logo').addEventListener('click', function(e) {
   e.preventDefault();
   e.stopPropagation();
