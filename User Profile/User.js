@@ -1,4 +1,5 @@
 
+
 function navigateTo(sectionId) {
   const sections = ['profile-section', 'address-section', 'orders-section', 'wishlist-section'];
 
@@ -8,7 +9,7 @@ function navigateTo(sectionId) {
   });
 
   if (sectionId === 'orders') {
-    document.getElementById('orders-section').classList.remove('hidden');
+    document.getElementById('orders-section').classList.remove('hidden');s
   } else if (sectionId === 'wishlist') {
     document.getElementById('wishlist-section').classList.remove('hidden');
   } else if (sectionId === 'signout') {

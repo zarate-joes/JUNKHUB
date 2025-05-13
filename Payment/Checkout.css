@@ -16,10 +16,6 @@ aside > div {
   margin-top: 20px; /* Additional spacing */
 }
 
-
-
-
-
 a {
   text-decoration: none;
 }
@@ -38,15 +34,7 @@ a {
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
 }
 
-.mainbg {
-  display: flex;
-  justify-content: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #ffe664 100%);
-  overflow-x: hidden;
-  z-index: 0;
-  position: relative; /* optional but good for stacking context */
-}
+
 
 
   
