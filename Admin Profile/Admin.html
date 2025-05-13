@@ -1,169 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JunkHub Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      background: #f4f4f4;
-      display: flex;
-    }
-    .sidebar {
-      width: 220px;
-      background: #1c1f26;
-      color: white;
-      padding: 20px;
-      height: 100vh;
-    }
-    .sidebar h2 {
-      font-size: 1.5rem;
-      margin-bottom: 30px;
-    }
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-    .sidebar ul li {
-      margin: 20px 0;
-      cursor: pointer;
-    }
-    .sidebar ul li:hover {
-      color: #ffc107;
-    }
-    .main {
-      flex: 1;
-      padding: 30px;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .search {
-      width: 250px;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .stats {
-      margin-top: 20px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-    .stat {
-      background: #d8ecf5;
-      border-radius: 15px;
-      padding: 20px;
-      font-weight: 600;
-      font-size: 1.2rem;
-    }
-    .bottom {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-    }
-    .chart, .notifications {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      width: 48%;
-    }
-    .chart canvas {
-      width: 100%;
-      height: 200px;
-    }
-    .notifications ul {
-      list-style: none;
-      padding: 0;
-    }
-    .notifications li {
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
-    }
-  </style>
+  <title>Admin Profile - JunkHub</title>
+  <link rel="stylesheet" href="Admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <div class="sidebar">
-    <h2>JunkHub</h2>
-    <ul>
-      <li>Dashboard</li>
-      <li>Monitor Orders</li>
-      <li>Generate Reports</li>
-    </ul>
-    <h3>ACCOUNTS</h3>
-    <ul>
-      <li>Manage Users</li>
-    </ul>
-    <ul>
-      <li>Logout</li>
-    </ul>
-  </div>
-  <div class="main">
-    <div class="header">
-      <input class="search" type="text" placeholder="Search..." />
-      <div class="profile">
-        <img src="https://via.placeholder.com/30" alt="Profile" style="border-radius:50%" />
+  <div class="wrapper">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="logo-area">
+        <img src="../Images/teallogo22619-foad-200h.png" alt="JunkHub" class="logo-icon">
+        <span class="logo-text"><strong>Junk</strong>HUB</span>
       </div>
-    </div>
+      <nav class="nav-links">
+        <a href="#">Home Page</a>
+        <a href="#">Shop</a>
+        <a href="#">Products</a>
+      </nav>
+      <div class="header-actions">
+        <input type="text" placeholder="Search..." class="search-input" />
+        <i class="fa fa-bell"></i>
+        <i class="fa fa-shopping-cart"></i>
+       <a href="../User Profile/User.html">
+  <img src="./pngs/prof.png" alt="Profile" style="width: 18px; height: px; border-radius: 50%; object-fit: cover;" />
+</a>
 
-    <div class="stats">
-      <div class="stat">Active Users<br><strong>123</strong></div>
-      <div class="stat">Total Users<br><strong>246</strong></div>
-      <div class="stat">Total Revenue<br><strong>₱1,240,034</strong></div>
-      <div class="stat">Growth Rate<br><strong>5.35%</strong></div>
-    </div>
+        
+    </header>
 
-    <div class="bottom">
-      <div class="chart">
-        <h3>Revenue & Users Trend</h3>
-        <canvas id="trendChart"></canvas>
-      </div>
-      <div class="notifications">
-        <h3>Recent Notifications</h3>
-        <ul>
-          <li>New user registration <span style="float:right; color:gray">3 minutes ago</span></li>
-          <li>New user registration <span style="float:right; color:gray">33 minutes ago</span></li>
-        </ul>
-      </div>
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <nav>
+          <p>GENERAL</p>
+          <ul>
+            <li><i class="fa fa-chart-line"></i> Dashboard</li>
+            <li><i class="fa fa-box"></i> Monitor Orders</li>
+            <li><i class="fa fa-file-alt"></i> Generate Reports</li>
+          </ul>
+          <p>ACCOUNTS</p>
+          <ul>
+            <li><i class="fa fa-users"></i> Manage Users</li>
+          </ul>
+          <ul class="logout">
+            <li><i class="fa fa-sign-out-alt"></i> Logout</li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <section class="stats">
+          <div class="card"><i class="fa fa-users"></i> <span>Active Users</span> <strong>123</strong></div>
+          <div class="card"><i class="fa fa-user-friends"></i> <span>Total Users</span> <strong>246</strong></div>
+          <div class="card"><i class="fa fa-money-bill"></i> <span>Total Revenue</span> <strong>₱ 1,240,034</strong></div>
+          <div class="card"><i class="fa fa-chart-line"></i> <span>Growth Rate</span> <strong>5.35%</strong></div>
+        </section>
+
+        <section class="lower">
+          <div class="chart-box">
+            <h3><i class="fa fa-chart-bar"></i> Revenue & Users Trend</h3>
+            <canvas id="dashboardChart"></canvas>
+          </div>
+          <div class="notifications">
+            <h3><i class="fa fa-bell"></i> Recent Notifications</h3>
+            <div class="notification">New user registration <span>3 minutes ago</span></div>
+            <div class="notification">New user registration <span>33 minutes ago</span></div>
+          </div>
+        </section>
+      </main>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    const ctx = document.getElementById('trendChart').getContext('2d');
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-        datasets: [
-          {
-            label: 'Revenue',
-            borderColor: 'green',
-            data: [500, 1000, 2500, 2000, 1800],
-            fill: false,
-          },
-          {
-            label: 'Users',
-            borderColor: 'blue',
-            data: [200, 400, 600, 700, 650],
-            fill: false,
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-          }
-        }
-      }
-    });
-  </script>
+  <script src="Admin.js"></script>
 </body>
 </html>
