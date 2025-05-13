@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Profile - JunkHub</title>
+  <link rel="stylesheet" href="Admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="logo-area">
+        <img src="../Images/teallogo22619-foad-200h.png" alt="JunkHub" class="logo-icon">
+        <span class="logo-text"><strong>Junk</strong>HUB</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#">Home Page</a>
+        <a href="#">Shop</a>
+        <a href="#">Products</a>
+      </nav>
+      <div class="header-actions">
+        <input type="text" placeholder="Search..." class="search-input" />
+        <i class="fa fa-bell"></i>
+        <i class="fa fa-shopping-cart"></i>
+       <a href="../User Profile/User.html">
+  <img src="./pngs/prof.png" alt="Profile" style="width: 18px; height: px; border-radius: 50%; object-fit: cover;" />
+</a>
+
+        
+    </header>
+
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <nav>
+          <p>GENERAL</p>
+          <ul>
+            <li><i class="fa fa-chart-line"></i> Dashboard</li>
+            <li><i class="fa fa-box"></i> Monitor Orders</li>
+            <li><i class="fa fa-file-alt"></i> Generate Reports</li>
+          </ul>
+          <p>ACCOUNTS</p>
+          <ul>
+            <li><i class="fa fa-users"></i> Manage Users</li>
+          </ul>
+          <ul class="logout">
+            <li><i class="fa fa-sign-out-alt"></i> Logout</li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <section class="stats">
+          <div class="card"><i class="fa fa-users"></i> <span>Active Users</span> <strong>123</strong></div>
+          <div class="card"><i class="fa fa-user-friends"></i> <span>Total Users</span> <strong>246</strong></div>
+          <div class="card"><i class="fa fa-money-bill"></i> <span>Total Revenue</span> <strong>₱ 1,240,034</strong></div>
+          <div class="card"><i class="fa fa-chart-line"></i> <span>Growth Rate</span> <strong>5.35%</strong></div>
+        </section>
+
+        <section class="lower">
+          <div class="chart-box">
+            <h3><i class="fa fa-chart-bar"></i> Revenue & Users Trend</h3>
+            <canvas id="dashboardChart"></canvas>
+          </div>
+          <div class="notifications">
+            <h3><i class="fa fa-bell"></i> Recent Notifications</h3>
+            <div class="notification">New user registration <span>3 minutes ago</span></div>
+            <div class="notification">New user registration <span>33 minutes ago</span></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="Admin.js"></script>
+</body>
+</html>

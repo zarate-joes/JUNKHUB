@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Account - JunkHub</title>
+  <link rel="stylesheet" href="User.css">
+  <script src="https://cdn.tailwindcss.com"></script> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+  <div class="header">
+
+       <div class="divider-line"></div>
+
+      <div class="profile-icon">
+        <img src="./pngs/prof.png" alt="Profile"></div>
+
+        <a href="../Cart/Cart.html">
+          <div class="Cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        </a>
+</div>
+
+      <div class="notification-icon">
+        <i class="fas fa-bell"></i></div>
+
+        <div class="search-container"> 
+        <input type="text" placeholder="Search..."></div>
+
+         <a href="../Landing Page/index.html">
+        <div class="logo">
+        <img src="./pngs/Logo.png" alt="Logo"></div>
+      </a>
+
+        <h1 class="brand-name">
+      <span class="text-gold">Junk</span><span class="text-black">HUB</span>
+    </h1>
+
+          <div class="category-wrapper">
+
+        <a href="../Dashboard/junkhub.html">
+        <div class="home-cat">
+          <i class="fas fa-home"></i>
+          <span>Home Page</span></div>
+        </a>
+        
+        <div class="shop-cat">
+          <i class="fas fa-store"></i>
+          <span>Shop</span></div>
+        
+
+        <div class="products-cat">
+          <i class="fas fa-box"></i>
+          <span>Products</span></div>
+
+      </div>
+</div>
+  <!-- Main Content -->
+  <div class="flex bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-60 p-6 bg-gradient-to-b from-yellow-600 to-yellow-400 text-white" style="margin-top: 55px;">
+      <div class="text-2xl font-bold mb-6">Junk<span class="text-black">HUB</span></div>
+      <nav class="space-y-4">
+        <button onclick="showSection('account')" class="block w-full text-left font-semibold bg-white text-black px-4 py-2 rounded hover:bg-yellow-100">Manage My Account</button>
+        <button onclick="showSection('orders')" class="block w-full text-left font-semibold hover:bg-yellow-100 px-4 py-2 rounded">My Orders</button>
+        <button onclick="showSection('wishlist')" class="block w-full text-left font-semibold hover:bg-yellow-100 px-4 py-2 rounded">My Wishlist</button>
+        <button onclick="signOut()" class="block w-full text-left font-semibold hover:bg-yellow-100 px-4 py-2 rounded">Sign Out</button>
+      </nav>
+    </aside>
+
+    
+    <main class="flex-1 p-8 bg-white text-black" style="margin-top: 55px;">
+
+      <!-- Manage My Account -->
+      <div id="account-section" class="space-y-10">
+
+        <!-- Personal Profile -->
+        <div id="personal-profile" class="space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold flex items-center">
+              <span class="bg-yellow-400 text-black w-8 h-8 rounded-full flex items-center justify-center mr-3">1</span>
+              Personal Profile
+            </h3>
+            <button class="edit-btn bg-gray-200 text-black px-4 py-1.5 rounded hover:bg-yellow-400 transition" onclick="toggleEdit('personal-profile')">Edit</button>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                <input type="text" value="FirstName" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                <input type="text" value="LastName" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <input type="email" value="email@mail.com" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div id="shipping-address" class="space-y-4 mt-10">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold flex items-center">
+              <span class="bg-yellow-400 text-black w-8 h-8 rounded-full flex items-center justify-center mr-3">2</span>
+              Shipping Address
+            </h3>
+            <button class="edit-btn bg-gray-200 text-black px-4 py-1.5 rounded hover:bg-yellow-400 transition" onclick="toggleEdit('shipping-address')">Edit</button>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                <input type="text" value="FirstName" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                <input type="text" value="LastName" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Address *</label>
+                <input type="text" value="123 Sample Street" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                <input type="text" value="City" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Postal Code *</label>
+                <input type="text" value="12345" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+                <input type="tel" value="+123 456 7890" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-400 focus:outline-none">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Orders Section -->
+      <div id="orders-section" class="hidden">
+        <h3 class="font-bold text-xl mb-4">Orders</h3>
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="border-b">
+              <th class="py-2">Order #</th>
+              <th class="py-2">Place On</th>
+              <th class="py-2">Items</th>
+              <th class="py-2">Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Wishlist -->
+<div id="wishlist-section" class="hidden">
+  <h3 class="font-bold text-xl mb-6">My Wishlist</h3>
+
+  <!-- Example Wishlist Entry -->
+  <div class="space-y-8">
+    <!-- Each shop group -->
+    <div class="bg-yellow-500 border:bg-yellow-500 p-2 rounded">
+      <h4 class="font-semibold text-white px-4">Shop Name</h4>
+    </div>
+
+    <!-- Wishlist Card -->
+    <div class="border-2 border-blue-400 rounded-lg overflow-hidden bg-white shadow-sm flex items-center justify-between p-4">
+      <!-- Left: Image -->
+      <img src="../User Profile/pngs/Mother Board.png" alt="Unused Cardboards" class="w-24 h-24 object-contain rounded">
+
+      <!-- Middle: Info -->
+      <div class="flex-1 px-6">
+        <h5 class="font-semibold text-lg">Unused Mother Boards</h5>
+        <p class="text-sm text-gray-600">Available: 1000.0 kg</p>
+        <button class="text-red-500 mt-1 hover:text-red-700">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+
+      <!-- Right: Price & Cart -->
+      <div class="flex flex-col items-end justify-between h-full">
+        <p class="font-bold text-lg text-black">₱26.01</p>
+        <button class="bg-yellow-400 hover:bg-yellow-500 p-3 rounded">
+          <i class="fas fa-cart-plus text-black"></i>
+        </button>
+      </div>
+    </div>
+
+    
+
+  </div>
+</div>
+
+    </main>
+  </div>
+
+  <script>
+   s
+  </script>
+</body>
+</html>

@@ -1,27 +1,33 @@
 body {
+
   padding: 0;
   margin: 0;
-  background: white;
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #ffe664 100%);
 }
 
 a {
   text-decoration: none;
 }
 
+.text-gold { color: #FFE664; }
+.text-black { color: black; }
+.text-goldh { color: #FFD700; }
+.text-blackh { color: black; }
+
 .mainbg {
   top: 0;
   right: 0;
   bottom: 0;
   height: 100vh;
-  background: #f5f7fa;
-  margin-top: 55px;
-  margin-left: 225px;
-  height: calc(100% - 55px);
-  width: calc(100% - 225px);
+  background: white;
+  margin: 55px auto 0 auto;
+  height: calc(100% - 55px); 
+  width: 85%;
   overflow-x: hidden;
   z-index: 1;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
 }
 
 .header {
@@ -31,37 +37,97 @@ a {
   width: 100%;
   height: 55px;
   background: white;
-  width: calc(100% - 225px);
   z-index: 2;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
-
 }
   
 .sidebar {
   position: fixed;
   top: 0;
-  left: 0;
+  left: -225px; /* Start off-screen */
   width: 225px;
   height: 100vh;
   background: linear-gradient(to right, #C9AA00, #FFD700);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 50px;
+  padding-top: 70px;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   z-index: 3;
+  transition: left 0.3s ease; /* Add smooth transition */
+}
+
+.sidebar.visible {
+  left: 0; /* Bring into view */
 }
 
 .sidebar img {
-  width: 90px;
+  width: 70px;
   height: auto;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
-.junkhub-img {
-  filter: drop-shadow(0 8px 5px rgba(0, 0, 0, 0.3));
-  
+.sidebar-toggle {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 4;
+}
+
+.sidebar-toggle:hover {
+  color: #e0e0e0;
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+.brand-name {
+  margin: 0px;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.75vw, 2rem);
+  letter-spacing: -0.04em;
+}
+
+.logo {
+  position: absolute;
+  top: 5px;
+  left: 60px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+    z-index: 4; /* Make sure it's above other elements */
+
+}
+
+.logo:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none; /* Make the image non-clickable so the div gets the click */
+
+}
+
+.brand-nameh {
+  margin-top: 8px;    
+  margin-left: 110px;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.50vw, 2rem);
+  letter-spacing: -0.04em;
 }
 
 .circle1 {
@@ -94,8 +160,8 @@ a {
 
 .search-container {
   position: absolute;
-  top: 10px;
-  left: 800px;
+  top: 9.5px;
+  right: 190px;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
@@ -126,14 +192,14 @@ a {
   width: 100%;
   background-color: #FFD700;
   z-index: 1;
-  margin-top: 35px;
+  bottom: 0;
 
 }
 
 .profile-icon {
   position: absolute;
   top: 10px;
-  right: 30px;
+  right: 60px;
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -155,13 +221,26 @@ a {
 
 .Cart-icon {
   position: absolute;
-  top: 14px;
-  right: 80px;
+  top: 13.5px;
+  right: 110px;
   font-size: 18px;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
   color: #000;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+}
+
+.cart-icon-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  padding: 1px 5px;
+  border-radius: 50%;
+  font-size: 10px;
+  display: none;
+  
 }
 
 .Cart-icon:hover {
@@ -170,16 +249,31 @@ a {
   opacity: 0.9;
 }
 
-.Cart-icon.clicked {
-  color: #FFD700; /* Color when clicked */
+@keyframes fly-to-cart {
+  100% {
+    transform: translate(var(--x), var(--y)) scale(0.3);
+    opacity: 0;
+  }
 }
+
+.flying-icon {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  animation: fly-to-cart 0.8s ease-in-out forwards;
+  transition: transform 0.8s ease-in-out;
+  color: #007bff;
+  font-size: 18px;
+}
+
+
 
 .notification-icon {
   position: absolute;
   color: #000000;
-  top: 12px;
-  right: 120px;
-  font-size: 20px;
+  top: 13.5px;
+  right: 150px;
+  font-size: 18px;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
@@ -209,7 +303,7 @@ a {
 
 .arrow {
   position: absolute;
-  margin-top: 175px;
+  top: 50%; /* Center vertically */
   transform: translateY(-50%);
   width: 50px;
   height: 50px;
@@ -221,7 +315,7 @@ a {
   justify-content: center;
   cursor: pointer;
   border-radius: 50%;
-  z-index: 1; 
+  z-index: 1;
   user-select: none;
   transition: background 0.3s, transform 0.2s;
 }
@@ -231,25 +325,39 @@ a {
 }
 
 .arrow.left {
-  left: 400px;
+  left: 15%; /* adjust as needed */
 }
 
 .arrow.right {
-  right: 185px;
+  right: 15%; /* adjust as needed */
+}
+
+.arrow-container {
+  position: relative;
+  top: 185px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 1;
 }
 
 .slider {
   align-items: center;
-  position: relative; /* important for absolute arrows */
+  position: relative;
   height: 350px;
   width: 750px;
   overflow: hidden;
   border-radius: 10px;
-  margin-left: 265px;
-  border: #000;
+  border: 0.5px solid #000; /* fixed missing border width */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
 
 .slides {
@@ -275,10 +383,10 @@ a {
 }
 
 .indicators {
-  position: absolute;
-  bottom: 245px;
-  text-align: center;
-  left: 55%;
+  display: flex;
+  justify-content: center;
+  margin-top: 15px; /* space below the slider */
+  z-index: 2;
 }
 
 .dot {
@@ -300,8 +408,8 @@ a {
 .category-wrapper {
   position: absolute;
   display: flex;
-  left: 30px;
-  top: 18px;
+  left: 250px;
+  top: 15px;
   bottom: 0px;
   gap: 30px;
 }
@@ -363,36 +471,39 @@ a {
   color: #FFD700; 
 }
 
+.container0-wrapper {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centers children horizontally */
+  gap: 10px;
+}
+
  .product-container0 {
   position: relative;
   background: white;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
-  width: 450px;
+  width: 370px;
   height: 200px;
-  margin-left: 60px;
   color: #000;
   border: 0.5px solid #000000;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
 .product-container0:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
   opacity: 0.9;
-    border-color: #FFD700;
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-}
-
-.product-container0.clicked {
   border-color: #FFD700;
   box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
+
 .text1 {
   position: absolute;
   top: 70px;
-  right: 80px;
+  left: 220px;
   font-size: 20px;
   font-weight: bold;
   color: black;
@@ -400,43 +511,48 @@ a {
 .text2 {
   position: absolute;
   top: 95px;
-  right: 120px;
+  left: 220px;
   font-size: 16px;
   color: black;
 }
 .text3 {
   position: absolute;
   top: 115px;
-  right: 50px;
+  left: 220px;
   font-size: 16px;
   color: black;
 }
-
+.text4{
+  position: absolute;
+  top: 135px;
+  left: 220px;
+  font-size: 14px;
+  color: rgb(56, 56, 56);
+}
 
 .underline-divider1 {
   border: none;
-  height: 2px;
-  width: 100%;
-  background-color: #FFD700;
+  height: 1.5px;
+  width: 98%;
+  background-color: #5f5f5e;
   z-index: 1;
-  margin-top: 40px;
+  margin: 40px auto 0 auto; /* top, horizontal, bottom */
 }
 
 .underline-divider0 {
   border: none;
-  height: 2px;
-  width: 100%;
-  background-color: #FFD700;
+  height: 1.5px;
+  width: 98%;
+  background-color: #5f5f5e#5f5f5e;
   z-index: 1;
-  margin-top: 40px;
-
+  margin: 40px auto 0 auto; /* top, horizontal, bottom */
 }
+
 .product-wrapper {
   position: relative;
   flex-wrap: wrap;
   display: flex;
-  margin-left: 60px;
-  margin-top: 20px;
+  justify-content: center; /* Centers children horizontally */
   gap: 10px;
 }
 
@@ -463,6 +579,14 @@ a {
   right: center;
   font-size: 16px;
   color: black;
+}
+
+.shop-name {
+  position: absolute;
+  top: 285px;
+  right: center;
+  font-size: 14px;
+  color: rgb(56, 56, 56);
 }
 
 .product-container {
@@ -492,16 +616,24 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(5px);
-  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(7px);
+  background-color: rgba(0, 0, 0, 0.5);
   display: none;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-
-
+@keyframes slideFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* Popup styling */
 .popup {
@@ -513,8 +645,9 @@ a {
   text-align: left;
   line-height: 0.3;
   gap: 20px; /* Space between image and text */
-}
+  animation: slideFromTop 0.4s ease-out forwards;
 
+}
 .popup-left {
   flex: 1;
 }
@@ -528,8 +661,14 @@ a {
 #popup-name {
   font-size: 18px;       /* Adjust size */
   font-weight: bold;     /* Make it bold */
-  color: #000000;           /* Optional: adjust color */
+  color: rgb(0, 0, 0);          /* Optional: adjust color */
   margin: 20px 0 0 0;        /* Optional: adjust spacing */
+}
+
+#popup-shop-name {
+  font-size: 14px;       /* Adjust size */
+  color: rgb(56, 56, 56);          /* Optional: adjust color */
+  margin: 5px 0 0 0;        /* Optional: adjust spacing */
 }
 
 .popup-right {
@@ -570,7 +709,9 @@ a {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
 }
+
 
 .add-to-cart:hover , .buy-now:hover, .sell-now:hover {
   color: #000000;
@@ -592,6 +733,8 @@ a {
     font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+
 
 }
 
