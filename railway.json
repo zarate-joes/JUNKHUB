@@ -1,0 +1,16 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile",
+    "config": {
+      "phpVersion": "8.1",
+      "webCommand": "php -S 0.0.0.0:$PORT -t ."
+    }
+  },
+  "env": {
+    "MYSQLHOST": { "from": "RAILWAY_MYSQLHOST" },
+    "MYSQLPORT": { "from": "RAILWAY_MYSQLPORT" },
+    "MYSQLUSER": { "from": "RAILWAY_MYSQLUSER" },
+    "MYSQLPASSWORD": { "from": "RAILWAY_MYSQLPASSWORD" },
+    "MYSQLDATABASE": { "from": "RAILWAY_MYSQLDATABASE" }
+  }
+}
