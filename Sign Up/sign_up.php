@@ -34,7 +34,7 @@ $errors = is_array($errors) ? $errors : [];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sign up for JunkHUB - Create your account today">
     <title>Sign Up - JunkHUB</title>
-    <link rel="icon" type="image/pnglogo" href="/Images/teallogo22619-foad-200h.png">
+    <link rel="icon" type="image/pnglogo" href="../Images/teallogo22619-foad-200h.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -48,9 +48,9 @@ $errors = is_array($errors) ? $errors : [];
         <!-- Left panel -->
         <section class="left-panel">
 
-          <a href="/Landing Page/index.html" class="brand-link">
+          <a href="../Landing Page/index.php" class="brand-link">
             <div class="brand">
-              <img src="/Images/teallogo22619-foad-200h.png" alt="JunkHUB Logo" class="brand-logo">
+              <img src="../Images/teallogo22619-foad-200h.png" alt="JunkHUB Logo" class="brand-logo">
               <h1 class="brand-name">
                 <span class="brand-highlight">Junk</span>HUB
               </h1>
@@ -80,7 +80,7 @@ $errors = is_array($errors) ? $errors : [];
             <p>' . $errors['user_exist'] . '</p></div>';
         }
         ?>
-          <form id="signup-form" class="signup-form" method="POST" action="/Backend/user-account.php" novalidate>
+          <form id="signup-form" class="signup-form" method="POST" action="../Backend/user-account.php" novalidate>
             <div class="form-row">
               <div class="form-group">
                 <label for="firstName">First Name:</label>
@@ -167,7 +167,7 @@ $errors = is_array($errors) ? $errors : [];
             <button type="submit" class="signup-button" name="signup" value="SIGN UP">SIGN UP</button>
             
             <p class="login-link">
-              Already have an account? <a href="/Sign In/sign_in.php" class="highlight-link">Login here</a>
+              Already have an account? <a href="../Sign In/sign_in.php" class="highlight-link">Login here</a>
             </p>
           </form>
         </section>

@@ -4,6 +4,11 @@ require_once 'dbconnect.php';
 session_start();
 $errors = [];
 
+require __DIR__ . '/dbconnect.php'; // Use absolute path
+if (!isset($pdo)) {
+    die("Database connection not established");
+}
+
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $firstName = $_POST['firstName'];
@@ -134,26 +139,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
         exit();
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->execute(['email' => $email]);
-    $user = $stmt->fetch();
+    
 
-    if ($user && password_verify($password, $user['password'])) {
-        session_regenerate_id(true);
-        $_SESSION['user'] = [
-            'id' => $user['id'],
-            'email' => $user['email'],
-            'firstName' => $user['firstName'],  // Using separate fields
-            'lastName' => $user['lastName'],
-            'created_at' => $user['created_at']
-        ];
-
-        header('Location: ../Dashboard/junkhub.php');
-        exit();
-    } else {
-        $errors['login'] = 'Invalid email or password';
-        $_SESSION['errors'] = $errors;
+    // 1. Connection check (with proper type verification)
+    if (!isset($pdo) || !($pdo instanceof PDO)) {
+        error_log("Critical: Database connection failed in login handler");
+        $_SESSION['errors']['system'] = 'Service unavailable';
         header('Location: ../Sign In/sign_in.php');
         exit();
     }
+
+    try {
+        // 2. Prepared statement with strict validation
+        $stmt = $pdo->prepare("SELECT id, email, password, firstName, lastName, created_at FROM users WHERE email = :email");
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // 3. Secure authentication flow
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                // Regenerate session ID to prevent fixation
+                session_regenerate_id(true);
+                
+                // Minimal session data
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'email' => $user['email'],
+                    'firstName' => htmlspecialchars($user['firstName']), // XSS protection
+                    'lastName' => htmlspecialchars($user['lastName']),
+                    'created_at' => $user['created_at'],
+                    'last_login' => time() // Track activity
+                ];
+                
+                // Security headers
+                header("Cache-Control: no-store");
+                header('Location: ../Dashboard/junkhub.php');
+                exit();
+            }
+        }
+        
+        // 4. Generic error message (don't reveal which was wrong)
+        $errors['login'] = 'Invalid credentials';
+        
+    } catch(PDOException $e) {
+        error_log("Login error: " . $e->getMessage());
+        $errors['system'] = 'System error';
+    } finally {
+        // 5. Always handle errors consistently
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            header('Location: ../Sign In/sign_in.php');
+            exit();
+        }
+    }
+    
 }

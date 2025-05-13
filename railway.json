@@ -2,7 +2,7 @@
   "build": {
     "dockerfile": "Dockerfile",
     "config": {
-      "phpVersion": "8.1",
+      "phpVersion": "8.2",
       "webCommand": "php -S 0.0.0.0:$PORT -t ."
     }
   },

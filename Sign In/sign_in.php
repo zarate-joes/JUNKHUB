@@ -24,7 +24,7 @@ if (isset($_SESSION['success'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Login to JunkHUB - Access your account">
     <title>Sign In - JunkHUB</title>
-    <link rel="icon" type="image/pnglogo" href="/Images/teallogo22619-foad-200h.png">
+    <link rel="icon" type="image/pnglogo" href="../Images/teallogo22619-foad-200h.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -37,9 +37,9 @@ if (isset($_SESSION['success'])) {
       <div class="login-wrapper">
         <!-- Left panel -->
         <section class="left-panel">
-          <a href="/Landing Page/index.html" class="brand-link">
+          <a href="../Landing Page/index.php" class="brand-link">
             <div class="brand">
-              <img src="/Images/teallogo22619-foad-200h.png" alt="JunkHUB Logo" class="brand-logo">
+              <img src="../Images/teallogo22619-foad-200h.png" alt="JunkHUB Logo" class="brand-logo">
               <h1 class="brand-name">
                 <span class="brand-highlight">Junk</span>HUB
               </h1>
@@ -78,7 +78,7 @@ if (isset($_SESSION['success'])) {
             }
           ?>
 
-          <form id="login-form" class="login-form" method="POST" action="/Backend/user-account.php" novalidate>
+          <form id="login-form" class="login-form" method="POST" action="../Backend/user-account.php" novalidate>
             <div class="form-group">
               <label for="email">Email:</label>
               <input type="email" id="email" name="email" placeholder="Enter your email address" required>
@@ -112,13 +112,13 @@ if (isset($_SESSION['success'])) {
             <button type="submit" class="login-button" name="signin" value="LOGIN">LOGIN</button>
             
             <p class="signup-link">
-              Don't have an account? <a href="/Sign Up/sign_up.php" class="highlight-link">Sign up here</a>
+              Don't have an account? <a href="../Sign Up/sign_up.php" class="highlight-link">Sign up here</a>
             </p>
           </form>
         </section>
       </div>
     </main>
-    <script src="/Sign Up/toogle.js" defer></script>
+    <script src="../Sign Up/toogle.js" defer></script>
   </body>
 </html>
 
