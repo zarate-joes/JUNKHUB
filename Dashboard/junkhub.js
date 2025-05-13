@@ -12,6 +12,39 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+
+document.querySelector('.sidebar-toggle').addEventListener('click', function(e) {
+  e.stopPropagation();
+
+  const sidebar = document.querySelector('.sidebar');
+
+  const mainbg = document.querySelector('.mainbg');
+
+  sidebar.classList.remove('visible');
+  mainbg.style.margin = '55px auto 0 auto'; // center again
+
+});
+
+document.querySelector('.logo').addEventListener('click', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const sidebar = document.querySelector('.sidebar');
+  const mainbg = document.querySelector('.mainbg');
+
+
+  sidebar.classList.toggle('visible');
+
+  if (sidebar.classList.contains('visible')) {
+    mainbg.style.margin = '55px 0 0 225px'; // shift right
+
+  } else {
+    mainbg.style.margin = '55px auto 0 auto'; // center again
+
+  }
+});
+
+
   // Popup functionality
 
 const overlay = document.getElementById('overlay');
