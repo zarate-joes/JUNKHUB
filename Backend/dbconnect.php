@@ -1,10 +1,15 @@
 <?php
 
-$host="centerbeam.proxy.rlwy.net";
-$dbname="railway";
-$username="root";
-$password="cglURvsjZsiIwwVsJdfpOKplztFeGylx";
-$port = 34126;
+$host = getenv('MYSQLHOST');     // e.g., "mysql.railway.internal"
+$port = getenv('MYSQLPORT');     // e.g., 34126
+$dbname = getenv('MYSQLDATABASE'); // "railway"
+$username = getenv('MYSQLUSER');   // "root"
+$password = getenv('MYSQLPASSWORD'); // Railway auto-generates this
+
+$options = [
+  PDO::MYSQL_ATTR_SSL_CA => '/etc/ssl/cert.pem' // SSL for security
+];
+
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -12,3 +17,5 @@ try {
 } catch(PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
+
+?>
