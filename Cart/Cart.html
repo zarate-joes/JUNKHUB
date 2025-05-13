@@ -1,110 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Cart</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <title>Cart - JunkHub</title>
+  <link rel="stylesheet" href="Cart.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
-<body class="bg-white font-sans">
+<body>
 
-  <!-- Header -->
-  <header class="bg-white text-black py-4 px-6 border-b-4 border-yellow-400 shadow-sm z-50">
-    <div class="max-w-screen-xl mx-auto flex items-center justify-between flex-wrap">
 
-      <!-- Category Wrapper -->
-      <div class="flex items-center space-x-6">
-        <a href="../Landing Page/index.html" class="flex items-center space-x-2 hover:text-orange-300">
-  <img src="./pngs/Logoo.png" alt="Logo" class="w-6 h-6 object-contain" />
-  <span class="text-sm font-medium">Home Page</span>
-</a>
-        <a href="../Dashboard/junkhub.html" class="flex items-center space-x-2 hover:text-yellow-500">
-    <i class="fas fa-store text-md"></i>
-    <span class="text-sm font-medium">Shop</span>
-  </a>
-         <a href="../Dashboard/junkhub.html" class="flex items-center space-x-2 hover:text-yellow-500">
-    <i class="fas fa-box text-md"></i>
-    <span class="text-sm font-medium">Products</span>
-  </a>
+    <div class="header">
+
+      <div class="divider-line"></div>
+      <div class="profile-icon">
+        <img src="./pngs/prof.png" alt="Profile"></div>
+
+<div class="Cart-icon">
+  <i class="fas fa-shopping-cart"></i>
+  <span class="cart-icon-badge">0</span>
 </div>
 
-      <!-- Search Box -->
-      <div class="relative max-w-xs w-full mx-4 mt-4 lg:mt-0">
-        <input
-          type="text"
-          placeholder="Search..."
-          class="w-full px-4 py-1.5 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-        />
+      <div class="notification-icon">
+        <i class="fas fa-bell"></i></div>
+
+        <div class="search-container"> 
+        <input type="text" placeholder="Search..."></div>
+
+         <a href="../Landing Page/index.html">
+        <div class="logo">
+        <img src="./pngs/Logo.png" alt="Logo"></div>
+      </a>
+
+        <h1 class="brand-name">
+      <span class="text-gold">Junk</span><span class="text-black">HUB</span>
+    </h1>
+
+          <div class="category-wrapper">
+
+        <a href="../Dashboard/junkhub.html">
+        <div class="home-cat">
+          <i class="fas fa-home"></i>
+          <span>Home Page</span></div>
+        </a>
+        
+        <div class="shop-cat">
+          <i class="fas fa-store"></i>
+          <span>Shop</span></div>
+        
+
+        <div class="products-cat">
+          <i class="fas fa-box"></i>
+          <span>Products</span></div>
+
       </div>
 
-      <!-- Icons -->
-      <div class="flex items-center space-x-4 mt-4 lg:mt-0">
-        <!-- Notification -->
-        <div class="relative text-xl hover:text-yellow-500 cursor-pointer">
-          <i class="fas fa-bell"></i>
-          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</span>
-        </div>
-        <!-- Cart -->
-        <div class="text-xl hover:text-yellow-500 cursor-pointer">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-        <!-- Profile -->
-        <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-yellow-400">
-          <img src="./pngs/prof.png" alt="Profile" class="w-full h-full object-cover" />
-        </div>
-      </div>
+       </div>
 
+
+      <div class="mainbg">
+
+      <div class="container-cart">
+
+      
+      <h1 class="text-cart">Your Cart</h1>
+
+      <div class="divider-line1"></div>
+
+      <div class="cart-items-container"></div>
+
+        </div>
+
+      <div class="summary-cart">
+
+    <div class="divider-line2"></div>
+
+<div class="summary-container">
+  <div class="summary-box">
+    <h2>Summary</h2>
+    <div class="summary-item">
+      <span>Subtotal</span>
+      <span>$</span>
     </div>
-  </header>
-
-  <!-- Cart Section -->
-  <main class="p-6 lg:flex lg:justify-between">
-    <!-- Cart Details -->
-    <div class="lg:w-2/3">
-      <h2 class="text-3xl font-bold mb-1">Your cart</h2>
-      <p class="text-gray-500 mb-4">1 item ships at checkout</p>
-
-      <!-- Product -->
-      <div class="flex items-center justify-between border-t pt-4">
-        <div class="flex items-center space-x-4">
-          <img src="./pngs/Mother Board.png" alt="Mother Board" class="w-24 h-auto" />
-          <div>
-            <h3 class="font-semibold text-lg">Mother Board</h3>
-            <p class="text-sm text-gray-500">2 items</p>
-          </div>
-        </div>
-        <div class="flex items-center space-x-4">
-          <div class="border rounded flex items-center px-2 py-1">
-            <button class="text-xl px-2">−</button>
-            <span class="px-2">1</span>
-            <button class="text-xl px-2">+</button>
-          </div>
-          <p class="font-semibold text-lg">$10</p>
-          <button class="text-xl text-gray-500 hover:text-red-500">×</button>
-        </div>
-      </div>
+    <div class="summary-item">
+      <span>Shipping Discount</span>
+      <span class="discount">- $</span>
     </div>
+    <div class="summary-item">
+      <span>Shipping & Handling</span>
+      <span>$</span>
+    </div>
+    <div class="summary-item">
+      <span>Tax (Calculated at checkout)</span>
+      <span>$0.00</span>
+    </div>
+    <hr />
+    <div class="summary-total">
+      <strong>Balance</strong>
+      <strong>$</strong>
+    </div>
+    <a href="../Payment/Checkout.html">
+    <button class="checkout-btn">Checkout
+    </button>
+    </a>
+  </div>
+</div>
 
-    <!-- Summary -->
-    <aside class="bg-[#fdf6ef] p-6 mt-6 lg:mt-0 lg:w-1/3">
-      <h3 class="text-xl font-semibold mb-4">Summary</h3>
-      <div class="space-y-2 text-sm">
-        <div class="flex justify-between"><span>Subtotal (1 Item)</span><span>$10.00</span></div>
-        <div class="flex justify-between"><span>Shipping Discount</span><span class="text-green-600">- $2.00</span></div>
-        <div class="flex justify-between"><span>Shipping & Handling</span><span>$4.00</span></div>
-        <div class="flex justify-between"><span>Tax (Calculated at checkout)</span><span>$0.00</span></div>
-      </div>
-      <hr class="my-4" />
-      <div class="flex justify-between text-lg font-bold">
-        <span>Balance</span>
-        <span>$12.00</span>
-      </div>
-      <a href="../Payment/Checkout.html" class="block w-full bg-yellow-500 text-black font-semibold text-center py-3 mt-4 rounded hover:bg-yellow-600">
-  Checkout
-  </a>
-    </aside>
-  </main>
 
+
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+      </div>
+
+   <script src="Cart.js"></script>
 </body>
 </html>
