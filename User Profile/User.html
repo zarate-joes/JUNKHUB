@@ -3,49 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage My Account</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Manage Account - JunkHub</title>
+  <link rel="stylesheet" href="User.css">
+  <script src="https://cdn.tailwindcss.com"></script> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
-<body class="font-sans bg-white">
+<body>
 
-  <!-- Header -->
-  <header class="bg-white border-b-4 border-yellow-400 shadow-sm py-4 px-6">
-    <div class="max-w-screen-xl mx-auto flex justify-between items-center">
-      <!-- Left nav -->
-      <div class="flex items-center space-x-6">
-        <a href="../Dashboard/junkhub.html" class="flex items-center space-x-2 hover:text-yellow-500">
-          <img src="./pngs/Logoo.png" alt="Logo" class="w-6 h-6 object-contain" />
-          <span class="text-sm font-medium">Home Page</span>
+  <div class="header">
+
+       <div class="divider-line"></div>
+
+      <div class="profile-icon">
+        <img src="./pngs/prof.png" alt="Profile"></div>
+
+        <a href="../Cart/Cart.html">
+          <div class="Cart-icon">
+        <i class="fas fa-shopping-cart"></i>
         </a>
-        <a href="shop.html" class="flex items-center space-x-2 hover:text-yellow-500">
-          <i class="fas fa-store text-md"></i>
-          <span class="text-sm font-medium">Shop</span>
+</div>
+
+      <div class="notification-icon">
+        <i class="fas fa-bell"></i></div>
+
+        <div class="search-container"> 
+        <input type="text" placeholder="Search..."></div>
+
+         <a href="../Landing Page/index.html">
+        <div class="logo">
+        <img src="./pngs/Logo.png" alt="Logo"></div>
+      </a>
+
+        <h1 class="brand-name">
+      <span class="text-gold">Junk</span><span class="text-black">HUB</span>
+    </h1>
+
+          <div class="category-wrapper">
+
+        <a href="../Dashboard/junkhub.html">
+        <div class="home-cat">
+          <i class="fas fa-home"></i>
+          <span>Home Page</span></div>
         </a>
-        <a href="products.html" class="flex items-center space-x-2 hover:text-yellow-500">
-          <i class="fas fa-box text-md"></i>
-          <span class="text-sm font-medium">Products</span>
-        </a>
+        
+        <div class="shop-cat">
+          <i class="fas fa-store"></i>
+          <span>Shop</span></div>
+        
+
+        <div class="products-cat">
+          <i class="fas fa-box"></i>
+          <span>Products</span></div>
+
       </div>
-
-      <!-- Right nav -->
-      <div class="flex items-center space-x-4">
-        <a href="../Notfication/Notification.html" class="relative hover:text-yellow-500">
-          <i class="fas fa-bell text-md"></i>
-          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">3</span>
-        </a>
-        <a href="../User Profile/User.html" class="flex items-center space-x-2 hover:opacity-75">
-          <img src="./pngs/prof.png" alt="Profile" class="w-6 h-6 object-contain" />
-          <span class="text-sm font-medium">Profile</span>
-        </a>
-      </div>
-    </div>
-  </header>
-
+</div>
   <!-- Main Content -->
   <div class="flex bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-60 p-6 bg-gradient-to-b from-yellow-600 to-yellow-400 text-white">
+    <aside class="w-60 p-6 bg-gradient-to-b from-yellow-600 to-yellow-400 text-white" style="margin-top: 55px;">
       <div class="text-2xl font-bold mb-6">Junk<span class="text-black">HUB</span></div>
       <nav class="space-y-4">
         <button onclick="showSection('account')" class="block w-full text-left font-semibold bg-white text-black px-4 py-2 rounded hover:bg-yellow-100">Manage My Account</button>
@@ -55,7 +73,8 @@
       </nav>
     </aside>
 
-    <main class="flex-1 p-8 bg-white text-black">
+    
+    <main class="flex-1 p-8 bg-white text-black" style="margin-top: 55px;">
 
       <!-- Manage My Account -->
       <div id="account-section" class="space-y-10">
@@ -186,17 +205,7 @@
   </div>
 
   <script>
-    function showSection(section) {
-      const sections = ['account-section', 'orders-section', 'wishlist-section'];
-      sections.forEach(id => {
-        document.getElementById(id).classList.add('hidden');
-      });
-      document.getElementById(`${section}-section`).classList.remove('hidden');
-    }
-
-    function signOut() {
-      window.location.href = '../Landing Page/index.html';
-    }
+   s
   </script>
 </body>
 </html>

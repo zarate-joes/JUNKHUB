@@ -344,5 +344,45 @@
   }
   
   .brand-link:hover {
-    text-decoration: none; /* No underline on hover */
+    text-decoration: none; 
   }
+
+  #eye {
+    position: relative;
+    left: 470px; /* Distance from right edge of input */
+    bottom: 26%; /* Center vertically */
+    transform: translateY(-50%); /* Precise vertical centering */
+    cursor: pointer;
+    z-index: 2; /* Ensures it stays above the input */
+  }
+
+.success-message {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  border-left: 4px solid #2e7d32;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.error, .error-main {
+  color: #ff3860;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  animation: fadeIn 0.3s ease-out;
+
+}
+
+.error-main {
+  background: #ffebee;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  border-left: 4px solid #ff3860;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

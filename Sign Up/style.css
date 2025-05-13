@@ -187,6 +187,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   flex: 1;
+  position: relative;
 }
 
 .form-group label {
@@ -258,7 +259,22 @@ a:hover {
 
 .passreq {
   text-align: left;
+  margin-left: 30px;
   font-size: 0.9rem;
+  color: var(--color-gray);
+}
+
+
+.passreq li {
+  position: relative;
+  margin-bottom: 0.25rem;
+}
+
+.passreq li::before {
+  content: "•";
+  position: absolute;
+  left: -1rem;
+  color: var(--color-primary-dark);
 }
 
 .highlight-link {
@@ -359,4 +375,43 @@ input:valid:not(:placeholder-shown) {
 
 .brand-link:hover {
   text-decoration: none; /* No underline on hover */
+}
+
+#eye {
+  position: absolute;
+  right: 10px;
+  top: 43px;
+  cursor: pointer;
+  margin-left: 0;
+}
+
+.error, .error-main {
+  color: #ff3860;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.error-main {
+  background: #ffebee;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  border-left: 4px solid #ff3860;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media screen and (max-width: 768px) {
+  .error-main, .success-message {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .passreq {
+    font-size: 0.8rem;
+  }
 }
