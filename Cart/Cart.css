@@ -147,6 +147,17 @@ a {
   opacity: 0.9;
 }
 
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  padding: 1px 5px;
+  border-radius: 50%;
+  font-size: 10px;
+}
+
 .search-container {
   position: absolute;
   top: 9.5px;
@@ -341,7 +352,7 @@ hr {
 
 .checkout-btn {
   width: 100%;
-  background-color: #e8d18c; /* yellow-600 */
+  background-color: #fcdb79; /* yellow-600 */
   color: black;
   padding: 12px;
   border: none;
@@ -356,9 +367,8 @@ hr {
 }
 
 .checkout-btn:hover {
-  background-color: #d4a007;
+  background-color: #FFD700;
 }
-
 
 
 .cart-item {
