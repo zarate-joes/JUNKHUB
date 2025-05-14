@@ -4,11 +4,6 @@ require_once 'dbconnect.php';
 session_start();
 $errors = [];
 
-require __DIR__ . '/dbconnect.php'; // Use absolute path
-if (!isset($pdo)) {
-    die("Database connection not established");
-}
-
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $firstName = $_POST['firstName'];
