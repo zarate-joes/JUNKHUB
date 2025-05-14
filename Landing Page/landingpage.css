@@ -1,0 +1,304 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  background-color: white;}
+
+.text-black { color: black; }
+.text-gold { color: #FFD700; }
+
+a {
+  text-decoration: none;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 55px;
+  background: white;
+  z-index: 2;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+}
+
+.logo {
+  position: absolute;
+  top: 6px;
+  left: 80px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+    z-index: 4; /* Make sure it's above other elements */
+
+}
+
+.logo:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none; /* Make the image non-clickable so the div gets the click */
+
+}
+
+.brand-name {
+  margin-top: 9px;    
+  margin-left: 130px;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.50vw, 2rem);
+  letter-spacing: -0.04em;
+}
+
+
+.button-signin {
+  position: absolute;
+  font-size: 14px;
+  font-weight: 600;
+  top: 7px;
+  right: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFD700;
+  height: 20px;
+  width: 50px;
+  color: #000000;
+  padding: 10px 15px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.1s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.button-signin:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+  background-color: #ffd900b7;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+}
+
+.text-container {
+  position: absolute;   /* Add this */
+  top: 17px;
+  right: 180px;             /* Already there */
+  display: flex;
+  gap: 30px;
+}
+
+.text-signup, .text-about, .text-contactus {
+    font-size: 14px;
+    font-weight: 600;
+  color: #000000;
+  text-decoration: none;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.1s ease;
+}
+
+.text-signup:hover, .text-about:hover, .text-contactus:hover {
+  color: #e0e0e0;
+}
+
+.mainbg {
+  position: relative;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  margin: 55px auto 0 auto;
+  width: 90%;
+  overflow-x: hidden;
+  z-index: 1;
+  min-height: calc(100vh - 55px); /* Minimum height of viewport */
+  /* Remove fixed height to allow infinite expansion */
+}
+
+.circle-img {
+  position: absolute;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+  transition: all 0.3s ease;
+  z-index: 1000; /* High value to ensure top layer */
+}
+
+/* Adjust individual image positioning to extend into lower-container */
+.tv-img {
+  width: 200px;
+  height: 200px;
+  border: 3px solid #000000;
+  top: 320px;
+  right: 440px;
+  z-index: 1001;
+}
+
+.junk-img {
+  width: 250px;
+  height: 250px;
+  border: 3px solid #000000;
+  top: 200px;
+  right: 280px;
+  z-index: 1002;
+}
+
+.bottle-img {
+  width: 300px;
+  height: 300px;
+  border: 3px solid #000000;
+  top: 40px;
+  right: 120px;
+  z-index: 1003;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0 5%;
+  margin-top: 100px; /* Try reducing from 100px */
+  margin-bottom: auto;
+}
+
+.hero-title, 
+.hero-subtitle {
+  margin: 0;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-weight: 600;
+  font-size: clamp(2.5rem, 3vw, 4rem);
+  line-height: 1.1;
+}
+
+.hero-subtitle {
+  margin: 1rem 0 0.4rem;
+  max-width: 900px;
+}
+
+.divider-line {
+  width: 47%;
+  height: 3px;
+  margin: 0.4rem 0;
+  background-color: #000;
+}
+
+.hero-description {
+  margin: 0;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: clamp(1.125rem, 1.75vw, 1.50rem);
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  max-width: 450px;
+}
+
+/* Call to Action */
+.cta-container {
+  display: flex;
+  gap: v0.4rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px; /* Consistent with width max() */
+  width: max(180px, 8vw);
+  height: clamp(50px, 3.5vw, 65px); /* Better proportional scaling */
+  background-color: #ffd700;
+  border-radius: 5px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+  color: black;
+  font-size: clamp(1.1rem, 1.3vw, 1.5rem); /* Better text scaling */
+  text-decoration: none;
+  transition: all 0.15s ease;
+  border: 2px solid transparent;
+  padding: 0 1.5rem; /* Adjusted for better text spacing */
+  white-space: nowrap; /* Prevents text wrapping */
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  background-color: #ffd900b7;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.lower-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  background: linear-gradient(to right, #C9AA00, #FFD700);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  z-index: 1; /* Lower than images */
+  top: -140px; /* Pull up to overlap with main content */
+
+}
+
+.circle1 {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  background-color: #FFD700;
+  border-radius: 50%;
+  top: 50px;
+  left: 100px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.circle2 {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  background-color: #FFD700;
+  border-radius: 50%;
+  top: -500px; /* Adjusted from margin-top */
+  right: -1100px; /* Adjusted from margin-right */
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.circle3 {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-color: #FFD700;
+  border-radius: 50%;
+  top: 250px;
+  right: 150px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.circle4 {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background-color: #FFD700;
+  border-radius: 50%;
+  top: 150px;
+  right: 350px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.circle5 {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background-color: #FFD700;
+  border-radius: 50%;
+  top: -190px;
+  right: 900px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+
