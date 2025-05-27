@@ -12,6 +12,68 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  
+
+
+
+
+
+
+  
+// Notification Panel Functionality
+const notificationIcon = document.querySelector('.notification-icon');
+const notificationPanel = document.getElementById('notificationPanel');
+const closeNotifications = document.getElementById('closeNotifications');
+
+if (notificationIcon && notificationPanel) {
+  notificationIcon.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    // Toggle notification panel
+    notificationPanel.classList.toggle('visible');
+    
+    // Remove badge when notifications are opened
+    const badge = this.querySelector('.badge');
+    if (badge) {
+      badge.style.display = 'none';
+    }
+    
+    // Close sidebar if open
+    const sidebar = document.querySelector('.sidebar');
+    const mainbg = document.querySelector('.mainbg');
+    if (sidebar.classList.contains('visible')) {
+      sidebar.classList.remove('visible');
+      mainbg.style.margin = '55px auto 0 auto';
+    }
+  });
+  
+  closeNotifications.addEventListener('click', function(e) {
+    e.stopPropagation();
+    notificationPanel.classList.remove('visible');
+  });
+}
+
+// Close notifications when clicking outside
+document.addEventListener('click', function(e) {
+  if (notificationPanel && !notificationPanel.contains(e.target) && e.target !== notificationIcon) {
+    notificationPanel.classList.remove('visible');
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 document.querySelector('.sidebar-toggle').addEventListener('click', function(e) {
   e.stopPropagation();
@@ -197,4 +259,13 @@ document.querySelector('.add-to-cart').addEventListener('click', function() {
 
   showSlide(currentIndex);
 
+
+
+
+
+
+  
+
+
+  
 });
