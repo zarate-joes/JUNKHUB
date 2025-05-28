@@ -62,7 +62,34 @@ document.addEventListener('click', function(e) {
 
 
 
-
+// Add this to your existing notification panel functionality
+const notificationFilters = document.querySelectorAll('.notification-filter');
+if (notificationFilters.length) {
+  notificationFilters.forEach(filter => {
+    filter.addEventListener('click', function() {
+      // Remove active class from all filters
+      notificationFilters.forEach(f => f.classList.remove('active'));
+      
+      // Add active class to clicked filter
+      this.classList.add('active');
+      
+      const filterType = this.dataset.filter;
+      const notificationItems = document.querySelectorAll('.notification-item');
+      
+      notificationItems.forEach(item => {
+        if (filterType === 'all') {
+          item.style.display = 'block';
+        } else if (filterType === 'unread') {
+          if (item.classList.contains('unread')) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+}
 
 
 
