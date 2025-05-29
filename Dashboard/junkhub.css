@@ -578,9 +578,6 @@ a {
   opacity: 0.9;
 }
 
-.home-cat.clicked {
-  color: #FFD700; 
-}
 
 .products-cat  {
   position: relative;
@@ -600,6 +597,33 @@ a {
 .products-cat.clicked {
   color: #FFD700; 
 }
+
+
+
+/*========================================== */
+
+
+/* In junkhub.css, add these styles */
+.shop-section, .product-section {
+  transition: opacity 0.3s ease;
+}
+
+/* Optional: Add some animation when switching views */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.shop-section[style*="display: block"], 
+.product-section[style*="display: block"] {
+  animation: fadeIn 0.3s ease;
+}
+
+
+
+/*========================================== */
+
+
 
 .container0-wrapper {
   position: relative;

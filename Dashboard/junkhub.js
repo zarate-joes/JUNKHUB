@@ -15,6 +15,88 @@ document.addEventListener('DOMContentLoaded', function () {
   
 
 
+// =========================================================================================
+
+
+
+// Get the category buttons
+const shopCat = document.querySelector('.shop-cat');
+const productsCat = document.querySelector('.products-cat');
+const homeCat = document.querySelector('.home-cat');
+
+// Get all sections
+const shopSection = document.querySelector('.shop-section');
+const productSections = document.querySelectorAll('.product-section');
+const mainbg = document.querySelector('.mainbg');
+
+// Function to show only shops
+function showShops() {
+  shopSection.style.display = 'block';
+  productSections.forEach(section => {
+    section.style.display = 'none';
+  });
+  // Reset to default view (centered)
+  mainbg.style.margin = '55px auto 0 auto';
+}
+
+// Function to show only products
+function showProducts() {
+  shopSection.style.display = 'none';
+  productSections.forEach(section => {
+    section.style.display = 'block';
+  });
+  // Reset to default view (centered)
+  mainbg.style.margin = '55px auto 0 auto';
+}
+
+// Function to show both (home view)
+function showHome() {
+  shopSection.style.display = 'block';
+  productSections.forEach(section => {
+    section.style.display = 'block';
+  });
+}
+
+// Add event listeners to category buttons
+if (shopCat) {
+  shopCat.addEventListener('click', function(e) {
+    e.preventDefault();
+    showShops();
+    // Update clicked state
+    document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
+    this.classList.add('clicked');
+  });
+}
+
+if (productsCat) {
+  productsCat.addEventListener('click', function(e) {
+    e.preventDefault();
+    showProducts();
+    // Update clicked state
+    document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
+    this.classList.add('clicked');
+  });
+}
+
+if (homeCat) {
+  homeCat.addEventListener('click', function(e) {
+    e.preventDefault();
+    showHome();
+    // Update clicked state
+    document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
+    this.classList.add('clicked');
+  });
+}
+
+// Initialize to show home view by default
+showHome();
+
+
+
+
+
+// =========================================================================================
+
 
 
 
@@ -93,11 +175,7 @@ if (notificationFilters.length) {
 
 
 
-
-
-
-
-
+// =========================================================================================
 
 
 
