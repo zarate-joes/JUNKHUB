@@ -451,32 +451,42 @@ body {
 }
 
 /* Orders Table */
+/* Orders Table */
 .orders-table {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
   border: 1px solid var(--light-gray);
   border-radius: var(--border-radius);
   overflow: hidden;
 }
 
 .table-header {
+  display: table-row;
   background-color: var(--secondary-color);
   color: white;
+}
+
+.table-header > div {
+  display: table-cell;
   padding: 1rem;
   font-weight: 500;
-  display: flex;
-  align-items: center;
 }
 
 .table-row {
-  display: contents;
+  display: table-row;
+  background-color: white;
 }
 
 .table-row > div {
+  display: table-cell;
   padding: 1rem;
   border-bottom: 1px solid var(--light-gray);
-  display: flex;
-  align-items: center;
+  vertical-align: middle;
+}
+
+.table-row:last-child > div {
+  border-bottom: none;
 }
 
 .status-badge {
@@ -484,6 +494,7 @@ body {
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 500;
+  display: inline-block;
 }
 
 .status-badge.pending {
@@ -661,17 +672,85 @@ body {
   margin-bottom: 1.5rem;
 }
 
+/* Products Table */
 .products-table {
-  display: grid;
-  grid-template-columns: 2fr repeat(5, 1fr);
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
   border: 1px solid var(--light-gray);
   border-radius: var(--border-radius);
   overflow: hidden;
 }
 
+.products-table .table-header {
+  display: table-row;
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.products-table .table-header > div {
+  display: table-cell;
+  padding: 1rem;
+  font-weight: 500;
+}
+
+.products-table .table-row {
+  display: table-row;
+  background-color: white;
+}
+
+.products-table .table-row > div {
+  display: table-cell;
+  padding: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+  vertical-align: middle;
+}
+
+.products-table .table-row:last-child > div {
+  border-bottom: none;
+}
+
 .product-cell {
   display: flex;
   align-items: center;
+  gap: 1rem;
+}
+
+.product-icon {
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.product-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.product-info p {
+  font-size: 0.8rem;
+  color: var(--gray-color);
+}
+
+.stock-input {
+  width: 50px;
+  padding: 0.3rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .stock-input {

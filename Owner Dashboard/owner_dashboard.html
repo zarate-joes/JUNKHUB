@@ -196,54 +196,54 @@
         </section>
 
         <!-- Orders Section -->
-        <section class="orders-section">
-          <div class="section-header">
-            <h2>Recent Orders</h2>
-            <div class="order-filter">
-              <button class="filter-btn active">All</button>
-              <button class="filter-btn">Pending</button>
-              <button class="filter-btn">Completed</button>
-            </div>
-          </div>
-          
-          <div class="orders-table">
-            <div class="table-header">
-              <div>Order #</div>
-              <div>Buyer</div>
-              <div>Items</div>
-              <div>Date</div>
-              <div>Status</div>
-              <div>Action</div>
-            </div>
-            
-            <div class="table-row">
-              <div>#1234</div>
-              <div>Chidrick</div>
-              <div>Cardboard (10kg)</div>
-              <div>March 20, 2025</div>
-              <div><span class="status-badge pending">Pending</span></div>
-              <div><button class="btn btn-sm">View</button></div>
-            </div>
-            
-            <div class="table-row">
-              <div>#1235</div>
-              <div>Joebert</div>
-              <div>Scrap Metal (2kg)</div>
-              <div>March 21, 2025</div>
-              <div><span class="status-badge completed">Completed</span></div>
-              <div><button class="btn btn-sm">View</button></div>
-            </div>
-            
-            <div class="table-row">
-              <div>#1236</div>
-              <div>Reggie</div>
-              <div>Plastic Bottles (5kg)</div>
-              <div>March 22, 2025</div>
-              <div><span class="status-badge pending">Pending</span></div>
-              <div><button class="btn btn-sm">View</button></div>
-            </div>
-          </div>
-        </section>
+<section class="orders-section">
+  <div class="section-header">
+    <h2>Recent Orders</h2>
+    <div class="order-filter">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Pending</button>
+      <button class="filter-btn">Completed</button>
+    </div>
+  </div>
+  
+  <div class="orders-table">
+    <div class="table-header">
+      <div>Order #</div>
+      <div>Buyer</div>
+      <div>Items</div>
+      <div>Date</div>
+      <div>Status</div>
+      <div>Action</div>
+    </div>
+    
+    <div class="table-row">
+      <div>#1234</div>
+      <div>Chidrick</div>
+      <div>Cardboard (10kg)</div>
+      <div>March 20, 2025</div>
+      <div><span class="status-badge pending">Pending</span></div>
+      <div><button class="btn btn-sm">View</button></div>
+    </div>
+    
+    <div class="table-row">
+      <div>#1235</div>
+      <div>Joebert</div>
+      <div>Scrap Metal (2kg)</div>
+      <div>March 21, 2025</div>
+      <div><span class="status-badge completed">Completed</span></div>
+      <div><button class="btn btn-sm">View</button></div>
+    </div>
+    
+    <div class="table-row">
+      <div>#1236</div>
+      <div>Reggie</div>
+      <div>Plastic Bottles (5kg)</div>
+      <div>March 22, 2025</div>
+      <div><span class="status-badge pending">Pending</span></div>
+      <div><button class="btn btn-sm">View</button></div>
+    </div>
+  </div>
+</section>
 
         <!-- Messages & Analytics Section -->
         <section class="bottom-section">
@@ -327,119 +327,121 @@
           </div>
         </header>
 
-        <section class="products-management">
-          <div class="section-header">
-            <h2>Product Inventory</h2>
-            <div class="section-actions">
-              <button class="btn btn-primary" id="add-product">
-                <i class="fas fa-plus"></i> Add New Product
-              </button>
-              <div class="search-box">
-                <input type="text" placeholder="Search products...">
-                <i class="fas fa-search"></i>
-              </div>
-            </div>
-          </div>
+<!-- Products Management Section -->
+<section class="products-management">
+  <div class="section-header">
+    <h2>Product Inventory</h2>
+    <div class="section-actions">
+      <button class="btn btn-primary" id="add-product">
+        <i class="fas fa-plus"></i> Add New Product
+      </button>
+      <div class="search-box">
+        <input type="text" placeholder="Search products...">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+  </div>
 
-          <div class="category-filter">
-            <button class="filter-btn active">All</button>
-            <button class="filter-btn">Plastic</button>
-            <button class="filter-btn">Metal</button>
-            <button class="filter-btn">Glass</button>
-            <button class="filter-btn">Paper</button>
-          </div>
+  <div class="category-filter">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">Plastic</button>
+    <button class="filter-btn">Metal</button>
+    <button class="filter-btn">Glass</button>
+    <button class="filter-btn">Paper</button>
+  </div>
 
-          <div class="products-table">
-            <div class="table-header">
-              <div>Product</div>
-              <div>Price</div>
-              <div>Stock</div>
-              <div>Category</div>
-              <div>Status</div>
-              <div>Actions</div>
-            </div>
-            
-            <div class="table-row">
-              <div class="product-cell">
-                <div class="product-icon">P</div>
-                <div class="product-info">
-                  <h3>Plastic Bottles</h3>
-                  <p>ID: PB001</p>
-                </div>
-              </div>
-              <div>₱3/kg</div>
-              <div>
-                <input type="number" value="20" min="0" class="stock-input">
-                <span>kg</span>
-              </div>
-              <div>Plastic</div>
-              <div>
-                <label class="toggle-switch">
-                  <input type="checkbox" checked>
-                  <span class="slider"></span>
-                </label>
-                <span class="status-text">Available</span>
-              </div>
-              <div class="actions-cell">
-                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
-            
-            <div class="table-row">
-              <div class="product-cell">
-                <div class="product-icon">S</div>
-                <div class="product-info">
-                  <h3>Scrap Metal</h3>
-                  <p>ID: SM002</p>
-                </div>
-              </div>
-              <div>₱10/kg</div>
-              <div>
-                <input type="number" value="8" min="0" class="stock-input">
-                <span>kg</span>
-              </div>
-              <div>Metal</div>
-              <div>
-                <label class="toggle-switch">
-                  <input type="checkbox" checked>
-                  <span class="slider"></span>
-                </label>
-                <span class="status-text">Available</span>
-              </div>
-              <div class="actions-cell">
-                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
-            
-            <div class="table-row">
-              <div class="product-cell">
-                <div class="product-icon">C</div>
-                <div class="product-info">
-                  <h3>Cardboard</h3>
-                  <p>ID: CB003</p>
-                </div>
-              </div>
-              <div>₱5/kg</div>
-              <div>
-                <input type="number" value="15" min="0" class="stock-input">
-                <span>kg</span>
-              </div>
-              <div>Paper</div>
-              <div>
-                <label class="toggle-switch">
-                  <input type="checkbox" checked>
-                  <span class="slider"></span>
-                </label>
-                <span class="status-text">Available</span>
-              </div>
-              <div class="actions-cell">
-                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
-          </div>
+  <div class="products-table">
+    <div class="table-header">
+      <div>Product</div>
+      <div>Price</div>
+      <div>Stock</div>
+      <div>Category</div>
+      <div>Status</div>
+      <div>Actions</div>
+    </div>
+    
+    <div class="table-row">
+      <div class="product-cell">
+        <div class="product-icon">P</div>
+        <div class="product-info">
+          <h3>Plastic Bottles</h3>
+          <p>ID: PB001</p>
+        </div>
+      </div>
+      <div>₱3/kg</div>
+      <div>
+        <input type="number" value="20" min="0" class="stock-input">
+        <span>kg</span>
+      </div>
+      <div>Plastic</div>
+      <div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="status-text">Available</span>
+      </div>
+      <div class="actions-cell">
+        <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    
+    <div class="table-row">
+      <div class="product-cell">
+        <div class="product-icon">S</div>
+        <div class="product-info">
+          <h3>Scrap Metal</h3>
+          <p>ID: SM002</p>
+        </div>
+      </div>
+      <div>₱10/kg</div>
+      <div>
+        <input type="number" value="8" min="0" class="stock-input">
+        <span>kg</span>
+      </div>
+      <div>Metal</div>
+      <div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="status-text">Available</span>
+      </div>
+      <div class="actions-cell">
+        <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    
+    <div class="table-row">
+      <div class="product-cell">
+        <div class="product-icon">C</div>
+        <div class="product-info">
+          <h3>Cardboard</h3>
+          <p>ID: CB003</p>
+        </div>
+      </div>
+      <div>₱5/kg</div>
+      <div>
+        <input type="number" value="15" min="0" class="stock-input">
+        <span>kg</span>
+      </div>
+      <div>Paper</div>
+      <div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="status-text">Available</span>
+      </div>
+      <div class="actions-cell">
+        <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
 
           <!-- Add Product Modal -->
           <div class="modal" id="add-product-modal">
