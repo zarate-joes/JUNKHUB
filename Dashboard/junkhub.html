@@ -23,13 +23,15 @@
     </h1>
     <div class="circle1"></div>
     <div class="circle2"></div>
+
+    
   </div>
 
   <div class="header">
   
       <div class="search-underline"></div>
 
-      <a href="../User Profile/User.html">
+      <a href="../User Profile/profile.html">
      <div class="profile-icon">
         <img src="./pngs/prof.png" alt="Profile">
       </div>
@@ -44,12 +46,14 @@
     </a>
 
 
-    <a href="../Notfication/Notification.html">
+
+    
+
       <div class="notification-icon">
         <i class="fas fa-bell"></i>  
         <span class="badge">3</span>
       </div>
-  </a>
+
 
       <div class="search-container"> 
         <input type="text" placeholder="Search...">
@@ -93,11 +97,49 @@
 
       <div class="search-underline">
       </div>
-  
+ 
+      
+<!-- Notification Panel -->
+<!-- Update the notification panel section -->
+<div class="notification-panel" id="notificationPanel">
+  <div class="notification-header">
+    <span>Notifications</span>
+    <span class="close-notifications" id="closeNotifications">&times;</span>
+  </div>
+  <div class="notification-filters">
+    <button class="notification-filter active" data-filter="all">All</button>
+    <button class="notification-filter" data-filter="unread">Unread</button>
+  </div>
+  <div class="notification-items">
+    <div class="notification-item unread">
+      <div>New message from Shop A</div>
+      <div class="notification-time">2 hours ago</div>
+    </div>
+    <div class="notification-item unread">
+      <div>Your order has been shipped</div>
+      <div class="notification-time">1 day ago</div>
+    </div>
+    <div class="notification-item">
+      <div>Weekly newsletter</div>
+      <div class="notification-time">3 days ago</div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 </div>   
  
  
 <div class="mainbg">
+
+  <div class="shop-section">
 
   <h2 style="font-weight: 600; margin-left: 60px;">Shops</h2>
   
@@ -132,8 +174,16 @@
     <span class="dot"></span>
   </div>
 
+  </div>
+
+
+
   <div class="underline-divider1">
   </div>
+
+
+<div class="product-section">
+
 
     <h2 style="font-weight: 600; margin-left: 60px;">Recommended Items</h2>
 
@@ -165,8 +215,13 @@
 
             </div>
 
+     </div>
+
       <div class="underline-divider1">
       </div>
+
+
+      <div class="product-section">
 
       <h2 style="font-weight: 600; margin-left: 60px;">Items</h2>
 
@@ -253,7 +308,9 @@
                             </div>
                 </div> 
                 </div> 
+                </div> 
   
+                
 
  <div class="overlay" id="overlay">
   <div class="popup">

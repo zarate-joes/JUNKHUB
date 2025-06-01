@@ -1,5 +1,4 @@
 body {
-
   padding: 0;
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -152,6 +151,20 @@ a {
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .content {
   flex: 1;
   padding: 20px;
@@ -285,9 +298,7 @@ a {
   opacity: 0.9;
 }
 
-.notification-icon.clicked {
-  color: #FFD700;
-}
+
 
 .badge {
   position: absolute;
@@ -299,6 +310,138 @@ a {
   border-radius: 50%;
   font-size: 10px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.notification-panel {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100vh;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  padding-top: 0; /* Remove the top padding */
+  box-shadow: -3px 0 10px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  z-index: 3;
+  transition: right 0.3s ease;
+}
+
+.notification-panel.visible {
+  right: 0; /* Bring into view */
+}
+
+.notification-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #f9f9f9;
+}
+
+.notification-item.unread {
+  background-color: #fff9e6;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #777;
+  margin-top: 5px;
+}
+
+.close-notifications {
+  cursor: pointer;
+  color: #777;
+}
+
+.close-notifications:hover {
+  color: #333;
+}
+
+/* Adjust main content when notification panel is open */
+.notification-panel.visible ~ .mainbg {
+  margin-right: 300px;
+}
+
+
+/* Add these styles to your CSS file */
+.notification-filters {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  background: white;
+  position: sticky;
+  top: 56px; /* Height of the header */
+  z-index: 1;
+}
+
+.notification-filter {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #777;
+  transition: all 0.2s;
+}
+
+.notification-filter.active {
+  color: #FFD700;
+  border-bottom: 2px solid #FFD700;
+}
+
+.notification-filter:hover {
+  background: #f9f9f9;
+}
+
+.notification-items {
+  overflow-y: auto;
+  flex: 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .arrow {
@@ -448,9 +591,6 @@ a {
   opacity: 0.9;
 }
 
-.home-cat.clicked {
-  color: #FFD700; 
-}
 
 .products-cat  {
   position: relative;
@@ -470,6 +610,33 @@ a {
 .products-cat.clicked {
   color: #FFD700; 
 }
+
+
+
+/*========================================== */
+
+
+/* In junkhub.css, add these styles */
+.shop-section, .product-section {
+  transition: opacity 0.3s ease;
+}
+
+/* Optional: Add some animation when switching views */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.shop-section[style*="display: block"], 
+.product-section[style*="display: block"] {
+  animation: fadeIn 0.3s ease;
+}
+
+
+
+/*========================================== */
+
+
 
 .container0-wrapper {
   position: relative;

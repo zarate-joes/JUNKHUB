@@ -12,6 +12,173 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  
+
+
+// =========================================================================================
+
+
+
+// Get the category buttons
+const shopCat = document.querySelector('.shop-cat');
+const productsCat = document.querySelector('.products-cat');
+const homeCat = document.querySelector('.home-cat');
+
+// Get all sections
+const shopSection = document.querySelector('.shop-section');
+const productSections = document.querySelectorAll('.product-section');
+const mainbg = document.querySelector('.mainbg');
+
+// Function to show only shops
+function showShops() {
+  shopSection.style.display = 'block';
+  productSections.forEach(section => {
+    section.style.display = 'none';
+  });
+  // Reset to default view (centered)
+  mainbg.style.margin = '55px auto 0 auto';
+}
+
+// Function to show only products
+function showProducts() {
+  shopSection.style.display = 'none';
+  productSections.forEach(section => {
+    section.style.display = 'block';
+  });
+  // Reset to default view (centered)
+  mainbg.style.margin = '55px auto 0 auto';
+}
+
+// Function to show both (home view)
+function showHome() {
+  shopSection.style.display = 'block';
+  productSections.forEach(section => {
+    section.style.display = 'block';
+  });
+}
+
+// Add event listeners to category buttons
+if (shopCat) {
+  shopCat.addEventListener('click', function(e) {
+    e.preventDefault();
+    showShops();
+    // Update clicked state
+    document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
+    this.classList.add('clicked');
+  });
+}
+
+if (productsCat) {
+  productsCat.addEventListener('click', function(e) {
+    e.preventDefault();
+    showProducts();
+    // Update clicked state
+    document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
+    this.classList.add('clicked');
+  });
+}
+
+if (homeCat) {
+  homeCat.addEventListener('click', function(e) {
+    e.preventDefault();
+    showHome();
+    // Update clicked state
+    document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
+    this.classList.add('clicked');
+  });
+}
+
+// Initialize to show home view by default
+showHome();
+
+
+
+
+
+// =========================================================================================
+
+
+
+
+
+  
+// Notification Panel Functionality
+const notificationIcon = document.querySelector('.notification-icon');
+const notificationPanel = document.getElementById('notificationPanel');
+const closeNotifications = document.getElementById('closeNotifications');
+
+if (notificationIcon && notificationPanel) {
+  notificationIcon.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    // Toggle notification panel
+    notificationPanel.classList.toggle('visible');
+    
+    // Remove badge when notifications are opened
+    const badge = this.querySelector('.badge');
+    if (badge) {
+      badge.style.display = 'none';
+    }
+    
+    // Close sidebar if open
+    const sidebar = document.querySelector('.sidebar');
+    const mainbg = document.querySelector('.mainbg');
+    if (sidebar.classList.contains('visible')) {
+      sidebar.classList.remove('visible');
+      mainbg.style.margin = '55px auto 0 auto';
+    }
+  });
+  
+  closeNotifications.addEventListener('click', function(e) {
+    e.stopPropagation();
+    notificationPanel.classList.remove('visible');
+  });
+}
+
+// Close notifications when clicking outside
+document.addEventListener('click', function(e) {
+  if (notificationPanel && !notificationPanel.contains(e.target) && e.target !== notificationIcon) {
+    notificationPanel.classList.remove('visible');
+  }
+});
+
+
+
+// Add this to your existing notification panel functionality
+const notificationFilters = document.querySelectorAll('.notification-filter');
+if (notificationFilters.length) {
+  notificationFilters.forEach(filter => {
+    filter.addEventListener('click', function() {
+      // Remove active class from all filters
+      notificationFilters.forEach(f => f.classList.remove('active'));
+      
+      // Add active class to clicked filter
+      this.classList.add('active');
+      
+      const filterType = this.dataset.filter;
+      const notificationItems = document.querySelectorAll('.notification-item');
+      
+      notificationItems.forEach(item => {
+        if (filterType === 'all') {
+          item.style.display = 'block';
+        } else if (filterType === 'unread') {
+          if (item.classList.contains('unread')) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+}
+
+
+
+// =========================================================================================
+
+
+
 
 document.querySelector('.sidebar-toggle').addEventListener('click', function(e) {
   e.stopPropagation();
@@ -197,4 +364,13 @@ document.querySelector('.add-to-cart').addEventListener('click', function() {
 
   showSlide(currentIndex);
 
+
+
+
+
+
+  
+
+
+  
 });

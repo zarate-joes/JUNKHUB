@@ -1,254 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard - JunkHub</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="Admin.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="Admin.js"></script>
 </head>
-<body class="font-sans bg-white">
 
-  <!-- Header -->
-  <header class="bg-white border-b-4 border-yellow-400 shadow py-4 px-6">
-    <div class="max-w-screen-x1 mx-auto flex justify-between items-center">
-      <!-- Left Nav -->
-      <div class="flex items-center space-x-6">
-        <a href="#" class="flex items-center space-x-2 text-sm font-medium hover:text-yellow-400">
-          <img src="./pngs/Logo.png" alt="Logo" class="w-6 h-6 object-contain" />
-          <span>Home Page</span>
-        </a>
-        <a href="#" class="flex items-center space-x-2 text-sm font-medium hover:text-yellow-500">
-          <i class="fas fa-store"></i><span>Shop</span>
-        </a>
-        <a href="#" class="flex items-center space-x-2 text-sm font-medium hover:text-yellow-500">
-          <i class="fas fa-box"></i><span>Products</span>
-        </a>
+<body>
+  <div class="header">
+    <div class="divider-line"></div>
+
+    <a href="../User Profile/User.html">
+      <div class="profile-icon">
+        <img src="./pngs/prof.png" alt="Profile">
       </div>
-      <!-- Right Nav -->
-      <div class="flex items-center space-x-4">
-        <div class="relative hover:text-yellow-500">
-          <i class="fas fa-bell text-md"></i>
-          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">3</span>
+    </a>
+
+    <div class="admin-text">
+      <span>admin</span>
+    </div>
+
+    <div class="notification-icon">
+      <i class="fas fa-bell"></i>  
+      <span class="badge">3</span>
+    </div>
+
+    <div class="search-container"> 
+      <input type="text" placeholder="Search...">
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <a href="../Landing Page/index.html" class="logo-brand-container">
+      <div class="logo">
+        <img src="./pngs/Logo.png" alt="Logo">
+      </div>
+      <h1 class="brand-name">
+        <span class="text-gold">Junk</span><span class="text-black">HUB</span>
+      </h1>
+    </a>
+
+    <div class="admin-menu">
+      <div class="menu-item active">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </div>
+      
+      <div class="menu-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Analytics</span>
+      </div>
+      
+      <div class="menu-item">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Monitor Orders</span>
+      </div>
+      
+      <div class="menu-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Generate Reports</span>
+      </div>
+      
+      <div class="menu-item">
+        <i class="fas fa-users-cog"></i>
+        <span>Manage Users</span>
+      </div>
+      
+      <div class="menu-item sign-out">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sign Out</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="content-header">
+      <h2>Admin Dashboard</h2>
+      <div class="breadcrumb">Home / Dashboard</div>
+    </div>
+    
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-icon" style="background-color: #4e73df;">
+          <i class="fas fa-calendar"></i>
         </div>
-        <div class="flex items-center space-x-2 hover:opacity-75">
-          <img src="./pngs/prof.png" alt="Profile" class="w-6 h-6 object-contain" />
-          <span class="text-sm font-medium">Admin</span>
+        <div class="stat-info">
+          <div class="stat-title">Total Orders</div>
+          <div class="stat-value">1,248</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon" style="background-color: #1cc88a;">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-title">Revenue</div>
+          <div class="stat-value">$48,352</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon" style="background-color: #36b9cc;">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-title">Users</div>
+          <div class="stat-value">1,024</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon" style="background-color: #f6c23e;">
+          <i class="fas fa-percentage"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-title">Conversion</div>
+          <div class="stat-value">24%</div>
         </div>
       </div>
     </div>
-  </header>
-
-  <!-- Layout -->
-  <div class="flex h-screen">
-    <!-- Sidebar -->
-    <aside class="w-64 h-screen bg-gradient-to-b from-yellow-200 to-yellow-500 text-white p-6">
-
-       <div class="text-3xl font-bold mb-12">Junk<span class="text-black">HUB</span>
+    
+    <div class="charts-container">
+      <div class="chart-card">
+        <h3>Sales Overview</h3>
+        <canvas id="salesChart"></canvas>
       </div>
-      <nav class="space-y-4">
-        <button onclick="showSection('dashboard')" class="w-full text-left px-4 py-2 bg-yellow-700 hover:bg-yellow-800 rounded text-white">Dashboard</button>
-        <button onclick="showSection('analytics')" class="w-full text-left px-4 py-2 bg-yellow-700 hover:bg-yellow-800 rounded text-white">Analytics</button>
-        <button onclick="showSection('orders')" class="w-full text-left px-4 py-2 bg-yellow-700 hover:bg-yellow-800 rounded text-white">Monitor Orders</button>
-        <button onclick="showSection('reports')" class="w-full text-left px-4 py-2 bg-yellow-700 hover:bg-yellow-800 rounded text-white">Generate Reports</button>
-        <button onclick="showSection('users')" class="w-full text-left px-4 py-2 bg-yellow-700 hover:bg-yellow-800 rounded text-white">Manage Users</button>
-        <button onclick="signOut()" class="w-full text-left px-4 py-2 bg-yellow-700 hover:bg-yellow-800 rounded text-white">Sign Out</button>
-      </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 ml-6">
-      <div class="bg-white p-8 rounded-2xl shadow-md space-y-10">
-
-        <!-- Dashboard Section -->
-        <section id="dashboard-section" class="space-y-8">
-          <h2 class="text-2xl font-bold text-gray-800">Dashboard Overview</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="card-stat"><i class="fas fa-users"></i> Active Users <strong>123</strong></div>
-            <div class="card-stat"><i class="fas fa-user-friends"></i> Total Users <strong>246</strong></div>
-            <div class="card-stat"><i class="fas fa-money-bill"></i> Total Revenue <strong>₱1,240,034</strong></div>
-            <div class="card-stat"><i class="fas fa-chart-line"></i> Growth Rate <strong>5.35%</strong></div>
-          </div>
-        </section>
-
-        <!-- Analytics Section -->
-      <section id="analytics-section" class="hidden">
-  <h2 class="text-2xl font-bold text-gray-800 mb-4">Analytics Dashboard</h2>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-    <div class="card-stat">
-      <i class="fas fa-eye"></i>
-      <div>Total Page Views</div>
-      <strong>28,740</strong>
-    </div>
-    <div class="card-stat">
-      <i class="fas fa-shopping-cart"></i>
-      <div>Conversion Rate</div>
-      <strong>3.9%</strong>
-    </div>
-    <div class="card-stat">
-      <i class="fas fa-clock"></i>
-      <div>Avg. Session Duration</div>
-      <strong>2m 34s</strong>
-    </div>
-  </div>
-
-  <!-- Analytics Graph -->
-  <div class="bg-white p-6 rounded-xl shadow-md">
-    <canvas id="analyticsChart" height="200"></canvas>
-  </div>
-</section>
-
-        <!-- Orders Section -->
-<section id="orders-section" class="hidden p-4">
-  <h2 class="text-2xl font-bold text-gray-800 mb-4">User Orders Management</h2>
-
-  <div class="space-y-4" id="admin-orders-container">
-    <!-- Orders will be injected here via JavaScript -->
-  </div>
-</section>
-
-        <section id="reports-section" class="hidden p-4">
-  <h2 class="text-2xl font-bold text-gray-800 mb-4">Report Generation</h2>
-
-  <div class="mb-4 flex flex-wrap gap-3 items-center">
-    <label for="start-date" class="text-gray-700">Date Range:</label>
-    <input type="date" id="start-date" class="border px-3 py-1 rounded-md" />
-    <span>to</span>
-    <input type="date" id="end-date" class="border px-3 py-1 rounded-md" />
-    <button onclick="generateReport()" class="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700">
-      Generate Report
-    </button>
-  </div>
-
-  <div class="overflow-x-auto mb-4">
-    <table id="report-table" class="w-full border border-gray-200 text-sm text-center">
-      <thead class="bg-gray-100">
-        <thead class="bg-gray-100">
-  <tr>
-    <th class="border p-2">User</th>
-    <th class="border p-2">Material</th>
-    <th class="border p-2">Quantity</th>
-    <th class="border p-2">Weight (kg)</th>
-    <th class="border p-2">Points</th>
-    <th class="border p-2">Total Cash (₱)</th>
-    <th class="border p-2">Date</th>
-  </tr>
-</thead>
-
-      <tbody>
-        <!-- JS will insert rows here -->
-      </tbody>
-    </table>
-  </div>
-
-  <button onclick="downloadCSV()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
-    Download CSV
-  </button>
-  
-</section>
-
-        <!-- Users Section -->
-        <section id="users-section" class="hidden">
-          <h2 class="text-2xl font-bold text-gray-800 mb-4">Manage Users</h2>
-          <p>User list and actions go here...</p>
-        </section>
-
+      <div class="chart-card">
+        <h3>User Activity</h3>
+        <canvas id="activityChart"></canvas>
       </div>
-    </main>
+    </div>
+    
+    <div class="recent-orders">
+      <h3>Recent Orders</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#JH-1001</td>
+            <td>John Doe</td>
+            <td>3</td>
+            <td>$124.00</td>
+            <td><span class="status shipped">Shipped</span></td>
+            <td><button class="action-btn">View</button></td>
+          </tr>
+          <!-- More rows would go here -->
+        </tbody>
+      </table>
+    </div>
   </div>
-  
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="admin.js"></script>
-   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const ctx = document.getElementById('analyticsChart').getContext('2d');
 
-      const analyticsChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [
-            {
-              label: 'Page Views',
-              data: [4100, 3900, 4800, 5100, 4700, 4500, 4340],
-              fill: true,
-              backgroundColor: 'rgba(250, 204, 21, 0.2)', // yellow-400 with transparency
-              borderColor: '#FACC15', // Tailwind yellow-400
-              borderWidth: 3,
-              pointBackgroundColor: '#FACC15',
-              tension: 0.4 // smooth curves
-            },
-            {
-              label: 'Product Sales',
-              data: [1500, 1600, 1800, 1700, 1650, 1400, 1550],
-              fill: true,
-              backgroundColor: 'rgba(34, 197, 94, 0.2)', // green-500 with transparency
-              borderColor: '#10B981', // Tailwind green-500
-              borderWidth: 3,
-              pointBackgroundColor: '#10B981',
-              tension: 0.4
-            },
-            {
-              label: 'Orders',
-              data: [1200, 1100, 1300, 1400, 1350, 1200, 1250],
-              fill: true,
-              backgroundColor: 'rgba(59, 130, 246, 0.2)', // blue-500 with transparency
-              borderColor: '#3B82F6', // Tailwind blue-500
-              borderWidth: 3,
-              pointBackgroundColor: '#3B82F6',
-              tension: 0.4
-            },
-            {
-              label: 'Users',
-              data: [2500, 2300, 2400, 2550, 2650, 2500, 2700],
-              fill: true,
-              backgroundColor: 'rgba(239, 68, 68, 0.2)', // red-500 with transparency
-              borderColor: '#EF4444', // Tailwind red-500
-              borderWidth: 3,
-              pointBackgroundColor: '#EF4444',
-              tension: 0.4
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: true,
-              labels: {
-                color: '#374151', // text-gray-700
-                font: {
-                  weight: 'bold'
-                }
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                color: '#6B7280' // text-gray-500
-              },
-              grid: {
-                color: '#E5E7EB' // gray-200
-              }
-            },
-            x: {
-              ticks: {
-                color: '#6B7280'
-              },
-              grid: {
-                display: false
-              }
-            }
-          }
-        }
-      });
-    });
-  </script>
+
+
+  <!-- Sign Out Confirmation Modal -->
+<div class="signout-modal">
+  <div class="signout-modal-content">
+    <h3>Are you sure you want to sign out?</h3>
+    <div class="signout-modal-buttons">
+      <button class="signout-confirm-btn">Sign Out</button>
+      <button class="signout-cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
