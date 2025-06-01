@@ -4,6 +4,7 @@ require_once 'dbconnect.php';
 session_start();
 $errors = [];
 
+//---------For user sign in--------------
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $firstName = $_POST['firstName'];
@@ -32,31 +33,29 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     } elseif(!preg_match('/^09[0-9]{9}$/', $contactNumber)) {
         $errors['contactNumber'] = 'Please enter a valid Philippine mobile number (09XXXXXXXXX)';
     } else {
-        // Standardize to 09 format if +639 was used
         $contactNumber = preg_replace('/^\+639/', '09', $contactNumber);
     }
 
         $hasError = false;
 
-    // Length check
+
     if (strlen($password) < 12) {
         $errors['password_length'] = 'Password must be at least 12 characters long';
         $hasError = true;
     }
 
-    // Uppercase check
     if (!preg_match('/[A-Z]/', $password)) {
         $errors['password_uppercase'] = 'Password must contain at least one uppercase letter (A-Z)';
         $hasError = true;
     }
 
-    // Lowercase check
+
     if (!preg_match('/[a-z]/', $password)) {
         $errors['password_lowercase'] = 'Password must contain at least one lowercase letter (a-z)';
         $hasError = true;
     }
 
-    // Number check
+
     if (!preg_match('/[0-9]/', $password)) {
         $errors['password_number'] = 'Password must contain at least one number (0-9)';
         $hasError = true;
@@ -82,8 +81,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
 
     if(!empty($errors)) {
         $_SESSION['errors'] = $errors;
-        $_SESSION['old'] = $_POST; // Store old input for repopulating form
-        header('Location: ../Sign Up/sign_up.php'); // Adjust path as needed
+        $_SESSION['old'] = $_POST; 
+        header('Location: ../Sign Up/sign_up.php'); 
         exit();
     }
 
@@ -101,7 +100,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     ]);
     
     $_SESSION['success'] = 'Registration successful! Please login.';
-    header('Location: ../Sign In/sign_in.php'); // Adjust path as needed
+    header('Location: ../Sign In/sign_in.php'); 
     exit();
     } catch (PDOException $e) {
         error_log('Database error: ' . $e->getMessage());
@@ -113,7 +112,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     }
 }
 
-//for sign_in.php
+//---------For user sign in--------------
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
@@ -155,10 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
         // 3. Secure authentication flow
         if ($user) {
             if (password_verify($password, $user['password'])) {
-                // Regenerate session ID to prevent fixation
                 session_regenerate_id(true);
-                
-                // Minimal session data
                 $_SESSION['user'] = [
                     'id' => $user['id'],
                     'email' => $user['email'],
@@ -168,7 +165,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
                     'last_login' => time() // Track activity
                 ];
                 
-                // Security headers
                 header("Cache-Control: no-store");
                 header('Location: ../Dashboard/junkhub.php');
                 exit();
@@ -191,3 +187,101 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
     }
     
 }
+
+// For remember me but I think this wasn't properly implemented; recheck
+
+if (!isset($_SESSION['user']) && isset($_COOKIE['remember'])) {
+    list($userId, $token) = explode(':', $_COOKIE['remember']);
+    
+    try {
+        $stmt = $pdo->prepare("SELECT id, remember_token, token_expiry FROM users WHERE id = :id");
+        $stmt->execute(['id' => $userId]);
+        $user = $stmt->fetch();
+        
+        if ($user && strtotime($user['token_expiry']) > time() && password_verify($token, $user['remember_token'])) {
+            // Valid token - log the user in
+            $stmt = $pdo->prepare("SELECT id, email, firstName, lastName, created_at FROM users WHERE id = :id");
+            $stmt->execute(['id' => $userId]);
+            $userData = $stmt->fetch();
+            
+            session_regenerate_id(true);
+            $_SESSION['user'] = [
+                'id' => $userData['id'],
+                'email' => $userData['email'],
+                'firstName' => htmlspecialchars($userData['firstName']),
+                'lastName' => htmlspecialchars($userData['lastName']),
+                'created_at' => $userData['created_at'],
+                'last_login' => time()
+            ];
+            
+            // Refresh the cookie
+            setcookie('remember', $_COOKIE['remember'], time() + 60 * 60 * 24 * 30, '/', '', true, true);
+        } else {
+            // Invalid token - clear cookie
+            setcookie('remember', '', time() - 3600, '/');
+        }
+    } catch (PDOException $e) {
+        error_log("Remember me auto-login error: " . $e->getMessage());
+    }
+}
+
+// Then modify the sign-in section to handle remember me
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
+    // ... existing email/password validation code ...
+
+    try {
+        $stmt = $pdo->prepare("SELECT id, email, password, firstName, lastName, created_at FROM users WHERE email = :email");
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                session_regenerate_id(true);
+                
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'email' => $user['email'],
+                    'firstName' => htmlspecialchars($user['firstName']),
+                    'lastName' => htmlspecialchars($user['lastName']),
+                    'created_at' => $user['created_at'],
+                    'last_login' => time()
+                ];
+                
+                // Handle remember me
+                if (isset($_POST['remember'])) {
+                    $token = bin2hex(random_bytes(32));
+                    $expiry = time() + 60 * 60 * 24 * 30; // 30 days
+                    
+                    $stmt = $pdo->prepare("UPDATE users SET remember_token = :token, token_expiry = :expiry WHERE id = :id");
+                    $stmt->execute([
+                        'token' => password_hash($token, PASSWORD_BCRYPT),
+                        'expiry' => date('Y-m-d H:i:s', $expiry),
+                        'id' => $user['id']
+                    ]);
+                    
+                    setcookie('remember', $user['id'] . ':' . $token, $expiry, '/', '', true, true);
+                }
+                
+                header("Cache-Control: no-store");
+                header('Location: ../Dashboard/junkhub.php');
+                exit();
+            }
+        }
+        
+        $errors['login'] = 'Invalid credentials';
+        
+    } catch(PDOException $e) {
+        error_log("Login error: " . $e->getMessage());
+        $errors['system'] = 'System error';
+    } finally {
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            header('Location: ../Sign In/sign_in.php');
+            exit();
+        }
+    }
+}
+
+?>

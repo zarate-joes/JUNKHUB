@@ -99,14 +99,13 @@ if (isset($_SESSION['success'])) {
                 }
               ?>
             </div>
-            
+
             <div class="form-options">
               <div class="remember-me">
-                <input type="checkbox" id="remember" name="remember">
+                <input type="checkbox" id="remember" name="remember" value="1">
                 <label for="remember">Remember me</label>
               </div>
-              
-              <a href="#" class="forgot-password">Forgot Password?</a>
+              <a href="forgot_password.php" class="forgot-password">Forgot Password?</a>
             </div>
             
             <button type="submit" class="login-button" name="signin" value="LOGIN">LOGIN</button>

@@ -30,7 +30,7 @@ if(isset($_SESSION['user'])){
     <button class="sidebar-toggle">
     <i class="fas fa-arrow-left"></i>
   </button>
-    <img src="./pngs/Logoo.png" alt="Logo" onclick="window.location.href='../Landing Page/index.html'" style="cursor: pointer;">
+    <img src="./pngs/Logoo.png" alt="Logo" onclick="window.location.href='../Landing Page/index.php'" style="cursor: pointer;">
     <h1 class="brand-name">
       <span class="text-gold">Junk</span><span class="text-black">HUB</span>
     </h1>
