@@ -127,14 +127,13 @@ document.addEventListener('DOMContentLoaded', function () {
     initDashboardCharts();
   }
 
-function loadAnalyticsContent() {
-  mainContent.innerHTML = `
-    <div class="content-header">
-      <h2>Analytics Dashboard</h2>
-      <div class="breadcrumb">Home / Analytics</div>
-    </div>
-    
-    <div class="analytics-stats-container">
+  function loadAnalyticsContent() {
+    mainContent.innerHTML = `
+      <div class="content-header">
+        <h2>Analytics Dashboard</h2>
+        <div class="breadcrumb">Home / Analytics</div>
+      </div>
+      
       <div class="analytics-stats">
         <div class="analytics-stat-card">
           <h3>Total Page Views</h3>
@@ -151,7 +150,6 @@ function loadAnalyticsContent() {
           <div class="analytics-stat-value">2m 34s</div>
         </div>
       </div>
-    </div>
       
       <div class="analytics-filters">
         <div class="filter-option">

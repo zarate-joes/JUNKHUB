@@ -11,7 +11,7 @@ a {
 }
 
 .text-gold { color: #FFD700; }
-.text-black { color: rgb(0, 0, 0); } /* Changed to white for dark sidebar */
+.text-black { color: white; } /* Changed to white for dark sidebar */
 
 .header {
   position: fixed;
@@ -61,7 +61,7 @@ a {
 .admin-text {
   position: absolute;
   top: 13px;
-  right: 60px;
+  right: 40px;
   color: #000;
 }
 
