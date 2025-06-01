@@ -496,6 +496,97 @@ body {
   color: #155724;
 }
 
+/* Order Management Specific Styles */
+.orders-management {
+  padding: 1rem;
+}
+
+.order-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.order-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.status-select {
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--light-gray);
+  font-family: 'Poppins', sans-serif;
+  background-color: white;
+  cursor: pointer;
+}
+
+.order-details-modal .modal-content {
+  max-width: 700px;
+}
+
+.order-items-list {
+  margin: 1rem 0;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.order-total {
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.order-status-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.order-history {
+  margin-top: 1.5rem;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.history-date {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+/* Status Colors */
+.status-badge.new {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.status-badge.accepted {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-badge.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
 /* Bottom Section */
 .bottom-section {
   display: grid;
@@ -1202,3 +1293,4 @@ input:checked + .slider:before {
 .brand-link:hover {
   text-decoration: none;
 }
+

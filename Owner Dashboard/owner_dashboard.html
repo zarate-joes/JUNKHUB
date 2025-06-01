@@ -504,26 +504,15 @@
             <h2>Order Management</h2>
             <p>View and manage customer orders</p>
           </div>
+          <div class="time-filter">
+            <button class="filter-btn active">Today</button>
+            <button class="filter-btn">This Week</button>
+            <button class="filter-btn">This Month</button>
+          </div>
         </header>
 
         <section class="orders-management">
-          <div class="section-header">
-            <h2>Customer Orders</h2>
-            <div class="section-actions">
-              <div class="search-box">
-                <input type="text" placeholder="Search by buyer name or date...">
-                <i class="fas fa-search"></i>
-              </div>
-              <div class="order-filter">
-                <button class="filter-btn active">All</button>
-                <button class="filter-btn">New</button>
-                <button class="filter-btn">Accepted</button>
-                <button class="filter-btn">Completed</button>
-                <button class="filter-btn">Cancelled</button>
-              </div>
-            </div>
-          </div>
-
+          <!-- Order Summary Cards -->
           <div class="order-summary">
             <div class="summary-card">
               <div class="summary-icon">
@@ -532,6 +521,7 @@
               <div class="summary-info">
                 <h3>Total Orders</h3>
                 <p class="summary-value">24</p>
+                <p class="summary-change positive">+8% from last week</p>
               </div>
             </div>
             <div class="summary-card">
@@ -563,23 +553,47 @@
             </div>
           </div>
 
+          <!-- Order Filters and Search -->
+          <div class="section-header">
+            <h2>Order List</h2>
+            <div class="section-actions">
+              <div class="search-box">
+                <input type="text" placeholder="Search orders...">
+                <i class="fas fa-search"></i>
+              </div>
+              <div class="order-filter">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">New</button>
+                <button class="filter-btn">Accepted</button>
+                <button class="filter-btn">Completed</button>
+                <button class="filter-btn">Cancelled</button>
+              </div>
+            </div>
+          </div>
+
           <div class="orders-table">
             <div class="table-header">
               <div>Order #</div>
-              <div>Buyer</div>
+              <div>Customer</div>
+              <div>Date</div>
               <div>Items</div>
               <div>Total</div>
-              <div>Date</div>
               <div>Status</div>
               <div>Actions</div>
             </div>
             
+            <!-- Order Row 1 -->
             <div class="table-row">
               <div>#1234</div>
-              <div>Chidrick</div>
-              <div>Cardboard (10kg)</div>
-              <div>₱50.00</div>
-              <div>March 20, 2025</div>
+              <div>
+                <div class="user-profile">
+                  <img src="../Dashboard/pngs/prof.png" alt="User" width="30">
+                  <span>Chidrick</span>
+                </div>
+              </div>
+              <div>Mar 20, 2025</div>
+              <div>3 items</div>
+              <div>₱350.00</div>
               <div>
                 <select class="status-select">
                   <option value="new">New</option>
@@ -588,18 +602,24 @@
                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
-              <div class="actions-cell">
-                <button class="btn btn-sm btn-primary">Approve</button>
-                <button class="btn btn-sm btn-remove">Reject</button>
+              <div class="order-actions">
+                <button class="btn btn-sm btn-primary view-order">View</button>
+                <button class="btn btn-sm btn-remove">Cancel</button>
               </div>
             </div>
             
+            <!-- Order Row 2 -->
             <div class="table-row">
               <div>#1235</div>
-              <div>Joebert</div>
-              <div>Scrap Metal (2kg)</div>
-              <div>₱20.00</div>
-              <div>March 21, 2025</div>
+              <div>
+                <div class="user-profile">
+                  <img src="../Dashboard/pngs/prof.png" alt="User" width="30">
+                  <span>Joebert</span>
+                </div>
+              </div>
+              <div>Mar 21, 2025</div>
+              <div>2 items</div>
+              <div>₱220.00</div>
               <div>
                 <select class="status-select">
                   <option value="new">New</option>
@@ -608,18 +628,24 @@
                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
-              <div class="actions-cell">
-                <button class="btn btn-sm btn-primary">Approve</button>
-                <button class="btn btn-sm btn-remove">Reject</button>
+              <div class="order-actions">
+                <button class="btn btn-sm btn-primary view-order">View</button>
+                <button class="btn btn-sm" disabled>Cancel</button>
               </div>
             </div>
             
+            <!-- Order Row 3 -->
             <div class="table-row">
               <div>#1236</div>
-              <div>Reggie</div>
-              <div>Plastic Bottles (5kg)</div>
-              <div>₱15.00</div>
-              <div>March 22, 2025</div>
+              <div>
+                <div class="user-profile">
+                  <img src="../Dashboard/pngs/prof.png" alt="User" width="30">
+                  <span>Reggie</span>
+                </div>
+              </div>
+              <div>Mar 22, 2025</div>
+              <div>1 item</div>
+              <div>₱150.00</div>
               <div>
                 <select class="status-select">
                   <option value="new" selected>New</option>
@@ -628,13 +654,100 @@
                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
-              <div class="actions-cell">
-                <button class="btn btn-sm btn-primary">Approve</button>
-                <button class="btn btn-sm btn-remove">Reject</button>
+              <div class="order-actions">
+                <button class="btn btn-sm btn-primary view-order">View</button>
+                <button class="btn btn-sm btn-remove">Cancel</button>
               </div>
             </div>
           </div>
-        </section>
+
+        <!-- Order Details Modal -->
+        <div class="modal order-details-modal" id="order-details-modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Order Details #1234</h3>
+              <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="order-info">
+                <div class="form-group">
+                  <label>Customer:</label>
+                  <p>Chidrick</p>
+                </div>
+                <div class="form-group">
+                  <label>Order Date:</label>
+                  <p>March 20, 2025 at 10:30 AM</p>
+                </div>
+                <div class="form-group">
+                  <label>Status:</label>
+                  <div class="order-status-info">
+                    <select class="status-select">
+                      <option value="new">New</option>
+                      <option value="accepted" selected>Accepted</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                    <span class="status-badge accepted">Accepted</span>
+                  </div>
+                </div>
+              </div>
+
+              <h4>Order Items</h4>
+              <div class="order-items-list">
+                <div class="order-item">
+                  <div>
+                    <strong>Plastic Bottles</strong>
+                    <p>5kg × ₱3.00</p>
+                  </div>
+                  <div>₱15.00</div>
+                </div>
+                <div class="order-item">
+                  <div>
+                    <strong>Scrap Metal</strong>
+                    <p>2kg × ₱10.00</p>
+                  </div>
+                  <div>₱20.00</div>
+                </div>
+                <div class="order-item">
+                  <div>
+                    <strong>Cardboard</strong>
+                    <p>10kg × ₱5.00</p>
+                  </div>
+                  <div>₱50.00</div>
+                </div>
+              </div>
+
+              <div class="order-total">
+                <p>Subtotal: ₱85.00</p>
+                <p>Service Fee: ₱5.00</p>
+                <p>Total: ₱90.00</p>
+              </div>
+
+              <div class="order-history">
+                <h4>Order History</h4>
+                <div class="history-item">
+                  <div>
+                    <strong>Order placed</strong>
+                    <p class="history-date">Mar 20, 2025 10:30 AM</p>
+                  </div>
+                  <span class="status-badge new">New</span>
+                </div>
+                <div class="history-item">
+                  <div>
+                    <strong>Order accepted</strong>
+                    <p class="history-date">Mar 20, 2025 11:45 AM</p>
+                  </div>
+                  <span class="status-badge accepted">Accepted</span>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-cancel close-modal">Close</button>
+                <button type="button" class="btn btn-primary">Save Changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Messages Tab Content -->
