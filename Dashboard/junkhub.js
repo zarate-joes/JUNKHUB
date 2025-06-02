@@ -17,11 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-
-
-
-
   // Shop data - in a real app, this would come from an API
   const shops = [
     {
@@ -96,6 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add more shops as needed
   ];
 
+
+
   // Render shops
   function renderShops() {
     const shopsWrapper = document.querySelector('.shops-wrapper');
@@ -120,14 +117,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+
 // Show items for a specific shop
 function showShopItems(shopId) {
+
+  document.querySelectorAll('.shop-container').forEach(shop => {
+    shop.classList.remove('active');
+  });
+
   const shop = shops.find(s => s.id == shopId);
   if (!shop) return;
   
   const shopItemsContainer = document.getElementById('shop-items-container');
   const shopItemsSection = document.getElementById('shop-items-section');
   
+  if (shopItemsSection.style.display === 'block' && 
+      shopItemsSection.dataset.currentShop === shopId.toString()) {
+    shopItemsSection.style.display = 'none';
+    shopItemsSection.classList.remove('visible');
+    shopItemsSection.dataset.currentShop = '';
+    return;
+  }
+  
+  // Otherwise, show the shop's items
   shopItemsContainer.innerHTML = '';
   
   shop.items.forEach(item => {
@@ -150,27 +162,25 @@ function showShopItems(shopId) {
     shopItemsContainer.appendChild(itemElement);
   });
   
-  // Show the shop items section and add visible class
+  // Add active class to the clicked shop container
+  const clickedShop = document.querySelector(`.shop-container[data-shop-id="${shopId}"]`);
+  if (clickedShop) {
+    clickedShop.classList.add('active');
+  }
+  
   shopItemsSection.style.display = 'block';
   shopItemsSection.classList.add('visible');
+  shopItemsSection.dataset.currentShop = shopId;
+  
+  attachProductClickHandlers();
+  
+  shopItemsSection.scrollIntoView({ behavior: 'smooth' });
+}
 
-
-    
-    // Show the shop items section
-    document.getElementById('shop-items-section').style.display = 'block';
-    
-    // Reattach click handlers to the new product containers
-    attachProductClickHandlers();
-    
-    // Scroll to the shop items section
-    shopItemsSection.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  // Function to attach click handlers to product containers
 function attachProductClickHandlers() {
   document.querySelectorAll('.product-container, .product-container0').forEach(container => {
     container.addEventListener('click', (e) => {
-      // Don't trigger if clicking on a link inside the container
+      
       if (e.target.tagName === 'A') return;
       
       popupImg.src = container.dataset.img;
@@ -189,7 +199,6 @@ attachProductClickHandlers();
   renderShops();
   
 // =========================================================================================
-
 
 
 // Get the category buttons

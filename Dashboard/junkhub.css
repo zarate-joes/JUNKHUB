@@ -1144,6 +1144,12 @@ a {
   box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
+/* Add to junkhub.css */
+.shop-container.active {
+  border: 2px solid #FFD700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
 .shop-avatar {
   width: 200px;
   height: 200px;
