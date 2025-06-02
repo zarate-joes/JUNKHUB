@@ -1007,9 +1007,7 @@
         <section class="settings-management">
           <div class="settings-tabs">
             <button class="tab-btn active" data-tab="account">Account</button>
-            <button class="tab-btn" data-tab="notifications">Notifications</button>
             <button class="tab-btn" data-tab="security">Security</button>
-            <button class="tab-btn" data-tab="preferences">Preferences</button>
           </div>
 
           <div class="settings-content">
@@ -1018,113 +1016,81 @@
               <form class="settings-form">
                 <div class="form-group">
                   <label for="account-name">Full Name</label>
-                  <input type="text" id="account-name" value="John Doe">
+                  <input type="text" id="account-name" value="" placeholder="John Doe">
                 </div>
                 <div class="form-group">
                   <label for="account-email">Email</label>
-                  <input type="email" id="account-email" value="john.doe@example.com">
+                  <input type="email" id="account-email" value="" placeholder="john.doe@example.com">
                 </div>
                 <div class="form-group">
                   <label for="account-phone">Phone Number</label>
-                  <input type="tel" id="account-phone" value="+639123456789">
+                  <input type="tel" id="account-phone" value="" placeholder="j+639123456789">
                 </div>
                 <div class="form-group">
-                  <label for="account-business">Business Name</label>
-                  <input type="text" id="account-business" value="JunkHUB">
+                  <label for="account-business">Shop Name</label>
+                  <input type="text" id="account-business" value="" placeholder="JunkHUB">
                 </div>
                 <div class="form-group">
-                  <label for="account-address">Business Address</label>
-                  <textarea id="account-address">123 Main Street, Manila, Philippines</textarea>
+                  <label for="account-address">Shop Address</label>
+                  <textarea id="account-address" placeholder="123 Main Street, Manila, Philippines"></textarea>
                 </div>
+
+                <div class="form-group">
+                  <label for="shop-description">Shop Description</label>
+                  <textarea id="shop-description" rows="4" placeholder="Tell customers about your shop"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="shop-logo">Shop Logo</label>
+                  <div class="logo-upload-container">
+                    <div class="logo-preview">
+                      <img id="logo-preview" src="../Dashboard/pngs/prof.png" alt="Current Logo" width="100">
+                    </div>
+                    <input type="file" id="shop-logo" accept="image/*" style="display: none;">
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('shop-logo').click()">
+                      <i class="fas fa-upload"></i> Upload New Logo
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Business Hours</label>
+                  <div class="business-hours">
+                    <div class="day-hours">
+                      <label>Monday - Friday</label>
+                      <div class="time-inputs">
+                        <input type="time" value="08:00">
+                        <span>to</span>
+                        <input type="time" value="17:00">
+                      </div>
+                    </div>
+                    <div class="day-hours">
+                      <label>Saturday</label>
+                      <div class="time-inputs">
+                        <input type="time" value="09:00">
+                        <span>to</span>
+                        <input type="time" value="15:00">
+                      </div>
+                    </div>
+                    <div class="day-hours">
+                      <label>Sunday</label>
+                      <div class="time-inputs">
+                        <input type="time" value="09:00" disabled>
+                        <span>to</span>
+                        <input type="time" value="12:00" disabled>
+                        <label class="closed-checkbox">
+                          <input type="checkbox" checked> Closed
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="form-actions">
                   <button type="button" class="btn btn-cancel">Cancel</button>
                   <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
-              </form>
-            </div>
 
-            <div class="tab-pane" id="notification-settings">
-              <h3>Notification Preferences</h3>
-              <form class="settings-form">
-                <div class="notification-group">
-                <h4>Email Notifications</h4>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                  </label>
-                  <span>New orders</span>
-                </div>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                  </label>
-                  <span>Order updates</span>
-                </div>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                  </label>
-                  <span>Messages from buyers</span>
-                </div>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                  </label>
-                  <span>Promotions and offers</span>
-                </div>
-              </div>
-
-              <div class="notification-group">
-                <h4>Push Notifications</h4>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                  </label>
-                  <span>New orders</span>
-                </div>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                  </label>
-                  <span>Order updates</span>
-                </div>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                  </label>
-                  <span>Messages from buyers</span>
-                </div>
-              </div>
-
-              <div class="notification-group">
-                <h4>SMS Notifications</h4>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                  </label>
-                  <span>Important order updates</span>
-                </div>
-                <div class="notification-item">
-                  <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                  </label>
-                  <span>Security alerts</span>
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <button type="button" class="btn btn-cancel">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Preferences</button>
-              </div>
               </form>
             </div>
 
@@ -1149,20 +1115,6 @@
                   <label for="confirm-password">Confirm New Password</label>
                   <input type="password" id="confirm-password" placeholder="Confirm new password">
                 </div>
-                <div class="form-group">
-                  <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                  </label>
-                  <span>Enable two-factor authentication</span>
-                </div>
-                <div class="form-group">
-                  <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                  </label>
-                  <span>Login alerts</span>
-                </div>
                 <div class="form-actions">
                   <button type="button" class="btn btn-cancel">Cancel</button>
                   <button type="submit" class="btn btn-primary">Update Security Settings</button>
@@ -1170,58 +1122,6 @@
               </form>
             </div>
 
-            <div class="tab-pane" id="preference-settings">
-              <h3>Application Preferences</h3>
-              <form class="settings-form">
-                <div class="form-group">
-                  <label for="language">Language</label>
-                  <select id="language">
-                    <option value="en" selected>English</option>
-                    <option value="fil">Filipino</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="timezone">Timezone</label>
-                  <select id="timezone">
-                    <option value="UTC+8" selected>Philippine Standard Time (UTC+8)</option>
-                    <option value="UTC+0">GMT</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="currency">Currency</label>
-                  <select id="currency">
-                    <option value="PHP" selected>Philippine Peso (₱)</option>
-                    <option value="USD">US Dollar ($)</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="theme">Theme</label>
-                  <select id="theme">
-                    <option value="light" selected>Light</option>
-                    <option value="dark">Dark</option>
-                    <option value="system">System Default</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                  </label>
-                  <span>Show recent activities on dashboard</span>
-                </div>
-                <div class="form-group">
-                  <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                  </label>
-                  <span>Show product recommendations</span>
-                </div>
-                <div class="form-actions">
-                  <button type="button" class="btn btn-cancel">Cancel</button>
-                  <button type="submit" class="btn btn-primary">Save Preferences</button>
-                </div>
-              </form>
-            </div>
           </div>
         </section>
       </div>
