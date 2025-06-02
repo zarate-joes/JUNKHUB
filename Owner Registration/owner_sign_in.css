@@ -571,10 +571,6 @@ input:valid:not(:placeholder-shown) {
   animation: pulse 0.5s ease;
 }
 
-  .owner-login-button {
-  animation: fadeInUp 0.5s ease-out 1.3s both;
-}
-
 .owner-login:hover {
   animation: pulse 0.3s ease;
 }
