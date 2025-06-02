@@ -124,15 +124,6 @@
                   <option value="barangay3">Barangay 3</option>
                 </select>
               </div>
-              
-              <div class="form-group">
-                <label>Pin Your Location</label>
-                <div class="map-container">
-                  <p class="map-placeholder">Map Placeholder<br>Click to set your exact location</p>
-                </div>
-                <p class="form-hint">This helps buyers find your shop easily</p>
-              </div>
-            </section>
             
             <section class="form-section">
               <h2 class="section-title">Business Hours</h2>

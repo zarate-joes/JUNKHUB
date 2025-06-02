@@ -348,24 +348,6 @@ textarea {
   font-size: 0.9rem;
 }
 
-/* Map container */
-.map-container {
-  height: 250px;
-  background-color: #f0f0f0;
-  border-radius: var(--border-radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: var(--spacing-sm);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.map-placeholder {
-  text-align: center;
-  font-weight: 500;
-  color: var(--color-gray);
-}
-
 /* Form actions */
 .form-actions {
   display: flex;
