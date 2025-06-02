@@ -472,3 +472,86 @@
 .brand-link:hover {
   text-decoration: none; /* No underline on hover */
 }
+
+/* Add these animations at the top of your CSS file, after the variables */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromLeft {
+  from { transform: translateX(-50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Add these animation classes to existing elements */
+.left-panel {
+  animation: fadeIn 0.8s ease-out, slideInFromLeft 0.8s ease-out;
+}
+
+.form-panel {
+  animation: fadeIn 0.8s ease-out, slideInFromRight 0.8s ease-out;
+}
+
+.welcome-title {
+  animation: fadeIn 1s ease-out 0.3s both;
+}
+
+.welcome-text {
+  animation: fadeIn 1s ease-out 0.6s both;
+}
+
+.account-button {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.user-button {
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.owner-button {
+  animation: fadeIn 0.6s ease-out 0.4s both;
+}
+
+.account-help {
+  animation: fadeIn 0.6s ease-out 0.8s both;
+}
+
+/* Add hover animations */
+.brand-logo:hover {
+  animation: pulse 0.5s ease;
+}
+
+.account-button:hover {
+  animation: pulse 0.3s ease;
+}
+
+/* Animate decorative elements */
+.deco-rect-1 {
+  animation: float 6s ease-in-out infinite;
+}
+
+.deco-rect-2 {
+  animation: float 5s ease-in-out infinite 1s;
+}
+
+.deco-rect-3 {
+  animation: float 7s ease-in-out infinite 0.5s;
+}
