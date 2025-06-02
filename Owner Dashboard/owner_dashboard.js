@@ -625,3 +625,134 @@ document.addEventListener('DOMContentLoaded', function() {
   // Load initial tab (Overview)
   loadTabContent('overview');
 });
+
+
+function setupOrderSearch() {
+  const searchBox = document.querySelector('.orders-management .search-box input');
+  const searchIcon = document.querySelector('.orders-management .search-box i');
+  
+  if (!searchBox) return;
+  
+  const searchHandler = () => {
+    const searchTerm = searchBox.value.toLowerCase();
+    filterOrders(searchTerm);
+  };
+  
+  searchBox.addEventListener('input', searchHandler);
+  searchIcon.addEventListener('click', searchHandler);
+}
+
+// Function to filter orders based on search term
+function filterOrders(searchTerm = '') {
+  const ordersTable = document.querySelector('.orders-management .orders-table');
+  if (!ordersTable) return;
+  
+  const rows = ordersTable.querySelectorAll('.table-row:not(.table-header)');
+  
+  rows.forEach(row => {
+    const orderNumber = row.querySelector('div:nth-child(1)').textContent.toLowerCase();
+    const customerName = row.querySelector('div:nth-child(2)').textContent.toLowerCase();
+    const orderDate = row.querySelector('div:nth-child(3)').textContent.toLowerCase();
+    const orderItems = row.querySelector('div:nth-child(4)').textContent.toLowerCase();
+    const orderTotal = row.querySelector('div:nth-child(5)').textContent.toLowerCase();
+    
+    const matches = 
+      orderNumber.includes(searchTerm) ||
+      customerName.includes(searchTerm) ||
+      orderDate.includes(searchTerm) ||
+      orderItems.includes(searchTerm) ||
+      orderTotal.includes(searchTerm);
+    
+    row.style.display = matches ? '' : 'none';
+  });
+}
+
+
+function loadOrders() {
+  // Your existing order loading code...
+  
+  // Set up search functionality
+  setupOrderSearch();
+}
+
+// Update the loadTabContent function to ensure search is set up when switching to orders tab
+function loadTabContent(tabId) {
+  switch(tabId) {
+    case 'products':
+      loadProducts();
+      break;
+    case 'orders':
+      loadOrders();
+      break;
+    case 'messages':
+      loadMessages();
+      break;
+    case 'analytics':
+      loadAnalytics();
+      break;
+    case 'settings':
+      loadSettings();
+      break;
+    default:
+      // Overview tab loads by default
+      break;
+  }
+}
+
+
+
+const orderFilterButtons = document.querySelectorAll('.order-filter .filter-btn');
+const orderRows = document.querySelectorAll('.orders-management .table-row');
+
+orderFilterButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // Remove active class from all filter buttons
+    orderFilterButtons.forEach(btn => btn.classList.remove('active'));
+    
+    // Add active class to clicked button
+    this.classList.add('active');
+    
+    const filterValue = this.textContent.toLowerCase();
+    
+    // Filter order rows
+    orderRows.forEach(row => {
+      if (filterValue === 'all') {
+        row.style.display = 'table-row';
+      } else {
+        const statusBadge = row.querySelector('.status-badge, .status-select');
+        let statusText = '';
+        
+        if (statusBadge.classList.contains('status-badge')) {
+          statusText = statusBadge.textContent.toLowerCase();
+        } else if (statusBadge.classList.contains('status-select')) {
+          statusText = statusBadge.value.toLowerCase();
+        }
+        
+        if (statusText === filterValue) {
+          row.style.display = 'table-row';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    });
+  });
+});
+
+// Also add this to handle changes in the status dropdown
+const statusSelects = document.querySelectorAll('.status-select');
+statusSelects.forEach(select => {
+  select.addEventListener('change', function() {
+    const activeFilter = document.querySelector('.order-filter .filter-btn.active');
+    if (activeFilter && activeFilter.textContent.toLowerCase() !== 'all') {
+      const filterValue = activeFilter.textContent.toLowerCase();
+      const row = this.closest('.table-row');
+      const currentStatus = this.value.toLowerCase();
+      
+      if (currentStatus === filterValue) {
+        row.style.display = 'table-row';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  });
+});
