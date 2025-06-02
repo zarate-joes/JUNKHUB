@@ -20,7 +20,6 @@ if(isset($_SESSION['user'])){
   <title>Dashboard - JunkHub</title>
   <link rel="stylesheet" href="junkhub.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="../Images/teallogo22619-foad-200h.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
@@ -30,25 +29,27 @@ if(isset($_SESSION['user'])){
     <button class="sidebar-toggle">
     <i class="fas fa-arrow-left"></i>
   </button>
-    <img src="./pngs/Logoo.png" alt="Logo" onclick="window.location.href='../Landing Page/index.php'" style="cursor: pointer;">
+
+    <img src="./pngs/Logoo.png" alt="Logo" onclick="window.location.href='../Landing Page/landingpage.html'" style="cursor: pointer;">
     <h1 class="brand-name">
       <span class="text-gold">Junk</span><span class="text-black">HUB</span>
     </h1>
     <div class="circle1"></div>
     <div class="circle2"></div>
+
+    
   </div>
 
   <div class="header">
   
-
       <div class="search-underline"></div>
 
-      <a href="../User Profile/User.html">
+      <a href="../User Profile/profile.html">
      <div class="profile-icon">
         <img src="./pngs/prof.png" alt="Profile">
       </div>
       </a>
-      
+    
 
     <a href="../Cart/Cart.html">
     <div class="Cart-icon">
@@ -58,12 +59,18 @@ if(isset($_SESSION['user'])){
     </a>
 
 
-    <a href="../Notfication/Notification.html">
+
+    
+
       <div class="notification-icon">
         <i class="fas fa-bell"></i>  
         <span class="badge">3</span>
       </div>
-  </a>
+
+<div class="message-icon">
+  <i class="fas fa-envelope"></i>
+  <span class="message-badge">5</span>
+</div>
 
       <div class="search-container"> 
         <input type="text" placeholder="Search...">
@@ -107,13 +114,95 @@ if(isset($_SESSION['user'])){
 
       <div class="search-underline">
       </div>
-  
+ 
+      
+<!-- Notification Panel -->
+<!-- Update the notification panel section -->
+<div class="notification-panel" id="notificationPanel">
+  <div class="notification-header">
+    <span>Notifications</span>
+    <span class="close-notifications" id="closeNotifications">&times;</span>
+  </div>
+  <div class="notification-filters">
+    <button class="notification-filter active" data-filter="all">All</button>
+    <button class="notification-filter" data-filter="unread">Unread</button>
+  </div>
+  <div class="notification-items">
+    <div class="notification-item unread">
+      <div>New message from Shop A</div>
+      <div class="notification-time">2 hours ago</div>
+    </div>
+    <div class="notification-item unread">
+      <div>Your order has been shipped</div>
+      <div class="notification-time">1 day ago</div>
+    </div>
+    <div class="notification-item">
+      <div>Weekly newsletter</div>
+      <div class="notification-time">3 days ago</div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Messenger Sidebar -->
+<div class="messenger-panel" id="messengerPanel">
+  <div class="messenger-header">
+    <span>Messages</span>
+    <span class="close-messenger" id="closeMessenger">&times;</span>
+  </div>
+  <div class="messenger-filters">
+    <button class="messenger-filter active" data-filter="all">All</button>
+    <button class="messenger-filter" data-filter="unread">Unread</button>
+  </div>
+  <div class="messenger-items">
+    <div class="messenger-item unread">
+      <div class="messenger-avatar">
+        <img src="./pngs/prof.png" alt="User">
+      </div>
+      <div class="messenger-content">
+        <div class="messenger-sender">Shop A</div>
+        <div class="messenger-preview">Hello, about your order...</div>
+        <div class="messenger-time">2 hours ago</div>
+      </div>
+    </div>
+    <div class="messenger-item">
+      <div class="messenger-avatar">
+        <img src="./pngs/prof.png" alt="User">
+      </div>
+      <div class="messenger-content">
+        <div class="messenger-sender">Shop B</div>
+        <div class="messenger-preview">Your item is ready for pickup</div>
+        <div class="messenger-time">1 day ago</div>
+      </div>
+    </div>
+    <div class="messenger-item">
+      <div class="messenger-avatar">
+        <img src="./pngs/prof.png" alt="User">
+      </div>
+      <div class="messenger-content">
+        <div class="messenger-sender">Shop C</div>
+        <div class="messenger-preview">Thank you for your purchase</div>
+        <div class="messenger-time">3 days ago</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 </div>   
-</div>   
+ 
  
 <div class="mainbg">
 
-  <h2 style="font-weight: 600; margin-left: 60px;">Shops</h2>
+  <div class="shop-section">
+
+  <h2 style="font-weight: 600; margin-left: 60px;">Most Viewed Shops</h2>
   
   <div class="arrow-container">
   <div class="arrow left" id="prev">&#10094;</div> 
@@ -146,8 +235,16 @@ if(isset($_SESSION['user'])){
     <span class="dot"></span>
   </div>
 
+  </div>
+
+
+
   <div class="underline-divider1">
   </div>
+
+
+<div class="product-section">
+
 
     <h2 style="font-weight: 600; margin-left: 60px;">Recommended Items</h2>
 
@@ -179,95 +276,32 @@ if(isset($_SESSION['user'])){
 
             </div>
 
+     </div>
+
       <div class="underline-divider1">
       </div>
 
-      <h2 style="font-weight: 600; margin-left: 60px;">Items</h2>
 
-      <div class="product-wrapper">
+<div class="shops-section">
+  <h2 style="font-weight: 600; margin-left: 60px;">Shops</h2>
+  
+  <div class="shops-wrapper">
+    <!-- Shop containers will be added dynamically by JavaScript -->
+  </div>
+</div>
 
-      <div class="product-container" data-name="Aluminum Metal" data-price="₱150.09 per kg" data-available="Available: 500kg" data-shop="ⓘ Shop Name" data-img="./pngs/aluminum.png">
-        <div class="product_name">Aluminum Metal</div>
-         <div class="product-price">₱150.09 per kg</div>
-         <div class="product-available">Available: 500kg</div>
-          <div class="shop-name">ⓘ Shop Name</div>
-          <img src="./pngs/aluminum.png" alt="aluminum" style="width: 200px; height: 200px; border-radius: 5px">
-        </div>
+<div class="underline-divider1"></div>
 
-          <div class="product-container" data-name="Plastic Bottles" data-price="₱26.01 per kg" data-available="Available: 1,000kg" data-shop="ⓘ Shop Name" data-img="./pngs/plastic.png">
-            <div class="product_name">Plastic Bottles</div>
-            <div class="product-price">₱26.01 per kg</div>
-            <div class="product-available">Available: 1,000kg</div>
-            <div class="shop-name">ⓘ Shop Name</div>
-              <img src="./pngs/plastic.png" alt="plastic" style="width: 200px; height: 200px; border-radius: 5px">
-            </div>
-
-            <div class="product-container" data-name="Old Car Batteries" data-price="₱500 per unit" data-available="Available: 25units" data-shop="ⓘ Shop Name" data-img="./pngs/battery.png">
-              <div class="product_name">Cardboard</div>
-              <div class="product-price">₱34.12 per kg</div>
-              <div class="product-available">Available: 350kg</div>
-              <div class="shop-name">ⓘ Shop Name</div>
-                <img src="./pngs/cardboard.png" alt="cardboard" style="width: 200px; height: 200px; border-radius: 5px">
-              </div>
-
-              <div class="product-container" data-name="Copper" data-price="₱123.90 per kg" data-available="Available: 500kg" data-shop="ⓘ Shop Name" data-img="./pngs/copper.png">
-                <div class="product_name">Copper</div>
-                <div class="product-price">₱123.90 per kg</div>
-                <div class="product-available">Available: 500kg</div>
-                <div class="shop-name">ⓘ Shop Name</div>
-                  <img src="./pngs/copper.png" alt="copper" style="width: 200px; height: 200px; border-radius: 5px">
-                </div>
-
-                <div class="product-container" data-name="Old Car Batteries" data-price="₱500 per unit" data-available="Available: 25units" data-shop="ⓘ Shop Name" data-img="./pngs/battery.png">
-                  <div class="product_name">Old Car Batteries</div>
-                  <div class="product-price">₱500 per unit</div>
-                  <div class="product-available">Available: 25units</div>
-                  <div class="shop-name">ⓘ Shop Name</div>
-                    <img src="./pngs/battery.png" alt="battery" style="width: 200px; height: 200px; border-radius: 5px">
-                  </div>
-
-                  <div class="product-container" data-name="Scrap Metal - Steel" data-price="₱150.09 per kg" data-available="Available: 500kg" data-shop="ⓘ Shop Name" data-img="./pngs/steel.png">
-                    <div class="product_name">Scrap Metal - Steel</div>
-                    <div class="product-price">₱150.09 per kg</div>
-                    <div class="product-available">Available: 500kg</div>
-                    <div class="shop-name">ⓘ Shop Name</div>
-                      <img src="./pngs/steel.png" alt="battery" style="width: 200px; height: 200px; border-radius: 5px">
-                    </div>
-
-                    <div class="product-container" data-name="Unused Cardboard" data-price="₱34.12 per kg" data-available="Available: 350kg" data-shop="ⓘ Shop Name" data-img="./pngs/unusedcardboard.png">
-                      <div class="product_name">Unused Cardboard</div>
-                      <div class="product-price">₱34.12 per kg</div>
-                      <div class="product-available">Available: 350kg</div>
-                      <div class="shop-name">ⓘ Shop Name</div>
-                        <img src="./pngs/unusedcardboard.png" alt="battery" style="width: 200px; height: 200px; border-radius: 5px">
-                      </div>
-
-                      <div class="product-container" data-name="Bicycle Parts" data-price="₱100.75 per unit" data-available="Available: 100 Pieces" data-shop="ⓘ Shop Name" data-img="./pngs/bicycle.png">
-                        <div class="product_name">Bicycle Parts</div>
-                        <div class="product-price">₱100.75 per unit</div>
-                        <div class="product-available">Available: 100 Pieces</div>
-                        <div class="shop-name">ⓘ Shop Name</div>
-                          <img src="./pngs/bicycle.png" alt="battery" style="width: 200px; height: 200px; border-radius: 5px">
-                        </div>
-
-                        <div class="product-container" data-name="Computer Parts" data-price="₱123.90 per kg" data-available="Available: 500kg" data-shop="ⓘ Shop Name" data-img="./pngs/computerparts.png">
-                          <div class="product_name">Computer Parts</div>
-                          <div class="product-price">₱123.90 per kg</div>
-                          <div class="product-available">Available: 500kg</div>
-                          <div class="shop-name">ⓘ Shop Name</div>
-                            <img src="./pngs/computerparts.png" alt="battery" style="width: 200px; height: 200px; border-radius: 5px">
-                          </div>
-
-                          <div class="product-container" data-name="Cans" data-price="₱25 per kg" data-available="Available: 430kg" data-shop="ⓘ Shop Name" data-img="./pngs/cans.png">
-                            <div class="product_name">Cans</div>
-                            <div class="product-price">₱25 per kg</div>
-                            <div class="product-available">Available: 430kg</div>
-                            <div class="shop-name">ⓘ Shop Name</div>
-                              <img src="./pngs/cans.png" alt="battery" style="width: 200px; height: 200px; border-radius: 5px">
-                            </div>
-                </div> 
+<div class="product-section" id="shop-items-section">
+  <h2 style="font-weight: 600; margin-left: 60px;">Shop Items</h2>
+  
+  <div class="product-wrapper" id="shop-items-container">
+    <!-- Shop-specific items will be loaded here when a shop is clicked -->
+  </div>
+</div>
                 </div> 
   
+                
 
  <div class="overlay" id="overlay">
   <div class="popup">
