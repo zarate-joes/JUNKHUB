@@ -245,6 +245,14 @@
     transform: translateY(1px);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
+
+  .login-button {
+  animation: fadeInUp 0.5s ease-out 1.3s both;
+}
+
+.login-button:hover {
+  animation: pulse 0.3s ease;
+}
   
   .signup-link {
     margin-top: var(--spacing-xl);
@@ -442,7 +450,7 @@
 }
 
 .brand {
-  animation: fadeInUp 0.6s ease-out 0.2s both;
+  animation: fadeInUp 0.5s ease-out 0.2s both;
 }
 
 .welcome-title {
@@ -520,4 +528,12 @@
   .form-panel {
     animation: fadeInUp 0.8s ease-out 0.2s both;
   }
+}
+
+/* Ensure smooth transitions for interactive elements */
+.signup-button,
+.brand-link,
+.form-group input,
+.checkbox-group {
+  transition: all 0.3s ease;
 }

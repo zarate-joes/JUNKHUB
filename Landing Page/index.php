@@ -97,7 +97,7 @@
     <span class="text-gold">Junk</span><span class="text-black">HUB</span>
     </h1>
 
-    <div class="description-container">
+    <div class="description-container"> 
         <div class="text-description">JunkHub is an e-commerce marketplace for 
                                       buying and selling recyclable and second-hand materials. 
                                       We connect junk shop owners, sellers, and buyers to promote 

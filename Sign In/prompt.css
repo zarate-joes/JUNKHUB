@@ -501,6 +501,12 @@
   100% { transform: scale(1); }
 }
 
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 /* Add these animation classes to existing elements */
 .left-panel {
   animation: fadeIn 0.8s ease-out, slideInFromLeft 0.8s ease-out;
@@ -555,3 +561,11 @@
 .deco-rect-3 {
   animation: float 7s ease-in-out infinite 0.5s;
 }
+
+
+/* Animated background gradient */
+.login-container {
+  background: linear-gradient(-45deg, #f5f7fa, #ffe664, #f5f7fa, #ffe664);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}   
