@@ -13,10 +13,12 @@ if (!isset($_SESSION['owner']['id'])) {
     exit();
 }
 
+
+
 $ownerId = $_SESSION['owner']['id'];
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
     // Validate and sanitize inputs
     $businessName = htmlspecialchars(trim($_POST['shopName']));
     $description = htmlspecialchars(trim($_POST['shopDescription']));
@@ -36,54 +38,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($barangay)) $errors['barangay'] = 'Barangay is required';
     
     // Handle file upload
+    // Handle file upload
     $logoPath = null;
+
     if (isset($_FILES['shopLogo'])) {
         // Check for upload errors first
         switch ($_FILES['shopLogo']['error']) {
             case UPLOAD_ERR_OK:
+                // Proceed only if the upload is okay
                 break;
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
                 $errors['shopLogo'] = 'File size exceeds maximum allowed (2MB)';
-                break;
+                return;
             case UPLOAD_ERR_PARTIAL:
                 $errors['shopLogo'] = 'The uploaded file was only partially uploaded';
-                break;
+                return;
             case UPLOAD_ERR_NO_FILE:
-                // No file uploaded is not an error if logo is optional
+                // No file uploaded – optional logo, so skip
                 break;
             default:
                 $errors['shopLogo'] = 'An unknown error occurred during file upload';
-                break;
+                return;
         }
 
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
-        $detectedType = finfo_file($fileInfo, $_FILES['shopLogo']['tmp_name']);
-        
-        if (in_array($detectedType, $allowedTypes)) {
-            $uploadDir = '../uploads/business_logos/';
-            
-            // Create directory if it doesn't exist
-            if (!file_exists($uploadDir)) {
-                if (!mkdir($uploadDir, 0755, true)) {
-                    $errors['shopLogo'] = 'Failed to create upload directory';
+
+        // Check if the file was actually uploaded
+        if (is_uploaded_file($_FILES['shopLogo']['tmp_name'])) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $detectedType = finfo_file($finfo, $_FILES['shopLogo']['tmp_name']);
+            finfo_close($finfo);
+
+            if (in_array($detectedType, $allowedTypes)) {
+                $uploadDir = '../uploads/business_logos/';
+
+                // Create directory if it doesn't exist
+                if (!file_exists($uploadDir)) {
+                    if (!mkdir($uploadDir, 0755, true)) {
+                        $errors['shopLogo'] = 'Failed to create upload directory';
+                        return;
+                    }
                 }
-            }
-            
-            $extension = pathinfo($_FILES['shopLogo']['name'], PATHINFO_EXTENSION);
-            $filename = 'logo_' . $ownerId . '_' . time() . '.' . $extension;
-            $destination = $uploadDir . $filename;
-            
-            if (move_uploaded_file($_FILES['shopLogo']['tmp_name'], $destination)) {
-                $logoPath = $destination;
+
+                $extension = pathinfo($_FILES['shopLogo']['name'], PATHINFO_EXTENSION);
+                $filename = 'logo_' . $ownerId . '_' . time() . '.' . $extension;
+                $destination = $uploadDir . $filename;
+
+                if (move_uploaded_file($_FILES['shopLogo']['tmp_name'], $destination)) {
+                    $logoPath = $destination; // Save for database or session use
+                } else {
+                    $errors['shopLogo'] = 'Failed to upload logo';
+                }
             } else {
-                $errors['shopLogo'] = 'Failed to upload logo';
+                $errors['shopLogo'] = 'Invalid file type. Only JPG, PNG, and GIF are allowed.';
             }
         } else {
-            $errors['shopLogo'] = 'Invalid file type. Only JPG, PNG, and GIF are allowed.';
+            $errors['shopLogo'] = 'No valid file uploaded.';
         }
     }
+
     
     // Get materials
     $materials = $_POST['materials'] ?? [];
@@ -160,9 +174,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // If errors, return to form with data
     $_SESSION['errors'] = $errors;
     $_SESSION['old'] = $_POST;
-    header('Location: shopsignup.php');
+    header('Location: ../Owner Registration/shopsignup.php');
     exit();
 } else {
-    header('Location: shopsignup.php');
+    header('Location: ../Owner Registration/shopsignup.php');
     exit();
 }

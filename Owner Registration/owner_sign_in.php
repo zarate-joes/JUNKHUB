@@ -14,6 +14,7 @@ if (isset($_SESSION['errors'])) {
 
 if (isset($_SESSION['success'])) {
   $success = $_SESSION['success'];
+  unset($_SESSION['success']);
 }
 ?>
 
@@ -59,7 +60,7 @@ if (isset($_SESSION['success'])) {
             <div class="owner-deco-circle-2"></div>
           </div>
         </section>
-        
+
         <!-- Right panel - Login form -->
         <section class="owner-form-panel">
           <h2 class="owner-form-title">Owner Login</h2>
