@@ -386,3 +386,138 @@
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+
+/* Add these at the top of your CSS file, after the variables */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideInFromLeft {
+  from { transform: translateX(-50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Add these animation classes to existing elements */
+.login-container {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.left-panel {
+  animation: slideInFromLeft 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.form-panel {
+  animation: slideInFromRight 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.brand {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.welcome-title {
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+.welcome-text {
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.form-title {
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.login-form {
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.signup-link {
+  animation: fadeInUp 0.6s ease-out 0.8s both;
+}
+
+/* Animated background gradient */
+.login-container {
+  background: linear-gradient(-45deg, #f5f7fa, #ffe664, #f5f7fa, #ffe664);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Decorative element animations */
+.deco-rect-1 {
+  animation: float 6s ease-in-out infinite;
+}
+
+.deco-rect-2 {
+  animation: float 5s ease-in-out infinite 1s;
+}
+
+/* Interactive animations */
+.brand-logo:hover {
+  animation: pulse 0.5s ease;
+}
+
+.login-button:hover {
+  animation: pulse 0.3s ease;
+}
+
+/* Error animation */
+.error, .error-main {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Password eye icon animation */
+#eye:hover {
+  animation: pulse 0.3s ease;
+  color: var(--color-secondary);
+}
+
+/* Form input focus animation */
+.form-group input:not([type="checkbox"]):focus {
+  animation: pulse 0.5s ease;
+}
+
+/* Success message animation */
+.success-message {
+  animation: fadeInUp 0.5s ease-out, pulse 0.5s ease-out 0.5s;
+}
+
+/* Responsive adjustments for animations */
+@media screen and (max-width: 768px) {
+  .left-panel {
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  .form-panel {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+}
