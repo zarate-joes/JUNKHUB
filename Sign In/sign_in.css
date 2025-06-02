@@ -246,9 +246,6 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
-  .login-button {
-  animation: fadeInUp 0.5s ease-out 1.3s both;
-}
 
 .login-button:hover {
   animation: pulse 0.3s ease;

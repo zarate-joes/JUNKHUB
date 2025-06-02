@@ -632,10 +632,6 @@ input:valid:not(:placeholder-shown) {
   animation: fadeInUp 0.5s ease-out 1.2s both;
 }
 
-.signup-button {
-  animation: fadeInUp 0.5s ease-out 1.3s both;
-}
-
 .login-link {
   animation: fadeInUp 0.5s ease-out 1.4s both;
 }
