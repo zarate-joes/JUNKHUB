@@ -60,7 +60,7 @@
         </div>
         
         <!-- Form sections -->
-        <div class="form-content">
+        <form id="shopCreationForm" method="POST" action="shop-creation.php" enctype="multipart/form-data" class="form-content">
           <!-- Shop Details Tab -->
           <section class="form-tab active" id="shopDetailsTab">
             <section class="form-section">
@@ -68,19 +68,20 @@
               
               <div class="form-group">
                 <label for="shopName">Shop Name <span class="required">*</span></label>
-                <input type="text" id="shopName" placeholder="Enter your shop name" required>
+                <input type="text" id="shopName" name="shopName" placeholder="Enter your shop name" required>
                 <p class="form-hint">This will be displayed to customers on JunkHub</p>
               </div>
               
               <div class="form-group">
                 <label for="shopDescription">Shop Description</label>
-                <textarea id="shopDescription" rows="4" placeholder="Describe your shop and what you offer"></textarea>
+                <textarea id="shopDescription" name="shopDescription" rows="4" placeholder="Describe your shop and what you offer"></textarea>
               </div>
               
               <div class="form-group">
                 <label for="shopLogo">Shop Logo</label>
                 <div class="file-upload-container">
-                  <div class="file-upload-box">
+                  <input type="file" id="shopLogo" name="shopLogo" accept="image/*" style="display: none;">
+                  <div class="file-upload-box" onclick="document.getElementById('shopLogo').click()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon">
                       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
                       <circle cx="12" cy="13" r="4"></circle>
@@ -89,6 +90,7 @@
                     <p class="upload-subtitle">or click to browse files</p>
                     <p class="upload-info">Recommended size: 500 x 500 pixels</p>
                   </div>
+                  <div id="fileNameDisplay"></div>
                 </div>
               </div>
             </section>
@@ -98,12 +100,12 @@
               
               <div class="form-group">
                 <label for="contactPhone">Contact Phone <span class="required">*</span></label>
-                <input type="tel" id="contactPhone" placeholder="Enter your phone number" required>
+                <input type="tel" id="contactPhone" name="contactPhone" placeholder="Enter your phone number" required>
               </div>
               
               <div class="form-group">
                 <label for="contactEmail">Contact Email <span class="required">*</span></label>
-                <input type="email" id="contactEmail" placeholder="Enter your email address" required>
+                <input type="email" id="contactEmail" name="contactEmail"placeholder="Enter your email address" required>
               </div>
             </section>
             
@@ -169,28 +171,28 @@
                     <h3 class="category-title">Common Materials</h3>
                     <div class="materials-grid">
                       <div class="material-item">
-                        <input type="checkbox" id="material-plastic" name="materials" value="plastic">
+                        <input type="checkbox" id="material-plastic" name="materials[]" value="plastic">
                         <label for="material-plastic">
                           <span class="material-icon">♻️</span>
                           <span class="material-name">Plastic</span>
                         </label>
                       </div>
                       <div class="material-item">
-                        <input type="checkbox" id="material-paper" name="materials" value="paper">
+                        <input type="checkbox" id="material-paper" name="materials[]" value="paper">
                         <label for="material-paper">
                           <span class="material-icon">📄</span>
                           <span class="material-name">Paper</span>
                         </label>
                       </div>
                       <div class="material-item">
-                        <input type="checkbox" id="material-metal" name="materials" value="metal">
+                        <input type="checkbox" id="material-metal" name="materials[]" value="metal">
                         <label for="material-metal">
                           <span class="material-icon">🔩</span>
                           <span class="material-name">Metal</span>
                         </label>
                       </div>
                       <div class="material-item">
-                        <input type="checkbox" id="material-glass" name="materials" value="glass">
+                        <input type="checkbox" id="material-glass" name="materials[]" value="glass">
                         <label for="material-glass">
                           <span class="material-icon">🍶</span>
                           <span class="material-name">Glass</span>
@@ -204,28 +206,28 @@
                     <h3 class="category-title">Specialized Materials</h3>
                     <div class="materials-grid">
                       <div class="material-item">
-                        <input type="checkbox" id="material-electronics" name="materials" value="electronics">
+                        <input type="checkbox" id="material-electronics" name="materials[]" value="electronics">
                         <label for="material-electronics">
                           <span class="material-icon">💻</span>
                           <span class="material-name">Electronics</span>
                         </label>
                       </div>
                       <div class="material-item">
-                        <input type="checkbox" id="material-textiles" name="materials" value="textiles">
+                        <input type="checkbox" id="material-textiles" name="materials[]" value="textiles">
                         <label for="material-textiles">
                           <span class="material-icon">👕</span>
                           <span class="material-name">Textiles</span>
                         </label>
                       </div>
                       <div class="material-item">
-                        <input type="checkbox" id="material-organic" name="materials" value="organic">
+                        <input type="checkbox" id="material-organic" name="materials[]" value="organic">
                         <label for="material-organic">
                           <span class="material-icon">🌱</span>
                           <span class="material-name">Organic Waste</span>
                         </label>
                       </div>
                       <div class="material-item">
-                        <input type="checkbox" id="material-other" name="materials" value="other">
+                        <input type="checkbox" id="material-other" name="materials[]" value="other">
                         <label for="material-other">
                           <span class="material-icon">❓</span>
                           <span class="material-name">Other</span>
@@ -364,7 +366,24 @@
               </button>
             </div>
           </section>
-        </div>
+          <!-- Hidden fields for all form data -->
+          <input type="hidden" name="shopName" id="formShopName">
+          <input type="hidden" name="shopDescription" id="formShopDescription">
+          <input type="hidden" name="contactPhone" id="formContactPhone">
+          <input type="hidden" name="contactEmail" id="formContactEmail">
+          <input type="hidden" name="fullAddress" id="formFullAddress">
+          <input type="hidden" name="barangay" id="formBarangay">
+          <input type="hidden" name="businessHours" id="formBusinessHours">
+          <input type="hidden" name="specialRequirements" id="formSpecialRequirements">
+
+          <!-- For materials (array) -->
+          <?php
+          // This will be populated by JavaScript
+          foreach (['plastic', 'paper', 'metal', 'glass', 'electronics', 'textiles', 'organic', 'other'] as $material) {
+              echo '<input type="hidden" name="materials[]" id="formMaterial_'.$material.'" value="">';
+          }
+          ?>
+        </form>
       </div>
     </div>
   </div>
@@ -483,14 +502,18 @@
       });
       
       // Launch Shop
-      launchShop.addEventListener('click', function() {
-        if (document.getElementById('agreeTerms').checked) {
-          alert('Your shop has been successfully created!');
-          // Here you would typically submit the form to your backend
-          // window.location.href = 'shop_dashboard.html';
-        } else {
-          alert('Please agree to the Terms & Conditions before launching your shop.');
-        }
+      launchShop.addEventListener('click', function(e) {
+          e.preventDefault(); // Prevent default button behavior
+          
+          if (document.getElementById('agreeTerms').checked) {
+              // Update all form fields with current values
+              updateReviewSection(); 
+              
+              // Submit the form
+              document.getElementById('shopCreationForm').submit();
+          } else {
+              alert('Please agree to the Terms & Conditions before launching your shop.');
+          }
       });
       
       // Pricing method change handler
@@ -504,6 +527,55 @@
       
       // Initialize first step as active
       step1.classList.add('active');
+    });
+
+    // Function to update all hidden form fields
+    function updateFormFields() {
+        // Basic Information
+        document.getElementById('formShopName').value = document.getElementById('shopName').value;
+        document.getElementById('formShopDescription').value = document.getElementById('shopDescription').value;
+        
+        // Contact Information
+        document.getElementById('formContactPhone').value = document.getElementById('contactPhone').value;
+        document.getElementById('formContactEmail').value = document.getElementById('contactEmail').value;
+        
+        // Location
+        document.getElementById('formFullAddress').value = document.getElementById('fullAddress').value;
+        document.getElementById('formBarangay').value = document.getElementById('barangay').value;
+        
+        // Business Hours
+        document.getElementById('formBusinessHours').value = document.getElementById('businessHours').value;
+        
+        // Special Requirements
+        document.getElementById('formSpecialRequirements').value = document.getElementById('specialRequirements').value;
+        
+        // Materials
+        const materials = ['plastic', 'paper', 'metal', 'glass', 'electronics', 'textiles', 'organic', 'other'];
+        materials.forEach(material => {
+            const checkbox = document.getElementById('material-' + material);
+            const hiddenField = document.getElementById('formMaterial_' + material);
+            hiddenField.value = checkbox.checked ? material : '';
+        });
+    }
+
+    // Call this function whenever a continue button is clicked
+    document.querySelectorAll('.continue-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!this.id.includes('launch')) { // Don't submit on continue buttons
+                updateFormFields();
+            }
+        });
+    });
+
+    // Update form fields before final submission
+    document.getElementById('launchShop').addEventListener('click', function(e) {
+        if (document.getElementById('agreeTerms').checked) {
+            updateFormFields();
+            document.getElementById('shopCreationForm').submit();
+        } else {
+            e.preventDefault();
+            alert('Please agree to the Terms & Conditions before launching your shop.');
+        }
     });
   </script>
   <script src="./greeting.js" defer></script>
