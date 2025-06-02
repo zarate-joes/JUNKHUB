@@ -46,6 +46,226 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // Add this to the existing owner_dashboard.js file
+
+  // Initialize messages data in localStorage if not exists
+  if (!localStorage.getItem('messages')) {
+    const initialMessages = [
+      {
+        id: 'M001',
+        subject: 'Price Inquiry',
+        content: 'Hi! I\'m interested in your plastic bottles. What\'s the minimum quantity you sell?',
+        from: 'John Doe',
+        time: '2 hours ago',
+        read: false,
+        type: 'inquiry'
+      },
+      {
+        id: 'M002',
+        subject: 'Order Confirmation',
+        content: 'Just wanted to confirm that my order has been processed. Thanks!',
+        from: 'Sarah Smith',
+        time: '1 day ago',
+        read: true,
+        type: 'order'
+      },
+      {
+        id: 'M003',
+        subject: 'Delivery Question',
+        content: 'Do you offer delivery for large quantities of scrap metal?',
+        from: 'Michael Johnson',
+        time: '3 days ago',
+        read: false,
+        type: 'inquiry'
+      }
+    ];
+    localStorage.setItem('messages', JSON.stringify(initialMessages));
+  }
+
+  // Load messages function
+  // Update the loadMessages function to match the table arrangement
+  function loadMessages() {
+    const messages = JSON.parse(localStorage.getItem('messages')) || [];
+    const messagesContainer = document.getElementById('messages-container');
+    const activeTab = document.querySelector('.messages-tabs .tab-btn.active')?.dataset.tab || 'inbox';
+    
+    if (!messagesContainer) return;
+    
+    // Clear existing messages
+    messagesContainer.innerHTML = '';
+    
+    // Create table structure
+    const messagesTable = document.createElement('div');
+    messagesTable.className = 'messages-table';
+    
+    // Create table header
+    const tableHeader = document.createElement('div');
+    tableHeader.className = 'table-header';
+    tableHeader.innerHTML = `
+      <div>From</div>
+      <div>Subject</div>
+      <div>Preview</div>
+      <div>Time</div>
+      <div>Status</div>
+      <div>Actions</div>
+    `;
+    messagesTable.appendChild(tableHeader);
+    
+    // Filter messages based on active tab
+    let filteredMessages = messages;
+    if (activeTab === 'unread') {
+      filteredMessages = messages.filter(message => !message.read);
+    }
+    
+    // Add messages to table
+    filteredMessages.forEach(message => {
+      const tableRow = document.createElement('div');
+      tableRow.className = `table-row message-card ${!message.read ? 'unread' : ''}`;
+      tableRow.dataset.id = message.id;
+      
+      tableRow.innerHTML = `
+        <div class="message-sender">
+          <div class="user-profile">
+            <img src="../Dashboard/pngs/prof.png" alt="User" width="30">
+            <span>${message.from}</span>
+          </div>
+        </div>
+        <div class="message-subject">
+          <h3>${message.subject}</h3>
+        </div>
+        <div class="message-preview">
+          <p>${message.content}</p>
+        </div>
+        <div class="message-time">
+          <span>${message.time}</span>
+        </div>
+        <div class="message-status">
+          <span class="status-badge ${message.read ? 'read' : 'unread'}">
+            ${message.read ? 'Read' : 'Unread'}
+          </span>
+        </div>
+        <div class="message-actions">
+          <button class="btn btn-reply">Reply</button>
+          <button class="btn ${message.read ? 'btn-mark-unread' : 'btn-mark-read'}">
+            ${message.read ? 'Mark Unread' : 'Mark Read'}
+          </button>
+          <button class="btn btn-delete">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      `;
+      
+      messagesTable.appendChild(tableRow);
+      messagesContainer.appendChild(messagesTable);
+      
+      // Add event listeners for the new message row
+      setupMessageCardEvents(tableRow, message);
+    });
+    
+    // Update tab counts
+    updateMessageCounts();
+  }
+
+  // Setup event listeners for message card
+  function setupMessageCardEvents(card, message) {
+    // Reply button
+    const replyBtn = card.querySelector('.btn-reply');
+    replyBtn.addEventListener('click', function() {
+      const modal = document.getElementById('reply-modal');
+      document.getElementById('reply-to').textContent = message.from;
+      document.getElementById('reply-subject').textContent = `Re: ${message.subject}`;
+      modal.classList.add('active');
+    });
+    
+    // Mark as read/unread button
+    const markBtn = card.querySelector('.btn-mark-read, .btn-mark-unread');
+    markBtn.addEventListener('click', function() {
+      const messages = JSON.parse(localStorage.getItem('messages'));
+      const index = messages.findIndex(m => m.id === message.id);
+      
+      if (index !== -1) {
+        messages[index].read = !messages[index].read;
+        localStorage.setItem('messages', JSON.stringify(messages));
+        loadMessages(); // Refresh the messages list
+        updateMessageCounts(); // Update the counts in tabs
+      }
+    });
+
+    const deleteBtn = card.querySelector('.btn-delete');
+    deleteBtn.addEventListener('click', function() {
+      if (confirm(`Are you sure you want to delete this message from ${message.from}?`)) {
+        const messages = JSON.parse(localStorage.getItem('messages'));
+        const updatedMessages = messages.filter(m => m.id !== message.id);
+        localStorage.setItem('messages', JSON.stringify(updatedMessages));
+        loadMessages(); // Refresh the messages list
+        updateMessageCounts(); // Update the counts in tabs
+        
+        // Update notification badge count
+        updateNotificationBadge();
+      }
+    });
+  }
+
+  // Messages tabs functionality
+  function setupMessagesTabs() {
+    const tabs = document.querySelectorAll('.messages-tabs .tab-btn');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs
+        tabs.forEach(t => t.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        this.classList.add('active');
+        
+        // Load messages for this tab
+        loadMessages();
+      });
+    });
+  }
+
+
+  // Update the loadTabContent function to include messages setup
+  function loadTabContent(tabId) {
+    switch(tabId) {
+      case 'products':
+        loadProducts();
+        break;
+      case 'orders':
+        loadOrders();
+        break;
+      case 'messages':
+        loadMessages();
+        setupMessagesTabs();
+        setupMessagesSearch();
+        break;
+      case 'analytics':
+        loadAnalytics();
+        break;
+      case 'settings':
+        loadSettings();
+        break;
+      default:
+        // Overview tab loads by default
+        break;
+    }
+  }
+
+  function updateNotificationBadge() {
+    const messages = JSON.parse(localStorage.getItem('messages')) || [];
+    const unreadCount = messages.filter(m => !m.read).length;
+    const badge = document.querySelector('.notification-badge');
+    
+    if (badge) {
+      badge.textContent = unreadCount;
+      if (unreadCount === 0) {
+        badge.style.display = 'none';
+      } else {
+        badge.style.display = 'flex';
+      }
+    }
+  }
+
   // Load and render products
   function loadProducts() {
     const products = JSON.parse(localStorage.getItem('products')) || [];
@@ -77,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <span>${product.unit}</span>
         </div>
         <div>${capitalizeFirstLetter(product.category)}</div>
+        <div>${product.category2}</div>
         <div>
           <label class="toggle-switch">
             <input type="checkbox" ${product.status ? 'checked' : ''}>
@@ -158,6 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Fill form with product data
       document.getElementById('product-name').value = product.name;
       document.getElementById('product-category').value = product.category;
+      document.getElementById('product-category2').value = product.category2;
       document.getElementById('product-price').value = product.price;
       document.getElementById('product-stock').value = product.stock;
       document.getElementById('product-unit').value = product.unit;
@@ -185,6 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
         id: id,
         name: document.getElementById('product-name').value,
         category: document.getElementById('product-category').value,
+        category2: document.getElementById('product-category2').value,
         price: parseFloat(document.getElementById('product-price').value),
         stock: parseInt(document.getElementById('product-stock').value),
         unit: document.getElementById('product-unit').value,
@@ -527,6 +750,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <span>${product.unit}</span>
         </div>
         <div>${capitalizeFirstLetter(product.category)}</div>
+        <div>${product.category2}</div>
         <div>
           <label class="toggle-switch">
             <input type="checkbox" ${product.status ? 'checked' : ''}>
@@ -576,6 +800,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <span>${product.unit}</span>
           </div>
           <div>${capitalizeFirstLetter(product.category)}</div>
+          <div>${product.category2}</div>
           <div>
             <label class="toggle-switch">
               <input type="checkbox" ${product.status ? 'checked' : ''}>
@@ -624,4 +849,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Load initial tab (Overview)
   loadTabContent('overview');
+  updateNotificationBadge();
 });
