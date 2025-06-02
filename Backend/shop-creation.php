@@ -93,8 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->beginTransaction();
             
             // Insert business
-            $stmt = $pdo->prepare("
-                INSERT INTO businesses (
+            $stmt = $pdo->prepare('INSERT INTO businesses (
                     owner_id, business_name, description, logo_path, 
                     contact_phone, contact_email, address, barangay, 
                     business_hours, special_requirements
@@ -103,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     :contact_phone, :contact_email, :address, :barangay,
                     :business_hours, :special_requirements
                 )
-            ");
+            ');
             
             $stmt->execute([
                 ':owner_id' => $ownerId,
@@ -148,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Success - redirect to dashboard
             $_SESSION['success'] = 'Business created successfully!';
-            header('Location: ../Owner Dashboard/owner_dashboard.php');
+            header('Location: ../Owner Registration/owner_sign_in.php');
             exit();
             
         } catch (PDOException $e) {

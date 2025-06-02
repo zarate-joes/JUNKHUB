@@ -111,7 +111,7 @@ if (isset($_SESSION['success'])) {
             <button type="submit" class="owner-login-button" name="ownersignin" value="LOGIN">LOGIN</button>
             
             <p class="owner-signup-link">
-              Need business access? <a href="../Sign Up/owner_sign_up.php" class="owner-highlight-link">Request account</a>
+              Need business account? <a href="owner_sign_up.php" class="owner-highlight-link">Click Here</a>
             </p>
           </form>
         </section>
