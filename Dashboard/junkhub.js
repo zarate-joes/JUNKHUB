@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         icons.forEach(i => i.classList.remove('clicked'));
         this.classList.add('clicked');
+      
       }
     });
   });
@@ -122,10 +123,26 @@ if (notificationIcon && notificationPanel) {
     
     // Close sidebar if open
     const sidebar = document.querySelector('.sidebar');
+    const messengerPanel = document.getElementById('messengerPanel');
     const mainbg = document.querySelector('.mainbg');
+    
     if (sidebar.classList.contains('visible')) {
       sidebar.classList.remove('visible');
-      mainbg.style.margin = '55px auto 0 auto';
+    }
+    
+    // Adjust main content margin
+    if (notificationPanel.classList.contains('visible')) {
+      if (messengerPanel.classList.contains('visible')) {
+        mainbg.style.margin = '55px 600px 0 0';
+      } else {
+        mainbg.style.margin = '55px 300px 0 0';
+      }
+    } else {
+      if (messengerPanel.classList.contains('visible')) {
+        mainbg.style.margin = '55px 300px 0 0';
+      } else {
+        mainbg.style.margin = '55px auto 0 auto';
+      }
     }
   });
   
@@ -174,10 +191,118 @@ if (notificationFilters.length) {
 }
 
 
-
 // =========================================================================================
 
+// Messenger Panel Functionality
+const messageIcon = document.querySelector('.message-icon');
+const messengerPanel = document.getElementById('messengerPanel');
+const closeMessenger = document.getElementById('closeMessenger');
 
+if (messageIcon && messengerPanel) {
+  messageIcon.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    // Toggle messenger panel
+    messengerPanel.classList.toggle('visible');
+    
+    // Remove badge when opened
+    const badge = this.querySelector('.message-badge');
+    if (badge) {
+      badge.style.display = 'none';
+    }
+    
+    // Close other panels if open
+    const sidebar = document.querySelector('.sidebar');
+    const notificationPanel = document.getElementById('notificationPanel');
+    const mainbg = document.querySelector('.mainbg');
+    
+    if (sidebar.classList.contains('visible')) {
+      sidebar.classList.remove('visible');
+    }
+    
+    if (notificationPanel.classList.contains('visible')) {
+      notificationPanel.classList.remove('visible');
+    }
+    
+    // Adjust main content margin
+    if (messengerPanel.classList.contains('visible')) {
+      if (notificationPanel.classList.contains('visible')) {
+        mainbg.style.margin = '55px 600px 0 0';
+      } else {
+        mainbg.style.margin = '55px 300px 0 0';
+      }
+    } else {
+      if (notificationPanel.classList.contains('visible')) {
+        mainbg.style.margin = '55px 300px 0 0';
+      } else {
+        mainbg.style.margin = '55px auto 0 auto';
+      }
+    }
+  });
+  
+  closeMessenger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    messengerPanel.classList.remove('visible');
+    
+    // Adjust main content margin
+    const notificationPanel = document.getElementById('notificationPanel');
+    const mainbg = document.querySelector('.mainbg');
+    
+    if (notificationPanel.classList.contains('visible')) {
+      mainbg.style.margin = '55px 300px 0 0';
+    } else {
+      mainbg.style.margin = '55px auto 0 auto';
+    }
+  });
+}
+
+// Close messenger when clicking outside
+document.addEventListener('click', function(e) {
+  if (messengerPanel && !messengerPanel.contains(e.target) && e.target !== messageIcon) {
+    messengerPanel.classList.remove('visible');
+    
+    // Adjust main content margin
+    const notificationPanel = document.getElementById('notificationPanel');
+    const mainbg = document.querySelector('.mainbg');
+    
+    if (notificationPanel.classList.contains('visible')) {
+      mainbg.style.margin = '55px 300px 0 0';
+    } else {
+      mainbg.style.margin = '55px auto 0 auto';
+    }
+  }
+});
+
+// Messenger filters functionality
+const messengerFilters = document.querySelectorAll('.messenger-filter');
+if (messengerFilters.length) {
+  messengerFilters.forEach(filter => {
+    filter.addEventListener('click', function() {
+      // Remove active class from all filters
+      messengerFilters.forEach(f => f.classList.remove('active'));
+      
+      // Add active class to clicked filter
+      this.classList.add('active');
+      
+      const filterType = this.dataset.filter;
+      const messengerItems = document.querySelectorAll('.messenger-item');
+      
+      messengerItems.forEach(item => {
+        if (filterType === 'all') {
+          item.style.display = 'flex';
+        } else if (filterType === 'unread') {
+          if (item.classList.contains('unread')) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+}
+
+// =========================================================================================
 
 
 document.querySelector('.sidebar-toggle').addEventListener('click', function(e) {
