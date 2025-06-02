@@ -105,7 +105,7 @@
               
               <div class="form-group">
                 <label for="contactEmail">Contact Email <span class="required">*</span></label>
-                <input type="email" id="contactEmail" name="contactEmail"placeholder="Enter your email address" required>
+                <input type="email" id="contactEmail" name="contactEmail" placeholder="Enter your email address" required>
               </div>
             </section>
             
@@ -114,12 +114,12 @@
               
               <div class="form-group">
                 <label for="fullAddress">Full Address <span class="required">*</span></label>
-                <input type="text" id="fullAddress" placeholder="Enter your full address" required>
+                <input type="text" id="fullAddress" name="fullAddress" placeholder="Enter your full address" required>
               </div>
               
               <div class="form-group">
                 <label for="barangay">Barangay <span class="required">*</span></label>
-                <select id="barangay" required>
+                <select id="barangay" name="barangay" required>
                   <option value="" disabled selected>Select your barangay</option>
                   <option value="barangay1">Barangay 1</option>
                   <option value="barangay2">Barangay 2</option>
@@ -132,7 +132,7 @@
               
               <div class="form-group">
                 <label for="businessHours">When are you open for business?</label>
-                <select id="businessHours">
+                <select id="businessHours" name="businessHours">
                   <option value="everyday">Everyday (8 AM - 5 PM)</option>
                   <option value="weekdays">Weekdays (8 AM - 5 PM)</option>
                   <option value="weekends">Weekends (8 AM - 5 PM)</option>
@@ -142,7 +142,7 @@
             </section>
             
             <div class="form-actions">
-              <button class="back-button" id="backToLanding">
+              <button class="back-button" id="backToLanding" name="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
