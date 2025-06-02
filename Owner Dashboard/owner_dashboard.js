@@ -776,3 +776,100 @@ statusSelects.forEach(select => {
       loadSettings();
     });
   }
+
+
+  // Add this function to handle order cancellation
+function setupOrderCancellation() {
+  const cancelButtons = document.querySelectorAll('.orders-management .btn-remove');
+  
+  cancelButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation(); // Prevent event bubbling
+      
+      const row = this.closest('.table-row');
+      const orderNumber = row.querySelector('div:first-child').textContent;
+      
+      if (confirm(`Are you sure you want to cancel order ${orderNumber}?`)) {
+        // In a real app, you would send this to your backend
+        // For now, we'll just remove it from the UI
+        row.remove();
+        
+        // You could also update the status to "Cancelled" instead of removing
+        // const statusCell = row.querySelector('div:nth-child(6)');
+        // statusCell.innerHTML = '<span class="status-badge cancelled">Cancelled</span>';
+        // this.disabled = true;
+      }
+    });
+  });
+}
+
+// Update the loadOrders function to include cancellation setup
+function loadOrders() {
+  // Your existing order loading code...
+  
+  // Set up search functionality
+  setupOrderSearch();
+  
+  // Set up order cancellation
+  setupOrderCancellation();
+  
+  // Set up status filter
+  setupOrderStatusFilter();
+}
+
+// Add this function for status filtering
+function setupOrderStatusFilter() {
+  const orderFilterButtons = document.querySelectorAll('.order-filter .filter-btn');
+  
+  orderFilterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Remove active class from all filter buttons
+      orderFilterButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Add active class to clicked button
+      this.classList.add('active');
+      
+      const filterValue = this.textContent.toLowerCase();
+      const orderRows = document.querySelectorAll('.orders-management .table-row:not(.table-header)');
+      
+      orderRows.forEach(row => {
+        if (filterValue === 'all') {
+          row.style.display = 'table-row';
+        } else {
+          const statusElement = row.querySelector('.status-badge, .status-select');
+          let statusText = '';
+          
+          if (statusElement.classList.contains('status-badge')) {
+            statusText = statusElement.textContent.toLowerCase();
+          } else if (statusElement.classList.contains('status-select')) {
+            statusText = statusElement.value.toLowerCase();
+          }
+          
+          row.style.display = statusText === filterValue ? 'table-row' : 'none';
+        }
+      });
+    });
+  });
+  
+  // Handle status select changes
+  const statusSelects = document.querySelectorAll('.status-select');
+  statusSelects.forEach(select => {
+    select.addEventListener('change', function() {
+      const activeFilter = document.querySelector('.order-filter .filter-btn.active');
+      if (activeFilter && activeFilter.textContent.toLowerCase() !== 'all') {
+        const row = this.closest('.table-row');
+        const currentStatus = this.value.toLowerCase();
+        const filterValue = activeFilter.textContent.toLowerCase();
+        
+        row.style.display = currentStatus === filterValue ? 'table-row' : 'none';
+      }
+      
+      // Update the status badge if it exists
+      const statusBadge = this.closest('div').querySelector('.status-badge');
+      if (statusBadge) {
+        statusBadge.className = 'status-badge ' + this.value;
+        statusBadge.textContent = this.options[this.selectedIndex].text;
+      }
+    });
+  });
+}
