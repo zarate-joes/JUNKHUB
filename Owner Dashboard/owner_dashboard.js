@@ -756,3 +756,23 @@ statusSelects.forEach(select => {
     }
   });
 });
+
+
+  // Profile click handler to navigate to settings
+  const userProfile = document.querySelector('.user-profile');
+  if (userProfile) {
+    userProfile.addEventListener('click', function() {
+      // Remove active class from all nav items and tab contents
+      document.querySelectorAll('.nav-item').forEach(navItem => navItem.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Add active class to settings nav item
+      document.querySelector('.nav-item[data-tab="settings"]').classList.add('active');
+      
+      // Show settings tab content
+      document.getElementById('settings').classList.add('active');
+      
+      // Load settings content
+      loadSettings();
+    });
+  }

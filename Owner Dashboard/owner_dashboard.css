@@ -193,6 +193,17 @@ body {
   cursor: pointer;
 }
 
+.user-profile:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+  transition: var(--transition);
+}
+
+.user-profile img:hover {
+  transition: var(--transition);
+}
+
+
 .user-profile img {
   width: 40px;
   height: 40px;
