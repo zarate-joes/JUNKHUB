@@ -485,16 +485,6 @@ textarea {
   color: var(--color-dark);
 }
 
-/* Form tabs */
-.form-tab {
-  display: none;
-}
-
-/* Active tab */
-.form-tab.active {
-  display: block;
-}
-
 /* Materials Note */
 .materials-note {
   display: flex;
@@ -725,4 +715,48 @@ input:invalid:not(:focus):not(:placeholder-shown) {
 
 input:valid:not(:placeholder-shown) {
   border-color: #09c372;
+}
+
+.message-container {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+/* Highlight error fields */
+input.error, select.error, textarea.error {
+    border-color: #ff3860 !important;
+}
+
+.error {
+    border-color: #dc3545 !important;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* For select elements */
+select.error {
+    border-color: #dc3545;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dc3545' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
 }
