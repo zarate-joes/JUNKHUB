@@ -13,9 +13,181 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+
+
+
+
+
+
+
+
+
+  // Shop data - in a real app, this would come from an API
+  const shops = [
+    {
+      id: 1,
+      name: "Green Recycle Shop",
+      image: "./pngs/shop-1.jfif", 
+      rating: "★★★★☆",
+      location: "Manila",
+      items: [
+        {
+          name: "Aluminum Metal",
+          price: "₱150.09 per kg",
+          available: "Available: 500kg",
+          shop: "ⓘ Green Recycle Shop",
+          img: "./pngs/aluminum.png"
+        },
+        {
+          name: "Plastic Bottles",
+          price: "₱26.01 per kg",
+          available: "Available: 1,000kg",
+          shop: "ⓘ Green Recycle Shop",
+          img: "./pngs/plastic.png"
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: "Eco-Friendly Junk",
+      image: "./pngs/shop-2.jpg",
+      rating: "★★★☆☆",
+      location: "Quezon City",
+      items: [
+        {
+          name: "Old Car Batteries",
+          price: "₱500 per unit",
+          available: "Available: 25units",
+          shop: "ⓘ Eco-Friendly Junk",
+          img: "./pngs/battery.png"
+        },
+        {
+          name: "Copper",
+          price: "₱123.90 per kg",
+          available: "Available: 500kg",
+          shop: "ⓘ Eco-Friendly Junk",
+          img: "./pngs/copper.png"
+        }
+      ]
+    },
+    {
+      id: 3,
+      name: "Metro Scrap Dealer",
+      image: "./pngs/Shop-3.jpg",
+      rating: "★★★★★",
+      location: "Makati",
+      items: [
+        {
+          name: "Scrap Metal - Steel",
+          price: "₱150.09 per kg",
+          available: "Available: 500kg",
+          shop: "ⓘ Metro Scrap Dealer",
+          img: "./pngs/steel.png"
+        },
+        {
+          name: "Computer Parts",
+          price: "₱123.90 per kg",
+          available: "Available: 500kg",
+          shop: "ⓘ Metro Scrap Dealer",
+          img: "./pngs/computerparts.png"
+        }
+      ]
+    },
+    // Add more shops as needed
+  ];
+
+  // Render shops
+  function renderShops() {
+    const shopsWrapper = document.querySelector('.shops-wrapper');
+    shopsWrapper.innerHTML = '';
+    
+    shops.forEach(shop => {
+      const shopElement = document.createElement('div');
+      shopElement.className = 'shop-container';
+      shopElement.dataset.shopId = shop.id;
+      
+      shopElement.innerHTML = `
+        <img src="${shop.image}" alt="${shop.name}" class="shop-avatar">
+        <div class="shop-name">${shop.name}</div>
+        <div class="shop-rating">${shop.rating}</div>
+        <div class="shop-location">${shop.location}</div>
+      `;
+      
+      shopsWrapper.appendChild(shopElement);
+      
+      // Add click event to show shop items
+      shopElement.addEventListener('click', () => showShopItems(shop.id));
+    });
+  }
+
+// Show items for a specific shop
+function showShopItems(shopId) {
+  const shop = shops.find(s => s.id == shopId);
+  if (!shop) return;
   
+  const shopItemsContainer = document.getElementById('shop-items-container');
+  const shopItemsSection = document.getElementById('shop-items-section');
+  
+  shopItemsContainer.innerHTML = '';
+  
+  shop.items.forEach(item => {
+    const itemElement = document.createElement('div');
+    itemElement.className = 'product-container';
+    itemElement.dataset.name = item.name;
+    itemElement.dataset.price = item.price;
+    itemElement.dataset.available = item.available;
+    itemElement.dataset.shop = item.shop;
+    itemElement.dataset.img = item.img;
+    
+    itemElement.innerHTML = `
+      <div class="product_name">${item.name}</div>
+      <div class="product-price">${item.price}</div>
+      <div class="product-available">${item.available}</div>
+      <div class="shop-name">${item.shop}</div>
+      <img src="${item.img}" alt="${item.name}" style="width: 200px; height: 200px; border-radius: 5px">
+    `;
+    
+    shopItemsContainer.appendChild(itemElement);
+  });
+  
+  // Show the shop items section and add visible class
+  shopItemsSection.style.display = 'block';
+  shopItemsSection.classList.add('visible');
 
 
+    
+    // Show the shop items section
+    document.getElementById('shop-items-section').style.display = 'block';
+    
+    // Reattach click handlers to the new product containers
+    attachProductClickHandlers();
+    
+    // Scroll to the shop items section
+    shopItemsSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Function to attach click handlers to product containers
+function attachProductClickHandlers() {
+  document.querySelectorAll('.product-container, .product-container0').forEach(container => {
+    container.addEventListener('click', (e) => {
+      // Don't trigger if clicking on a link inside the container
+      if (e.target.tagName === 'A') return;
+      
+      popupImg.src = container.dataset.img;
+      popupName.textContent = container.dataset.name;
+      popupPrice.textContent = container.dataset.price;
+      popupAvailable.textContent = container.dataset.available;
+      popupShopName.textContent = container.dataset.shop;
+
+      overlay.style.display = 'flex';
+    });
+  });
+}
+
+attachProductClickHandlers();
+
+  renderShops();
+  
 // =========================================================================================
 
 
