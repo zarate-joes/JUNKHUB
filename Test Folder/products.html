@@ -1,0 +1,177 @@
+<div class="tab-content" id="products">
+  <header class="dashboard-header">
+    <div class="header-title">
+      <h2>My Products</h2>
+      <p>Manage your products and inventory</p>
+    </div>
+  </header>
+
+  <section class="products-management">
+    <div class="section-header">
+      <h2>Product Inventory</h2>
+      <div class="section-actions">
+        <button class="btn btn-primary" id="add-product">
+          <i class="fas fa-plus"></i> Add New Product
+        </button>
+        <div class="search-box">
+          <input type="text" placeholder="Search products...">
+          <i class="fas fa-search"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="category-filter">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Plastic</button>
+      <button class="filter-btn">Metal</button>
+      <button class="filter-btn">Glass</button>
+      <button class="filter-btn">Paper</button>
+    </div>
+
+    <div class="products-table">
+      <div class="table-header">
+        <div>Product</div>
+        <div>Price</div>
+        <div>Stock</div>
+        <div>Category</div>
+        <div>Status</div>
+        <div>Actions</div>
+      </div>
+      
+      <div class="table-row">
+        <div class="product-cell">
+          <div class="product-icon">P</div>
+          <div class="product-info">
+            <h3>Plastic Bottles</h3>
+            <p>ID: PB001</p>
+          </div>
+        </div>
+        <div>₱3/kg</div>
+        <div>
+          <input type="number" value="20" min="0" class="stock-input">
+          <span>kg</span>
+        </div>
+        <div>Plastic</div>
+        <div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+          <span class="status-text">Available</span>
+        </div>
+        <div class="actions-cell">
+          <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+      
+      <div class="table-row">
+        <div class="product-cell">
+          <div class="product-icon">S</div>
+          <div class="product-info">
+            <h3>Scrap Metal</h3>
+            <p>ID: SM002</p>
+          </div>
+        </div>
+        <div>₱10/kg</div>
+        <div>
+          <input type="number" value="8" min="0" class="stock-input">
+          <span>kg</span>
+        </div>
+        <div>Metal</div>
+        <div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+          <span class="status-text">Available</span>
+        </div>
+        <div class="actions-cell">
+          <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+      
+      <div class="table-row">
+        <div class="product-cell">
+          <div class="product-icon">C</div>
+          <div class="product-info">
+            <h3>Cardboard</h3>
+            <p>ID: CB003</p>
+          </div>
+        </div>
+        <div>₱5/kg</div>
+        <div>
+          <input type="number" value="15" min="0" class="stock-input">
+          <span>kg</span>
+        </div>
+        <div>Paper</div>
+        <div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+          <span class="status-text">Available</span>
+        </div>
+        <div class="actions-cell">
+          <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add Product Modal -->
+  <div class="modal" id="add-product-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Product</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="product-form">
+          <div class="form-group">
+            <label for="product-name">Product Name</label>
+            <input type="text" id="product-name" required>
+          </div>
+          <div class="form-group">
+            <label for="product-category">Category</label>
+            <select id="product-category" required>
+              <option value="">Select category</option>
+              <option value="plastic">Plastic</option>
+              <option value="metal">Metal</option>
+              <option value="glass">Glass</option>
+              <option value="paper">Paper</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product-price">Price (₱)</label>
+            <input type="number" id="product-price" min="0" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="product-stock">Initial Stock</label>
+            <input type="number" id="product-stock" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="product-unit">Unit</label>
+            <select id="product-unit" required>
+              <option value="kg">kg</option>
+              <option value="g">g</option>
+              <option value="lb">lb</option>
+              <option value="piece">piece</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product-description">Description (Optional)</label>
+            <textarea id="product-description" rows="3"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-cancel close-modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

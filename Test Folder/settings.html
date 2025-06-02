@@ -1,0 +1,128 @@
+<!-- Settings Tab Content -->
+<div class="tab-content" id="settings">
+  <header class="dashboard-header">
+    <div class="header-title">
+      <h2>Settings</h2>
+      <p>Manage your account and preferences</p>
+    </div>
+  </header>
+
+  <section class="settings-management">
+    <div class="settings-tabs">
+      <button class="tab-btn active" data-tab="account">Account</button>
+      <button class="tab-btn" data-tab="security">Security</button>
+    </div>
+
+    <div class="settings-content">
+      <div class="tab-pane active" id="account-settings">
+        <h3>Account Information</h3>
+        <form class="settings-form">
+          <div class="form-group">
+            <label for="account-name">Full Name</label>
+            <input type="text" id="account-name" value="" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label for="account-email">Email</label>
+            <input type="email" id="account-email" value="" placeholder="john.doe@example.com">
+          </div>
+          <div class="form-group">
+            <label for="account-phone">Phone Number</label>
+            <input type="tel" id="account-phone" value="" placeholder="+639123456789">
+          </div>
+          <div class="form-group">
+            <label for="account-business">Shop Name</label>
+            <input type="text" id="account-business" value="" placeholder="JunkHUB">
+          </div>
+          <div class="form-group">
+            <label for="account-address">Shop Address</label>
+            <textarea id="account-address" placeholder="123 Main Street, Manila, Philippines"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="shop-description">Shop Description</label>
+            <textarea id="shop-description" rows="4" placeholder="Tell customers about your shop"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="shop-logo">Shop Logo</label>
+            <div class="logo-upload-container">
+              <div class="logo-preview">
+                <img id="logo-preview" src="../Dashboard/pngs/prof.png" alt="Current Logo" width="100">
+              </div>
+              <input type="file" id="shop-logo" accept="image/*" style="display: none;">
+              <button type="button" class="btn btn-primary" onclick="document.getElementById('shop-logo').click()">
+                <i class="fas fa-upload"></i> Upload New Logo
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Business Hours</label>
+            <div class="business-hours">
+              <div class="day-hours">
+                <label>Monday - Friday</label>
+                <div class="time-inputs">
+                  <input type="time" value="08:00">
+                  <span>to</span>
+                  <input type="time" value="17:00">
+                </div>
+              </div>
+              <div class="day-hours">
+                <label>Saturday</label>
+                <div class="time-inputs">
+                  <input type="time" value="09:00">
+                  <span>to</span>
+                  <input type="time" value="15:00">
+                </div>
+              </div>
+              <div class="day-hours">
+                <label>Sunday</label>
+                <div class="time-inputs">
+                  <input type="time" value="09:00" disabled>
+                  <span>to</span>
+                  <input type="time" value="12:00" disabled>
+                  <label class="closed-checkbox">
+                    <input type="checkbox" checked> Closed
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-cancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="tab-pane" id="security-settings">
+        <h3>Security Settings</h3>
+        <form class="settings-form">
+          <div class="form-group">
+            <label for="current-password">Current Password</label>
+            <input type="password" id="current-password" placeholder="Enter current password">
+          </div>
+          <div class="form-group">
+            <label for="new-password">New Password</label>
+            <input type="password" id="new-password" placeholder="Enter new password">
+            <div class="password-strength">
+              <span class="strength-bar weak"></span>
+              <span class="strength-bar medium"></span>
+              <span class="strength-bar strong"></span>
+              <span class="strength-text">Weak</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm New Password</label>
+            <input type="password" id="confirm-password" placeholder="Confirm new password">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-cancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Update Security Settings</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>

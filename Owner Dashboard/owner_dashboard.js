@@ -1,42 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Initialize product data in localStorage if not exists
-  if (!localStorage.getItem('products')) {
-    const initialProducts = [
-      {
-        id: 'PB001',
-        name: 'Plastic Bottles',
-        price: 3,
-        stock: 20,
-        unit: 'kg',
-        category: 'plastic',
-        status: true,
-        description: 'Clean plastic bottles for recycling'
-      },
-      {
-        id: 'SM002',
-        name: 'Scrap Metal',
-        price: 10,
-        stock: 8,
-        unit: 'kg',
-        category: 'metal',
-        status: true,
-        description: 'Various scrap metal pieces'
-      },
-      {
-        id: 'CB003',
-        name: 'Cardboard',
-        price: 5,
-        stock: 15,
-        unit: 'kg',
-        category: 'paper',
-        status: true,
-        description: 'Used cardboard boxes'
-      }
-    ];
-    localStorage.setItem('products', JSON.stringify(initialProducts));
-  }
-
-  // Tab Navigation with Dynamic Loading
+  // Tab Navigation
   const navItems = document.querySelectorAll('.nav-item');
   const tabContents = document.querySelectorAll('.tab-content');
   

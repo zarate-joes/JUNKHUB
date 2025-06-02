@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Dashboard | JunkHUB</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="owner_dashboard.css">
+  <link rel="icon" type="image/pnglogo" href="../Images/teallogo22619-foad-200h.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="main-header">
+    <div class="header-content">
+      <div class="notification-icon">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">3</span>
+      </div>
+      <div class="user-profile">
+        <img src="../Dashboard/pngs/prof.png" alt="User Profile">
+        <span class="username">John Doe</span>
+      </div>
+    </div>
+    <div class="header-divider"></div>
+  </header>
+
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <a href="../Landing Page/index.php" class="brand-link">
+        <div class="logo-container">
+          <img src="https://c.animaapp.com/i1oP7wZ8/img/teallogo-1@2x.png" alt="JunkHUB Logo" class="logo">
+          <h1 class="logo-text"><span class="logo-highlight">Junk</span>HUB</h1>
+        </div>
+      </a>
+      
+      <nav class="main-nav">
+        <ul>
+
+          
+          <li class="nav-item active" data-tab="overview">
+            <i class="fas fa-chart-pie"></i>
+            <span>Overview</span>
+          </li>
+          <li class="nav-item" data-tab="products">
+            <i class="fas fa-box-open"></i>
+            <span>My Products</span>
+          </li>
+          <li class="nav-item" data-tab="orders">
+            <i class="fas fa-tasks"></i>
+            <span>Order Management</span>
+          </li>
+          <li class="nav-item" data-tab="messages">
+            <i class="fas fa-comment-alt"></i>
+            <span>Messages & Feedback</span>
+          </li>
+          <li class="nav-item" data-tab="analytics">
+            <i class="fas fa-chart-line"></i>
+            <span>Analytics Reports</span>
+          </li>
+          <li class="nav-item" data-tab="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="logout-container">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Tab contents will be loaded here dynamically -->
+      <?php include('dashboard_tabs/overview.html'); ?>
+    </main>
+  </div>
+
+  <script src="js/owner_dashboard.js"></script>
+</body>
+</html>
