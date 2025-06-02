@@ -246,8 +246,3 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.head.appendChild(style);
 });
-
-document.getElementById('shopLogo').addEventListener('change', function(e) {
-        const fileName = e.target.files[0]?.name || 'No file selected';
-        document.getElementById('fileNameDisplay').textContent = fileName;
-    });

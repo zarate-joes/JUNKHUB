@@ -2,6 +2,11 @@
 require_once 'dbconnect.php';
 session_start();
 
+// At start of shop-creation.php
+if (!isset($pdo)) {
+    die("Database connection failed");
+}
+
 // Verify owner is logged in
 if (!isset($_SESSION['owner']['id'])) {
     header('Location: ../Owner Registration/owner_sign_in.php');
@@ -33,6 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle file upload
     $logoPath = null;
     if (isset($_FILES['shopLogo']) && $_FILES['shopLogo']['error'] === UPLOAD_ERR_OK) {
+        $maxFileSize = 2 * 1024 * 1024; // 2MB
+            if ($_FILES['shopLogo']['size'] > $maxFileSize) {
+                $errors['shopLogo'] = 'File size exceeds maximum allowed (2MB)';
+            }
+            
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
         $detectedType = finfo_file($fileInfo, $_FILES['shopLogo']['tmp_name']);

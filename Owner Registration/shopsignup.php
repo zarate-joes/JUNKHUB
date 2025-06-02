@@ -142,13 +142,13 @@
             </section>
             
             <div class="form-actions">
-              <button class="back-button" id="backToLanding" name="">
+              <button class="back-button" id="backToLanding" name="backToLanding">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 BACK
               </button>
-              <button class="continue-button" id="continueToMaterials">
+              <button class="continue-button" id="continueToMaterials" name="continueToMaterials">
                 CONTINUE
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
@@ -158,7 +158,7 @@
           </section>
 
           <!-- Materials Tab -->
-          <section class="form-tab" id="materialsTab" style="display: none;">
+          <section class="form-tab" id="materialsTab">
             <section class="form-section">
               <h2 class="section-title">Materials You Accept</h2>
               
@@ -256,18 +256,18 @@
               
               <div class="form-group">
                 <label for="specialRequirements">Special Requirements</label>
-                <textarea id="specialRequirements" rows="3" placeholder="Do you have any special requirements for the materials? (e.g., clean, sorted, etc.)"></textarea>
+                <textarea id="specialRequirements" name="specialRequirements" rows="3" placeholder="Do you have any special requirements for the materials? (e.g., clean, sorted, etc.)"></textarea>
               </div>
             </section>
 
             <div class="form-actions">
-              <button class="back-button" id="backToShopDetails">
+              <button class="back-button" id="backToShopDetails" name="backToShopDetails"> 
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 BACK
               </button>
-              <button class="continue-button" id="continueToReview">
+              <button class="continue-button" id="continueToReview" name="continueToReview">
                 CONTINUE
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
@@ -277,7 +277,7 @@
           </section>
 
           <!-- Review & Launch Tab -->
-          <section class="form-tab" id="reviewTab" style="display: none;">
+          <section class="form-tab" id="reviewTab">
             <section class="form-section">
               <h2 class="section-title">Review Your Shop Details</h2>
               
@@ -352,13 +352,13 @@
             </section>
             
             <div class="form-actions">
-              <button class="back-button" id="backToMaterials">
+              <button class="back-button" id="backToMaterials" name="backToMaterials">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 BACK
               </button>
-              <button class="continue-button" id="launchShop">
+              <button class="continue-button" id="launchShop" name="launchShop">
                 LAUNCH SHOP
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
@@ -390,194 +390,194 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Tab navigation
-      const shopDetailsTab = document.getElementById('shopDetailsTab');
-      const materialsTab = document.getElementById('materialsTab');
-      const reviewTab = document.getElementById('reviewTab');
-      
-      // Buttons
-      const continueToMaterials = document.getElementById('continueToMaterials');
-      const continueToReview = document.getElementById('continueToReview');
-      const backToShopDetails = document.getElementById('backToShopDetails');
-      const backToMaterials = document.getElementById('backToMaterials');
-      const backToLanding = document.getElementById('backToLanding');
-      const launchShop = document.getElementById('launchShop');
-      
-      // Progress bar and steps
-      const progressBar = document.getElementById('progressBar');
-      const step1 = document.getElementById('step1');
-      const step2 = document.getElementById('step2');
-      const step3 = document.getElementById('step3');
-      
-      // Pricing method toggle
-      const pricingMethod = document.getElementById('pricingMethod');
-      const fixedPriceContainer = document.getElementById('fixedPriceContainer');
-      
-      // Continue to Materials tab
-      continueToMaterials.addEventListener('click', function() {
-        // Basic validation for required fields
-        const requiredFields = [
-          document.getElementById('shopName'),
-          document.getElementById('contactPhone'),
-          document.getElementById('contactEmail'),
-          document.getElementById('fullAddress'),
-          document.getElementById('barangay')
-        ];
+        console.log('Script loaded');
         
-        let isValid = true;
-        requiredFields.forEach(field => {
-          if (!field.value.trim()) {
-            field.style.borderColor = '#ff3860';
-            isValid = false;
-          }
-        });
+        // Tab navigation
+        const shopDetailsTab = document.getElementById('shopDetailsTab');
+        const materialsTab = document.getElementById('materialsTab');
+        const reviewTab = document.getElementById('reviewTab');
         
-        if (isValid) {
-          shopDetailsTab.style.display = 'none';
-          materialsTab.style.display = 'block';
-          progressBar.style.width = '66.66%';
-          step1.classList.remove('active');
-          step2.classList.add('active');
-        }
-      });
-      
-      // Continue to Review tab
-      continueToReview.addEventListener('click', function() {
-        // Update review section with entered values
-        document.getElementById('reviewShopName').textContent = document.getElementById('shopName').value || '-';
-        document.getElementById('reviewShopDescription').textContent = document.getElementById('shopDescription').value || '-';
-        document.getElementById('reviewContactPhone').textContent = document.getElementById('contactPhone').value || '-';
-        document.getElementById('reviewContactEmail').textContent = document.getElementById('contactEmail').value || '-';
-        document.getElementById('reviewFullAddress').textContent = document.getElementById('fullAddress').value || '-';
-        document.getElementById('reviewBarangay').textContent = document.getElementById('barangay').options[document.getElementById('barangay').selectedIndex].text || '-';
-        document.getElementById('reviewBusinessHours').textContent = document.getElementById('businessHours').options[document.getElementById('businessHours').selectedIndex].text || '-';
+        // Buttons
+        const continueToMaterials = document.getElementById('continueToMaterials');
+        const continueToReview = document.getElementById('continueToReview');
+        const backToShopDetails = document.getElementById('backToShopDetails');
+        const backToMaterials = document.getElementById('backToMaterials');
+        const backToLanding = document.getElementById('backToLanding');
+        const launchShop = document.getElementById('launchShop');
         
-        // Get selected materials
-        const materialCheckboxes = document.querySelectorAll('input[name="materials"]:checked');
-        const selectedMaterials = Array.from(materialCheckboxes).map(cb => cb.nextElementSibling.textContent).join(', ') || 'None selected';
-        document.getElementById('reviewMaterials').textContent = selectedMaterials;
+        // Progress bar and steps
+        const progressBar = document.getElementById('progressBar');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
         
-        // Pricing info
-        const pricingMethodText = document.getElementById('pricingMethod').options[document.getElementById('pricingMethod').selectedIndex].text;
-        document.getElementById('reviewPricingMethod').textContent = pricingMethodText;
-        
-        if (pricingMethod.value === 'fixed') {
-          document.getElementById('reviewFixedPriceContainer').style.display = 'block';
-          document.getElementById('reviewFixedPrice').textContent = '₱' + document.getElementById('fixedPrice').value;
-        } else {
-          document.getElementById('reviewFixedPriceContainer').style.display = 'none';
+        // Initialize first step as active
+        if (step1) step1.classList.add('active');
+
+        // Continue to Materials tab
+        if (continueToMaterials) {
+            continueToMaterials.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Basic validation for required fields
+                const requiredFields = [
+                    document.getElementById('shopName'),
+                    document.getElementById('contactPhone'),
+                    document.getElementById('contactEmail'),
+                    document.getElementById('fullAddress'),
+                    document.getElementById('barangay')
+                ];
+                
+                let isValid = true;
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.style.borderColor = '#ff3860';
+                        isValid = false;
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                if (isValid) {
+                    shopDetailsTab.classList.remove('active');
+                    materialsTab.classList.add('active');
+                    if (progressBar) progressBar.style.width = '66.66%';
+                    if (step1) step1.classList.remove('active');
+                    if (step2) step2.classList.add('active');
+                    
+                    console.log('Switching to materials tab');
+                    console.log('Shop tab display:', shopDetailsTab.style.display);
+                    console.log('Materials tab display:', materialsTab.style.display);
+                }
+            });
         }
         
-        document.getElementById('reviewSpecialRequirements').textContent = document.getElementById('specialRequirements').value || '-';
-        
-        // Switch tabs
-        materialsTab.style.display = 'none';
-        reviewTab.style.display = 'block';
-        progressBar.style.width = '100%';
-        step2.classList.remove('active');
-        step3.classList.add('active');
-      });
-      
-      // Back to Shop Details tab
-      backToShopDetails.addEventListener('click', function() {
-        materialsTab.style.display = 'none';
-        shopDetailsTab.style.display = 'block';
-        progressBar.style.width = '33.33%';
-        step2.classList.remove('active');
-        step1.classList.add('active');
-      });
-      
-      // Back to Materials tab
-      backToMaterials.addEventListener('click', function() {
-        reviewTab.style.display = 'none';
-        materialsTab.style.display = 'block';
-        progressBar.style.width = '66.66%';
-        step3.classList.remove('active');
-        step2.classList.add('active');
-      });
-      
-      // Back to Landing page
-      backToLanding.addEventListener('click', function() {
-        window.location.href = '../Landing Page/index.php';
-      });
-      
-      // Launch Shop
-      launchShop.addEventListener('click', function(e) {
-          e.preventDefault(); // Prevent default button behavior
-          
-          if (document.getElementById('agreeTerms').checked) {
-              // Update all form fields with current values
-              updateReviewSection(); 
-              
-              // Submit the form
-              document.getElementById('shopCreationForm').submit();
-          } else {
-              alert('Please agree to the Terms & Conditions before launching your shop.');
-          }
-      });
-      
-      // Pricing method change handler
-      pricingMethod.addEventListener('change', function() {
-        if (this.value === 'fixed') {
-          fixedPriceContainer.style.display = 'block';
-        } else {
-          fixedPriceContainer.style.display = 'none';
+        // Continue to Review tab
+        if (continueToReview) {
+            continueToReview.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update review section with entered values
+                document.getElementById('reviewShopName').textContent = document.getElementById('shopName').value || '-';
+                document.getElementById('reviewShopDescription').textContent = document.getElementById('shopDescription').value || '-';
+                document.getElementById('reviewContactPhone').textContent = document.getElementById('contactPhone').value || '-';
+                document.getElementById('reviewContactEmail').textContent = document.getElementById('contactEmail').value || '-';
+                document.getElementById('reviewFullAddress').textContent = document.getElementById('fullAddress').value || '-';
+                document.getElementById('reviewBarangay').textContent = document.getElementById('barangay').options[document.getElementById('barangay').selectedIndex].text || '-';
+                document.getElementById('reviewBusinessHours').textContent = document.getElementById('businessHours').options[document.getElementById('businessHours').selectedIndex].text || '-';
+                
+                // Get selected materials
+                const materialCheckboxes = document.querySelectorAll('input[name="materials[]"]:checked');
+                const selectedMaterials = Array.from(materialCheckboxes).map(cb => {
+                    const label = cb.closest('.material-item').querySelector('.material-name');
+                    return label ? label.textContent : '';
+                }).filter(Boolean).join(', ') || 'None selected';
+                document.getElementById('reviewMaterials').textContent = selectedMaterials;
+                
+                document.getElementById('reviewSpecialRequirements').textContent = document.getElementById('specialRequirements').value || '-';
+                
+                // Switch tabs
+                materialsTab.classList.remove('active');
+                reviewTab.classList.add('active');
+                if (progressBar) progressBar.style.width = '100%';
+                if (step2) step2.classList.remove('active');
+                if (step3) step3.classList.add('active');
+            });
         }
-      });
-      
-      // Initialize first step as active
-      step1.classList.add('active');
+        
+        // Back to Shop Details tab
+        if (backToShopDetails) {
+            backToShopDetails.addEventListener('click', function(e) {
+                e.preventDefault();
+                materialsTab.classList.remove('active');
+                shopDetailsTab.classList.add('active');
+                if (progressBar) progressBar.style.width = '33.33%';
+                if (step2) step2.classList.remove('active');
+                if (step1) step1.classList.add('active');
+            });
+        }
+        
+        // Back to Materials tab
+        if (backToMaterials) {
+            backToMaterials.addEventListener('click', function(e) {
+                e.preventDefault();
+                reviewTab.classList.remove('active');
+                materialsTab.classList.add('active');
+                if (progressBar) progressBar.style.width = '66.66%';
+                if (step3) step3.classList.remove('active');
+                if (step2) step2.classList.add('active');
+            });
+        }
+        
+        // Back to Landing page
+        if (backToLanding) {
+            backToLanding.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = '../Landing Page/index.php';
+            });
+        }
+        
+        // Launch Shop
+        if (launchShop) {
+            launchShop.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (document.getElementById('agreeTerms').checked) {
+                    updateFormFields();
+                    document.getElementById('shopCreationForm').submit();
+                } else {
+                    alert('Please agree to the Terms & Conditions before launching your shop.');
+                }
+            });
+        }
+        
+        // File upload display
+        const shopLogoInput = document.getElementById('shopLogo');
+        if (shopLogoInput) {
+            shopLogoInput.addEventListener('change', function(e) {
+                const fileName = e.target.files[0]?.name || 'No file selected';
+                const fileNameDisplay = document.getElementById('fileNameDisplay');
+                if (fileNameDisplay) {
+                    fileNameDisplay.textContent = fileName;
+                }
+            });
+        }
+
+        // Function to update all hidden form fields
+        function updateFormFields() {
+            // Basic Information
+            document.getElementById('formShopName').value = document.getElementById('shopName').value;
+            document.getElementById('formShopDescription').value = document.getElementById('shopDescription').value;
+            
+            // Contact Information
+            document.getElementById('formContactPhone').value = document.getElementById('contactPhone').value;
+            document.getElementById('formContactEmail').value = document.getElementById('contactEmail').value;
+            
+            // Location
+            document.getElementById('formFullAddress').value = document.getElementById('fullAddress').value;
+            document.getElementById('formBarangay').value = document.getElementById('barangay').value;
+            
+            // Business Hours
+            document.getElementById('formBusinessHours').value = document.getElementById('businessHours').value;
+            
+            // Special Requirements
+            document.getElementById('formSpecialRequirements').value = document.getElementById('specialRequirements').value;
+            
+            // Materials
+            const materials = ['plastic', 'paper', 'metal', 'glass', 'electronics', 'textiles', 'organic', 'other'];
+            materials.forEach(material => {
+                const checkbox = document.getElementById('material-' + material);
+                const hiddenField = document.getElementById('formMaterial_' + material);
+                if (checkbox && hiddenField) {
+                    hiddenField.value = checkbox.checked ? material : '';
+                }
+            });
+        }
     });
 
-    // Function to update all hidden form fields
-    function updateFormFields() {
-        // Basic Information
-        document.getElementById('formShopName').value = document.getElementById('shopName').value;
-        document.getElementById('formShopDescription').value = document.getElementById('shopDescription').value;
-        
-        // Contact Information
-        document.getElementById('formContactPhone').value = document.getElementById('contactPhone').value;
-        document.getElementById('formContactEmail').value = document.getElementById('contactEmail').value;
-        
-        // Location
-        document.getElementById('formFullAddress').value = document.getElementById('fullAddress').value;
-        document.getElementById('formBarangay').value = document.getElementById('barangay').value;
-        
-        // Business Hours
-        document.getElementById('formBusinessHours').value = document.getElementById('businessHours').value;
-        
-        // Special Requirements
-        document.getElementById('formSpecialRequirements').value = document.getElementById('specialRequirements').value;
-        
-        // Materials
-        const materials = ['plastic', 'paper', 'metal', 'glass', 'electronics', 'textiles', 'organic', 'other'];
-        materials.forEach(material => {
-            const checkbox = document.getElementById('material-' + material);
-            const hiddenField = document.getElementById('formMaterial_' + material);
-            hiddenField.value = checkbox.checked ? material : '';
-        });
-    }
-
-    // Call this function whenever a continue button is clicked
-    document.querySelectorAll('.continue-button').forEach(button => {
-        button.addEventListener('click', function(e) {
-            if (!this.id.includes('launch')) { // Don't submit on continue buttons
-                updateFormFields();
-            }
-        });
-    });
-
-    // Update form fields before final submission
-    document.getElementById('launchShop').addEventListener('click', function(e) {
-        if (document.getElementById('agreeTerms').checked) {
-            updateFormFields();
-            document.getElementById('shopCreationForm').submit();
-        } else {
-            e.preventDefault();
-            alert('Please agree to the Terms & Conditions before launching your shop.');
-        }
-    });
+    console.log('Switching to materials tab'); // Should appear when clicking continue
+    console.log('Shop tab display:', shopDetailsTab.style.display); // Should be 'none'
+    console.log('Materials tab display:', materialsTab.style.display); // Should be 'block'
   </script>
-  <script src="./greeting.js" defer></script>
 </body>
 </html>

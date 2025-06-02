@@ -492,7 +492,7 @@ textarea {
 
 /* Active tab */
 .form-tab.active {
-  display: block;
+  display: block !important;
 }
 
 /* Materials Note */
