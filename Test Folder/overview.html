@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Overview</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="owner_dashboard.css">
+    </head>
+<body>
+
+    
+    <div class="tab-content active" id="overview">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-title">
+      <h2>Overview</h2>
+      <p>Welcome back! Here's what's happening with your business today.</p>
+    </div>
+  </header>
+
+  <!-- Stats Cards -->
+  <section class="stats-section">
+    <div class="stats-card">
+      <div class="stats-icon sales">
+        <i class="fas fa-money-bill-wave"></i>
+      </div>
+      <div class="stats-info">
+        <h3>Total Sales</h3>
+        <p class="stats-value">₱12,450.00</p>
+        <p class="stats-change positive">+12% from last week</p>
+      </div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stats-icon products">
+        <i class="fas fa-boxes"></i>
+      </div>
+      <div class="stats-info">
+        <h3>Active Products</h3>
+        <p class="stats-value">8</p>
+        <p class="stats-change neutral">Same as last week</p>
+      </div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stats-icon orders">
+        <i class="fas fa-clipboard-list"></i>
+      </div>
+      <div class="stats-info">
+        <h3>Pending Orders</h3>
+        <p class="stats-value">5</p>
+        <p class="stats-change negative">-2 from yesterday</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products-section">
+    <div class="section-header">
+      <h2>My Products Overview</h2>
+      <div class="section-actions">
+        <button class="btn btn-primary" id="quick-add-product">
+          <i class="fas fa-plus"></i> Add New Item
+        </button>
+        <div class="view-toggle">
+          <button class="toggle-btn active">For Sale</button>
+          <button class="toggle-btn">For Bought</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="products-grid">
+      <!-- Product Card 1 -->
+      <div class="product-card">
+        <div class="product-icon">P</div>
+        <div class="product-info">
+          <h3>Plastic Bottles</h3>
+          <p class="product-price">₱3/kg</p>
+          <p class="product-stock">In stock: 20kg</p>
+          <p class="product-category">Category: Plastic</p>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-edit">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="btn btn-remove">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </div>
+      </div>
+      
+      <!-- Product Card 2 -->
+      <div class="product-card">
+        <div class="product-icon">S</div>
+        <div class="product-info">
+          <h3>Scrap Metal</h3>
+          <p class="product-price">₱10/kg</p>
+          <p class="product-stock">In stock: 8kg</p>
+          <p class="product-category">Category: Metal</p>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-edit">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="btn btn-remove">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </div>
+      </div>
+      
+      <!-- Product Card 3 -->
+      <div class="product-card">
+        <div class="product-icon">C</div>
+        <div class="product-info">
+          <h3>Cardboard</h3>
+          <p class="product-price">₱5/kg</p>
+          <p class="product-stock">In stock: 15kg</p>
+          <p class="product-category">Category: Paper</p>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-edit">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="btn btn-remove">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Orders Section -->
+  <section class="orders-section">
+    <div class="section-header">
+      <h2>Recent Orders</h2>
+      <div class="order-filter">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Pending</button>
+        <button class="filter-btn">Completed</button>
+      </div>
+    </div>
+    
+    <div class="orders-table">
+      <div class="table-header">
+        <div>Order #</div>
+        <div>Buyer</div>
+        <div>Items</div>
+        <div>Date</div>
+        <div>Status</div>
+        <div>Action</div>
+      </div>
+      
+      <div class="table-row">
+        <div>#1234</div>
+        <div>Chidrick</div>
+        <div>Cardboard (10kg)</div>
+        <div>March 20, 2025</div>
+        <div><span class="status-badge pending">Pending</span></div>
+        <div><button class="btn btn-sm">View</button></div>
+      </div>
+      
+      <div class="table-row">
+        <div>#1235</div>
+        <div>Joebert</div>
+        <div>Scrap Metal (2kg)</div>
+        <div>March 21, 2025</div>
+        <div><span class="status-badge completed">Completed</span></div>
+        <div><button class="btn btn-sm">View</button></div>
+      </div>
+      
+      <div class="table-row">
+        <div>#1236</div>
+        <div>Reggie</div>
+        <div>Plastic Bottles (5kg)</div>
+        <div>March 22, 2025</div>
+        <div><span class="status-badge pending">Pending</span></div>
+        <div><button class="btn btn-sm">View</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Messages & Analytics Section -->
+  <section class="bottom-section">
+    <div class="messages-container">
+      <div class="section-header">
+        <h2>Recent Messages</h2>
+        <button class="btn btn-text">View All</button>
+      </div>
+      
+      <div class="message-card">
+        <div class="message-header">
+          <h3>Price Inquiry</h3>
+          <span class="message-time">2 hours ago</span>
+        </div>
+        <p class="message-preview">Hi! I'm interested in your plastic bottles. What's the minimum quantity you sell?</p>
+        <div class="message-footer">
+          <span>From: John Doe</span>
+          <button class="btn btn-reply">Reply</button>
+        </div>
+      </div>
+      
+      <div class="message-card">
+        <div class="message-header">
+          <h3>Feedback</h3>
+          <span class="message-time">1 day ago</span>
+        </div>
+        <p class="message-preview">Nice! The materials were exactly as described. Will order again.</p>
+        <div class="message-footer">
+          <span>From: Sarah Smith</span>
+          <button class="btn btn-reply">Reply</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="analytics-container">
+      <div class="section-header">
+        <h2>Sales Analytics</h2>
+        <div class="time-filter">
+          <button class="filter-btn active">7D</button>
+          <button class="filter-btn">30D</button>
+          <button class="filter-btn">90D</button>
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <div class="sales-chart">
+          <canvas id="overviewChart"></canvas>
+        </div>
+        
+        <div class="top-materials">
+          <h3>Top Selling Materials</h3>
+          <div class="materials-list">
+            <div class="material-item">
+              <span class="material-name">Plastic Bottles</span>
+              <span class="material-percent">45%</span>
+              <div class="progress-bar" style="width: 45%"></div>
+            </div>
+            <div class="material-item">
+              <span class="material-name">Scrap Metal</span>
+              <span class="material-percent">30%</span>
+              <div class="progress-bar" style="width: 30%"></div>
+            </div>
+            <div class="material-item">
+              <span class="material-name">Electronic Waste</span>
+              <span class="material-percent">25%</span>
+              <div class="progress-bar" style="width: 25%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+</body>
+</html>

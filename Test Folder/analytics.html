@@ -1,0 +1,133 @@
+<!-- Analytics Tab Content -->
+<div class="tab-content" id="analytics">
+  <header class="dashboard-header">
+    <div class="header-title">
+      <h2>Analytics Reports</h2>
+      <p>Track your business performance</p>
+    </div>
+    <div class="time-filter">
+      <button class="filter-btn active">This Month</button>
+      <button class="filter-btn">Last Month</button>
+      <button class="filter-btn">Last 3 Months</button>
+      <button class="filter-btn">Custom Range</button>
+    </div>
+  </header>
+
+  <section class="analytics-reports">
+    <div class="analytics-summary">
+      <div class="summary-card">
+        <div class="summary-icon">
+          <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <div class="summary-info">
+          <h3>Total Sales</h3>
+          <p class="summary-value">₱24,850.00</p>
+          <p class="summary-change positive">+15% from last month</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="summary-info">
+          <h3>Total Orders</h3>
+          <p class="summary-value">42</p>
+          <p class="summary-change positive">+8% from last month</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <div class="summary-info">
+          <h3>Products Sold</h3>
+          <p class="summary-value">128</p>
+          <p class="summary-change positive">+12% from last month</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="summary-info">
+          <h3>New Customers</h3>
+          <p class="summary-value">18</p>
+          <p class="summary-change negative">-2 from last month</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="analytics-charts">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Sales Performance</h3>
+          <div class="chart-filter">
+            <button class="filter-btn active">Daily</button>
+            <button class="filter-btn">Weekly</button>
+            <button class="filter-btn">Monthly</button>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="salesChart"></canvas>
+        </div>
+      </div>
+      
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Top Selling Products</h3>
+        </div>
+        <div class="chart-container">
+          <canvas id="productsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="monthly-sales">
+      <div class="section-header">
+        <h3>Monthly Sales Summary</h3>
+        <button class="btn btn-text">Export as CSV</button>
+      </div>
+      <div class="sales-table">
+        <div class="table-header">
+          <div>Month</div>
+          <div>Total Sales</div>
+          <div>Orders</div>
+          <div>Avg. Order Value</div>
+          <div>New Customers</div>
+        </div>
+        
+        <div class="table-row">
+          <div>March 2025</div>
+          <div>₱12,450.00</div>
+          <div>24</div>
+          <div>₱518.75</div>
+          <div>8</div>
+        </div>
+        
+        <div class="table-row">
+          <div>February 2025</div>
+          <div>₱10,850.00</div>
+          <div>22</div>
+          <div>₱493.18</div>
+          <div>10</div>
+        </div>
+        
+        <div class="table-row">
+          <div>January 2025</div>
+          <div>₱9,750.00</div>
+          <div>18</div>
+          <div>₱541.67</div>
+          <div>6</div>
+        </div>
+        
+        <div class="table-row">
+          <div>December 2024</div>
+          <div>₱8,200.00</div>
+          <div>15</div>
+          <div>₱546.67</div>
+          <div>4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
