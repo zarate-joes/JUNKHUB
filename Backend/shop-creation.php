@@ -37,20 +37,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Handle file upload
     $logoPath = null;
-    if (isset($_FILES['shopLogo']) && $_FILES['shopLogo']['error'] === UPLOAD_ERR_OK) {
-        $maxFileSize = 2 * 1024 * 1024; // 2MB
-            if ($_FILES['shopLogo']['size'] > $maxFileSize) {
+    if (isset($_FILES['shopLogo'])) {
+        // Check for upload errors first
+        switch ($_FILES['shopLogo']['error']) {
+            case UPLOAD_ERR_OK:
+                break;
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
                 $errors['shopLogo'] = 'File size exceeds maximum allowed (2MB)';
-            }
-            
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $errors['shopLogo'] = 'The uploaded file was only partially uploaded';
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                // No file uploaded is not an error if logo is optional
+                break;
+            default:
+                $errors['shopLogo'] = 'An unknown error occurred during file upload';
+                break;
+        }
+
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
         $detectedType = finfo_file($fileInfo, $_FILES['shopLogo']['tmp_name']);
         
         if (in_array($detectedType, $allowedTypes)) {
             $uploadDir = '../uploads/business_logos/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
+            
+            // Create directory if it doesn't exist
+            if (!file_exists($uploadDir)) {
+                if (!mkdir($uploadDir, 0755, true)) {
+                    $errors['shopLogo'] = 'Failed to create upload directory';
+                }
             }
             
             $extension = pathinfo($_FILES['shopLogo']['name'], PATHINFO_EXTENSION);
