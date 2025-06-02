@@ -29,12 +29,13 @@
 
     <div class="text-container">
 
-    <a href="../Error Page/404.html">
-    <div class="text-contactus">Contact us</div>
+    <a href="../About Us/about.html">
+        <div class="text-about">About us</div>
     </a>
-    <a href="../Error Page/404.html">
-    <div class="text-about">About us</div>
+    <a href="#contact">
+    <div class="text-contactus">Contact</div>
     </a>
+
     <a href="../Sign Up/prompt.html">
     <div class="text-signup">Sign up</div>
     </a>
@@ -69,7 +70,7 @@
           <p class="hero-description">We're Here To Make Your Life Easier.</p>
           
           <div class="cta-container">
-            <a href="../Owner Sign-up/shopsignup.html" class="cta-button">
+            <a href="../Owner Registration/shopsignup.php" class="cta-button">
             Start Selling
             </a>
           </div>
@@ -115,6 +116,81 @@
     </div>
 
     </div>
+
+
+
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="./pngs/Logo.png" alt="JunkHub Logo">
+                    <h2><span class="text-gold">Junk</span><span class="text-black">HUB</span></h2>
+                </div>
+                <p class="footer-tagline">Turning your junk into treasure since 2025</p>
+            </div>
+            
+            <div class="footer-nav">
+                <div class="footer-nav-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="../Landing Page/index.php">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-nav-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#faq">FAQs</a></li>
+                    </ul>
+                </div>
+                
+<div class="footer-contact" id="contact">
+    <h3>Contact Us</h3>
+    <ul>
+        <li><span class="contact-icon">📧</span> contact@junkhub.com</li>
+        <li><span class="contact-icon">📱</span> +1 (555) 123-4567</li>
+        <li><span class="contact-icon">📍</span> 123 Junk St, Cagayan de Oro City</li>
+    </ul>
+</div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-social">
+                <a href="#" aria-label="Facebook"><span class="social-icon">FB</span></a>
+                <a href="#" aria-label="Twitter"><span class="social-icon">TW</span></a>
+                <a href="#" aria-label="Instagram"><span class="social-icon">IG</span></a>
+                <a href="#" aria-label="LinkedIn"><span class="social-icon">IN</span></a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2025 JunkHub. All Rights Reserved.
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 
