@@ -851,3 +851,251 @@ document.addEventListener('DOMContentLoaded', function() {
   loadTabContent('overview');
   updateNotificationBadge();
 });
+
+
+function setupOrderSearch() {
+  const searchBox = document.querySelector('.orders-management .search-box input');
+  const searchIcon = document.querySelector('.orders-management .search-box i');
+  
+  if (!searchBox) return;
+  
+  const searchHandler = () => {
+    const searchTerm = searchBox.value.toLowerCase();
+    filterOrders(searchTerm);
+  };
+  
+  searchBox.addEventListener('input', searchHandler);
+  searchIcon.addEventListener('click', searchHandler);
+}
+
+// Function to filter orders based on search term
+function filterOrders(searchTerm = '') {
+  const ordersTable = document.querySelector('.orders-management .orders-table');
+  if (!ordersTable) return;
+  
+  const rows = ordersTable.querySelectorAll('.table-row:not(.table-header)');
+  
+  rows.forEach(row => {
+    const orderNumber = row.querySelector('div:nth-child(1)').textContent.toLowerCase();
+    const customerName = row.querySelector('div:nth-child(2)').textContent.toLowerCase();
+    const orderDate = row.querySelector('div:nth-child(3)').textContent.toLowerCase();
+    const orderItems = row.querySelector('div:nth-child(4)').textContent.toLowerCase();
+    const orderTotal = row.querySelector('div:nth-child(5)').textContent.toLowerCase();
+    
+    const matches = 
+      orderNumber.includes(searchTerm) ||
+      customerName.includes(searchTerm) ||
+      orderDate.includes(searchTerm) ||
+      orderItems.includes(searchTerm) ||
+      orderTotal.includes(searchTerm);
+    
+    row.style.display = matches ? '' : 'none';
+  });
+}
+
+
+function loadOrders() {
+  // Your existing order loading code...
+  
+  // Set up search functionality
+  setupOrderSearch();
+}
+
+// Update the loadTabContent function to ensure search is set up when switching to orders tab
+function loadTabContent(tabId) {
+  switch(tabId) {
+    case 'products':
+      loadProducts();
+      break;
+    case 'orders':
+      loadOrders();
+      break;
+    case 'messages':
+      loadMessages();
+      break;
+    case 'analytics':
+      loadAnalytics();
+      break;
+    case 'settings':
+      loadSettings();
+      break;
+    default:
+      // Overview tab loads by default
+      break;
+  }
+}
+
+
+
+const orderFilterButtons = document.querySelectorAll('.order-filter .filter-btn');
+const orderRows = document.querySelectorAll('.orders-management .table-row');
+
+orderFilterButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // Remove active class from all filter buttons
+    orderFilterButtons.forEach(btn => btn.classList.remove('active'));
+    
+    // Add active class to clicked button
+    this.classList.add('active');
+    
+    const filterValue = this.textContent.toLowerCase();
+    
+    // Filter order rows
+    orderRows.forEach(row => {
+      if (filterValue === 'all') {
+        row.style.display = 'table-row';
+      } else {
+        const statusBadge = row.querySelector('.status-badge, .status-select');
+        let statusText = '';
+        
+        if (statusBadge.classList.contains('status-badge')) {
+          statusText = statusBadge.textContent.toLowerCase();
+        } else if (statusBadge.classList.contains('status-select')) {
+          statusText = statusBadge.value.toLowerCase();
+        }
+        
+        if (statusText === filterValue) {
+          row.style.display = 'table-row';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    });
+  });
+});
+
+// Also add this to handle changes in the status dropdown
+const statusSelects = document.querySelectorAll('.status-select');
+statusSelects.forEach(select => {
+  select.addEventListener('change', function() {
+    const activeFilter = document.querySelector('.order-filter .filter-btn.active');
+    if (activeFilter && activeFilter.textContent.toLowerCase() !== 'all') {
+      const filterValue = activeFilter.textContent.toLowerCase();
+      const row = this.closest('.table-row');
+      const currentStatus = this.value.toLowerCase();
+      
+      if (currentStatus === filterValue) {
+        row.style.display = 'table-row';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  });
+});
+
+
+  // Profile click handler to navigate to settings
+  const userProfile = document.querySelector('.user-profile');
+  if (userProfile) {
+    userProfile.addEventListener('click', function() {
+      // Remove active class from all nav items and tab contents
+      document.querySelectorAll('.nav-item').forEach(navItem => navItem.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Add active class to settings nav item
+      document.querySelector('.nav-item[data-tab="settings"]').classList.add('active');
+      
+      // Show settings tab content
+      document.getElementById('settings').classList.add('active');
+      
+      // Load settings content
+      loadSettings();
+    });
+  }
+
+
+  // Add this function to handle order cancellation
+function setupOrderCancellation() {
+  const cancelButtons = document.querySelectorAll('.orders-management .btn-remove');
+  
+  cancelButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation(); // Prevent event bubbling
+      
+      const row = this.closest('.table-row');
+      const orderNumber = row.querySelector('div:first-child').textContent;
+      
+      if (confirm(`Are you sure you want to cancel order ${orderNumber}?`)) {
+        // In a real app, you would send this to your backend
+        // For now, we'll just remove it from the UI
+        row.remove();
+        
+        // You could also update the status to "Cancelled" instead of removing
+        // const statusCell = row.querySelector('div:nth-child(6)');
+        // statusCell.innerHTML = '<span class="status-badge cancelled">Cancelled</span>';
+        // this.disabled = true;
+      }
+    });
+  });
+}
+
+// Update the loadOrders function to include cancellation setup
+function loadOrders() {
+  // Your existing order loading code...
+  
+  // Set up search functionality
+  setupOrderSearch();
+  
+  // Set up order cancellation
+  setupOrderCancellation();
+  
+  // Set up status filter
+  setupOrderStatusFilter();
+}
+
+// Add this function for status filtering
+function setupOrderStatusFilter() {
+  const orderFilterButtons = document.querySelectorAll('.order-filter .filter-btn');
+  
+  orderFilterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Remove active class from all filter buttons
+      orderFilterButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Add active class to clicked button
+      this.classList.add('active');
+      
+      const filterValue = this.textContent.toLowerCase();
+      const orderRows = document.querySelectorAll('.orders-management .table-row:not(.table-header)');
+      
+      orderRows.forEach(row => {
+        if (filterValue === 'all') {
+          row.style.display = 'table-row';
+        } else {
+          const statusElement = row.querySelector('.status-badge, .status-select');
+          let statusText = '';
+          
+          if (statusElement.classList.contains('status-badge')) {
+            statusText = statusElement.textContent.toLowerCase();
+          } else if (statusElement.classList.contains('status-select')) {
+            statusText = statusElement.value.toLowerCase();
+          }
+          
+          row.style.display = statusText === filterValue ? 'table-row' : 'none';
+        }
+      });
+    });
+  });
+  
+  // Handle status select changes
+  const statusSelects = document.querySelectorAll('.status-select');
+  statusSelects.forEach(select => {
+    select.addEventListener('change', function() {
+      const activeFilter = document.querySelector('.order-filter .filter-btn.active');
+      if (activeFilter && activeFilter.textContent.toLowerCase() !== 'all') {
+        const row = this.closest('.table-row');
+        const currentStatus = this.value.toLowerCase();
+        const filterValue = activeFilter.textContent.toLowerCase();
+        
+        row.style.display = currentStatus === filterValue ? 'table-row' : 'none';
+      }
+      
+      // Update the status badge if it exists
+      const statusBadge = this.closest('div').querySelector('.status-badge');
+      if (statusBadge) {
+        statusBadge.className = 'status-badge ' + this.value;
+        statusBadge.textContent = this.options[this.selectedIndex].text;
+      }
+    });
+  });
+}
