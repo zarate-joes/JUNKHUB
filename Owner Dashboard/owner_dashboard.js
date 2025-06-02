@@ -520,6 +520,26 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  const viewAllMessagesBtn = document.querySelector('.bottom-section .btn-text[data-tab="messages"]');
+  if (viewAllMessagesBtn) {
+    viewAllMessagesBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Remove active class from all nav items and tab contents
+      document.querySelectorAll('.nav-item').forEach(navItem => navItem.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Add active class to Messages nav item
+      document.querySelector('.nav-item[data-tab="messages"]').classList.add('active');
+      
+      // Show Messages tab content
+      document.getElementById('messages').classList.add('active');
+      
+      // Load Messages content
+      loadMessages();
+    });
+  }
   
   // Password Strength Checker
   const passwordInput = document.getElementById('new-password');
