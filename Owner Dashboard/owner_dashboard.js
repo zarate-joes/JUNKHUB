@@ -1,69 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-const orderFilterButtons = document.querySelectorAll('.order-filter .filter-btn');
-const orderRows = document.querySelectorAll('.orders-management .table-row');
-
-orderFilterButtons.forEach(button => {
-  button.addEventListener('click', function() {
-    // Remove active class from all filter buttons
-    orderFilterButtons.forEach(btn => btn.classList.remove('active'));
-    
-    // Add active class to clicked button
-    this.classList.add('active');
-    
-    const filterValue = this.textContent.toLowerCase();
-    
-    // Filter order rows
-    orderRows.forEach(row => {
-      if (filterValue === 'all') {
-        row.style.display = 'table-row';
-      } else {
-        const statusBadge = row.querySelector('.status-badge, .status-select');
-        let statusText = '';
-        
-        if (statusBadge.classList.contains('status-badge')) {
-          statusText = statusBadge.textContent.toLowerCase();
-        } else if (statusBadge.classList.contains('status-select')) {
-          statusText = statusBadge.value.toLowerCase();
-        }
-        
-        if (statusText === filterValue) {
-          row.style.display = 'table-row';
-        } else {
-          row.style.display = 'none';
-        }
-      }
-    });
-  });
-});
-
-
-
-
-// Also add this to handle changes in the status dropdown
-const statusSelects = document.querySelectorAll('.status-select');
-statusSelects.forEach(select => {
-  select.addEventListener('change', function() {
-    const activeFilter = document.querySelector('.order-filter .filter-btn.active');
-    if (activeFilter && activeFilter.textContent.toLowerCase() !== 'all') {
-      const filterValue = activeFilter.textContent.toLowerCase();
-      const row = this.closest('.table-row');
-      const currentStatus = this.value.toLowerCase();
-      
-      if (currentStatus === filterValue) {
-        row.style.display = 'table-row';
-      } else {
-        row.style.display = 'none';
-      }
-    }
-  });
-});
-
-
-
-
-
-
   // Tab Navigation
   const navItems = document.querySelectorAll('.nav-item');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -79,10 +14,224 @@ statusSelects.forEach(select => {
       
       // Show corresponding tab content
       const tabId = this.getAttribute('data-tab');
-      document.getElementById(tabId).classList.add('active');
+      const activeTab = document.getElementById(tabId);
+      activeTab.classList.add('active');
+      
+      // Load content dynamically based on tab
+      loadTabContent(tabId);
     });
   });
-  
+
+  // Function to load tab content dynamically
+  function loadTabContent(tabId) {
+    switch(tabId) {
+      case 'products':
+        loadProducts();
+        break;
+      case 'orders':
+        loadOrders();
+        break;
+      case 'messages':
+        loadMessages();
+        break;
+      case 'analytics':
+        loadAnalytics();
+        break;
+      case 'settings':
+        loadSettings();
+        break;
+      default:
+        // Overview tab loads by default
+        break;
+    }
+  }
+
+  // Load and render products
+  function loadProducts() {
+    const products = JSON.parse(localStorage.getItem('products')) || [];
+    const productsTable = document.querySelector('.products-table');
+    
+    if (!productsTable) return;
+    
+    // Clear existing rows (except header)
+    const rows = productsTable.querySelectorAll('.table-row:not(.table-header)');
+    rows.forEach(row => row.remove());
+    
+    // Add products to table
+    products.forEach(product => {
+      const row = document.createElement('div');
+      row.className = 'table-row';
+      row.dataset.id = product.id;
+      
+      row.innerHTML = `
+        <div class="product-cell">
+          <div class="product-icon">${product.name.charAt(0)}</div>
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p>ID: ${product.id}</p>
+          </div>
+        </div>
+        <div>₱${product.price}/${product.unit}</div>
+        <div>
+          <input type="number" value="${product.stock}" min="0" class="stock-input">
+          <span>${product.unit}</span>
+        </div>
+        <div>${capitalizeFirstLetter(product.category)}</div>
+        <div>
+          <label class="toggle-switch">
+            <input type="checkbox" ${product.status ? 'checked' : ''}>
+            <span class="slider"></span>
+          </label>
+          <span class="status-text">${product.status ? 'Available' : 'Unavailable'}</span>
+        </div>
+        <div class="actions-cell">
+          <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+        </div>
+      `;
+      
+      productsTable.appendChild(row);
+      
+      // Add event listeners for the new row
+      setupProductRowEvents(row, product);
+    });
+  }
+
+  // Setup event listeners for product row
+  function setupProductRowEvents(row, product) {
+    // Toggle switch
+    const toggleSwitch = row.querySelector('.toggle-switch input');
+    const statusText = row.querySelector('.status-text');
+    
+    toggleSwitch.addEventListener('change', function() {
+      const products = JSON.parse(localStorage.getItem('products'));
+      const index = products.findIndex(p => p.id === product.id);
+      
+      if (index !== -1) {
+        products[index].status = this.checked;
+        localStorage.setItem('products', JSON.stringify(products));
+        statusText.textContent = this.checked ? 'Available' : 'Unavailable';
+      }
+    });
+    
+    // Stock input
+    const stockInput = row.querySelector('.stock-input');
+    stockInput.addEventListener('change', function() {
+      const products = JSON.parse(localStorage.getItem('products'));
+      const index = products.findIndex(p => p.id === product.id);
+      
+      if (index !== -1) {
+        products[index].stock = parseInt(this.value);
+        localStorage.setItem('products', JSON.stringify(products));
+      }
+    });
+    
+    // Edit button
+    const editBtn = row.querySelector('.btn-edit');
+    editBtn.addEventListener('click', function() {
+      openEditProductModal(product);
+    });
+    
+    // Delete button
+    const deleteBtn = row.querySelector('.btn-remove');
+    deleteBtn.addEventListener('click', function() {
+      if (confirm(`Are you sure you want to delete ${product.name}?`)) {
+        const products = JSON.parse(localStorage.getItem('products'));
+        const updatedProducts = products.filter(p => p.id !== product.id);
+        localStorage.setItem('products', JSON.stringify(updatedProducts));
+        row.remove();
+      }
+    });
+  }
+
+  // Open edit product modal (also used for adding new products)
+  function openEditProductModal(product = null) {
+    const modal = document.getElementById('add-product-modal');
+    const form = modal.querySelector('#product-form');
+    
+    if (product) {
+      // Editing existing product
+      modal.querySelector('.modal-header h3').textContent = 'Edit Product';
+      form.dataset.mode = 'edit';
+      form.dataset.id = product.id;
+      
+      // Fill form with product data
+      document.getElementById('product-name').value = product.name;
+      document.getElementById('product-category').value = product.category;
+      document.getElementById('product-price').value = product.price;
+      document.getElementById('product-stock').value = product.stock;
+      document.getElementById('product-unit').value = product.unit;
+      document.getElementById('product-description').value = product.description || '';
+    } else {
+      // Adding new product
+      modal.querySelector('.modal-header h3').textContent = 'Add New Product';
+      form.dataset.mode = 'add';
+      form.reset();
+    }
+    
+    modal.classList.add('active');
+  }
+
+  // Product form submission
+  const productForm = document.getElementById('product-form');
+  if (productForm) {
+    productForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const mode = this.dataset.mode;
+      const id = this.dataset.id || 'P' + Math.random().toString(36).substr(2, 4).toUpperCase();
+      
+      const product = {
+        id: id,
+        name: document.getElementById('product-name').value,
+        category: document.getElementById('product-category').value,
+        price: parseFloat(document.getElementById('product-price').value),
+        stock: parseInt(document.getElementById('product-stock').value),
+        unit: document.getElementById('product-unit').value,
+        description: document.getElementById('product-description').value,
+        status: true
+      };
+      
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      
+      if (mode === 'edit') {
+        // Update existing product
+        const index = products.findIndex(p => p.id === id);
+        if (index !== -1) {
+          products[index] = product;
+        }
+      } else {
+        // Add new product
+        products.push(product);
+      }
+      
+      localStorage.setItem('products', JSON.stringify(products));
+      loadProducts();
+      this.closest('.modal').classList.remove('active');
+    });
+  }
+
+  // Add product button
+  const addProductBtn = document.getElementById('add-product');
+  if (addProductBtn) {
+    addProductBtn.addEventListener('click', function() {
+      openEditProductModal();
+    });
+  }
+
+  // Quick add product button (from overview)
+  const quickAddBtn = document.getElementById('quick-add-product');
+  if (quickAddBtn) {
+    quickAddBtn.addEventListener('click', function() {
+      openEditProductModal();
+    });
+  }
+
+  // Helper function
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   // Settings Tabs
   const settingsTabs = document.querySelectorAll('.settings-tabs .tab-btn');
   const tabPanes = document.querySelectorAll('.tab-pane');
@@ -190,7 +339,7 @@ statusSelects.forEach(select => {
         datasets: [{
           label: 'Sales (₱)',
           data: [1200, 1900, 1500, 2000, 1800, 2200, 2400],
-          backgroundColor: 'rgba(255, 215, 0, 0.2)',  // gold
+          backgroundColor: 'rgba(255, 215, 0, 0.2)',
           borderColor: 'rgba(255, 215, 0, 1)',
           borderWidth: 2,
           tension: 0.4,
@@ -214,37 +363,36 @@ statusSelects.forEach(select => {
     });
   }
   
-  // Update your salesChart initialization
-    if (document.getElementById('salesChart')) {
+  if (document.getElementById('salesChart')) {
     const salesCtx = document.getElementById('salesChart').getContext('2d');
     const salesChart = new Chart(salesCtx, {
-        type: 'bar',
-        data: {
+      type: 'bar',
+      data: {
         labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
         datasets: [{
-            label: 'Sales (₱)',
-            data: [3500, 4200, 3800, 4500],
-            backgroundColor: 'rgba(255, 215, 0, 0.2)',  // gol
-            borderColor: 'rgba(255, 215, 0, 1)',
-            borderWidth: 1
+          label: 'Sales (₱)',
+          data: [3500, 4200, 3800, 4500],
+          backgroundColor: 'rgba(255, 215, 0, 0.2)',
+          borderColor: 'rgba(255, 215, 0, 1)',
+          borderWidth: 1
         }]
-        },
-        options: {
+      },
+      options: {
         responsive: true,
-        maintainAspectRatio: false, // This is crucial
+        maintainAspectRatio: false,
         plugins: {
-            legend: {
+          legend: {
             display: false
-            }
+          }
         },
         scales: {
-            y: {
+          y: {
             beginAtZero: true
-            }
+          }
         }
-        }
+      }
     });
-    }
+  }
   
   if (document.getElementById('productsChart')) {
     const productsCtx = document.getElementById('productsChart').getContext('2d');
@@ -256,11 +404,11 @@ statusSelects.forEach(select => {
           data: [45, 30, 15, 5, 5],
           backgroundColor: [
             'rgba(255, 215, 0, 0.7)',
-            'rgba(62, 167, 106, 0.7)',     // secondary
-            'rgba(255, 224, 102, 0.7)',   // accent
-            'rgba(255, 82, 82, 0.7)',     // danger
-            'rgba(113, 113, 113, 0.7)'    // text-light
-            ],
+            'rgba(62, 167, 106, 0.7)',
+            'rgba(255, 224, 102, 0.7)',
+            'rgba(255, 82, 82, 0.7)',
+            'rgba(113, 113, 113, 0.7)'
+          ],
           borderWidth: 1
         }]
       },
@@ -279,27 +427,201 @@ statusSelects.forEach(select => {
   // Form Submissions
   const forms = document.querySelectorAll('form');
   forms.forEach(form => {
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Here you would typically handle form submission via AJAX
-      alert('Form submitted! In a real application, this would save your data.');
-      
-      // Close modal if this is a modal form
-      const modal = this.closest('.modal');
-      if (modal) {
-        modal.classList.remove('active');
-      }
-    });
+    if (form.id !== 'product-form') {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Form submitted! In a real application, this would save your data.');
+        
+        const modal = this.closest('.modal');
+        if (modal) {
+          modal.classList.remove('active');
+        }
+      });
+    }
   });
-  
+
   // Logout
   const logoutBtn = document.querySelector('.logout-container');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', function() {
       if (confirm('Are you sure you want to logout?')) {
-        // Here you would typically redirect to logout URL
         window.location.href = 'login.html';
       }
     });
   }
+
+  // Add this to the existing owner_dashboard.js file
+
+  // Category Filter Functionality
+  function setupCategoryFilter() {
+    const categoryButtons = document.querySelectorAll('.category-filter .filter-btn');
+    
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Filter products
+        filterProducts(this.textContent.toLowerCase());
+      });
+    });
+  }
+
+  // Search Box Functionality
+  function setupSearchBox() {
+    const searchBox = document.querySelector('.search-box input');
+    const searchIcon = document.querySelector('.search-box i');
+    
+    if (!searchBox) return;
+    
+    const searchHandler = () => {
+      const searchTerm = searchBox.value.toLowerCase();
+      filterProducts('all', searchTerm);
+    };
+    
+    searchBox.addEventListener('input', searchHandler);
+    searchIcon.addEventListener('click', searchHandler);
+  }
+
+  // Combined Filter Function
+  // Update the filterProducts function to maintain the original table arrangement
+  function filterProducts(category = 'all', searchTerm = '') {
+    const products = JSON.parse(localStorage.getItem('products')) || [];
+    const productsTable = document.querySelector('.products-table');
+    
+    if (!productsTable) return;
+    
+    // Clear existing rows (except header)
+    const rows = productsTable.querySelectorAll('.table-row:not(.table-header)');
+    rows.forEach(row => row.remove());
+    
+    // Filter products
+    const filteredProducts = products.filter(product => {
+      const categoryMatch = category === 'all' || product.category.toLowerCase() === category;
+      const searchMatch = searchTerm === '' || 
+        product.name.toLowerCase().includes(searchTerm) || 
+        product.id.toLowerCase().includes(searchTerm);
+      return categoryMatch && searchMatch;
+    });
+    
+    // Add filtered products to table while maintaining original structure
+    filteredProducts.forEach(product => {
+      const row = document.createElement('div');
+      row.className = 'table-row';
+      row.dataset.id = product.id;
+      
+      row.innerHTML = `
+        <div class="product-cell">
+          <div class="product-icon">${product.name.charAt(0)}</div>
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p>ID: ${product.id}</p>
+          </div>
+        </div>
+        <div>₱${product.price}/${product.unit}</div>
+        <div>
+          <input type="number" value="${product.stock}" min="0" class="stock-input">
+          <span>${product.unit}</span>
+        </div>
+        <div>${capitalizeFirstLetter(product.category)}</div>
+        <div>
+          <label class="toggle-switch">
+            <input type="checkbox" ${product.status ? 'checked' : ''}>
+            <span class="slider"></span>
+          </label>
+          <span class="status-text">${product.status ? 'Available' : 'Unavailable'}</span>
+        </div>
+        <div class="actions-cell">
+          <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+        </div>
+      `;
+      
+      productsTable.appendChild(row);
+      setupProductRowEvents(row, product);
+    });
+  }
+
+  // Update the loadProducts function to call these setup functions
+  function loadProducts() {
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      const productsTable = document.querySelector('.products-table');
+      
+      if (!productsTable) return;
+      
+      // Clear existing rows (except header)
+      const rows = productsTable.querySelectorAll('.table-row:not(.table-header)');
+      rows.forEach(row => row.remove());
+      
+      // Add products to table
+      products.forEach(product => {
+        const row = document.createElement('div');
+        row.className = 'table-row';
+        row.dataset.id = product.id;
+        
+        row.innerHTML = `
+          <div class="product-cell">
+            <div class="product-icon">${product.name.charAt(0)}</div>
+            <div class="product-info">
+              <h3>${product.name}</h3>
+              <p>ID: ${product.id}</p>
+            </div>
+          </div>
+          <div>₱${product.price}/${product.unit}</div>
+          <div>
+            <input type="number" value="${product.stock}" min="0" class="stock-input">
+            <span>${product.unit}</span>
+          </div>
+          <div>${capitalizeFirstLetter(product.category)}</div>
+          <div>
+            <label class="toggle-switch">
+              <input type="checkbox" ${product.status ? 'checked' : ''}>
+              <span class="slider"></span>
+            </label>
+            <span class="status-text">${product.status ? 'Available' : 'Unavailable'}</span>
+          </div>
+          <div class="actions-cell">
+            <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
+          </div>
+        `;
+        
+        productsTable.appendChild(row);
+        setupProductRowEvents(row, product);
+      });
+      
+      // Set up filter and search functionality
+      setupCategoryFilter();
+      setupSearchBox();
+  }
+
+  // Update the loadTabContent function to ensure these are set up when switching tabs
+  function loadTabContent(tabId) {
+      switch(tabId) {
+        case 'products':
+          loadProducts();
+          break;
+        case 'orders':
+          loadOrders();
+          break;
+        case 'messages':
+          loadMessages();
+          break;
+        case 'analytics':
+          loadAnalytics();
+          break;
+        case 'settings':
+          loadSettings();
+          break;
+        default:
+          // Overview tab loads by default
+          break;
+      }
+  }
+
+  // Load initial tab (Overview)
+  loadTabContent('overview');
 });
