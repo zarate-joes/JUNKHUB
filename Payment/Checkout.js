@@ -22,44 +22,33 @@ document.addEventListener('DOMContentLoaded', function() {
   codNotice.style.display = 'block';
 
   // Form submission
-  document.querySelector('.place-order-btn').addEventListener('click', function(e) {
-    e.preventDefault();
-    // Validate forms
-    const shippingFormValid = validateForm('shipping-form');
-    const paymentFormValid = validateForm('payment-form');
+document.querySelector('.place-order-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  // Only validate payment form now
+  const paymentFormValid = validateForm('payment-form');
+  
+  if (paymentFormValid) {
+    // Show loading state
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
+    this.disabled = true;
     
-    if (shippingFormValid && paymentFormValid) {
-      // Show loading state
-      this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
-      this.disabled = true;
-      
-      // Simulate order processing
-      setTimeout(() => {
-        alert('Order placed successfully!');
-        // In a real app, you would redirect to order confirmation page
-      }, 2000);
-    }
-  });
+    // Simulate order processing
+    setTimeout(() => {
+      alert('Order placed successfully!');
+      // In a real app, you would redirect to order confirmation page
+    }, 2000);
+  }
+});
 
   // Simple form validation
-  function validateForm(formId) {
-    const form = document.getElementById(formId);
-    let isValid = true;
-    
-    // Check required fields
-    const requiredInputs = form.querySelectorAll('[required]');
-    requiredInputs.forEach(input => {
-      if (!input.value.trim()) {
-        input.style.borderColor = 'red';
-        isValid = false;
-      } else {
-        input.style.borderColor = '#ddd';
-      }
-    });
-    
+function validateForm(formId) {
+  const form = document.getElementById(formId);
+  let isValid = true;
+  
+  // For payment form only
+  if (formId === 'payment-form') {
     // Additional validation for GCash
-    if (formId === 'payment-form' && 
-        document.querySelector('input[name="payment-method"]:checked').value === 'gcash') {
+    if (document.querySelector('input[name="payment-method"]:checked').value === 'gcash') {
       const gcashNumber = document.getElementById('gcash-number');
       if (!gcashNumber.value.trim() || !/^09\d{9}$/.test(gcashNumber.value.trim())) {
         gcashNumber.style.borderColor = 'red';
@@ -68,7 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
         gcashNumber.style.borderColor = '#ddd';
       }
     }
-    
-    return isValid;
   }
+  
+  return isValid;
+}
 });
