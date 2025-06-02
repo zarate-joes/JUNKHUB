@@ -14,6 +14,7 @@ if (isset($_SESSION['errors'])) {
 
 if (isset($_SESSION['success'])) {
   $success = $_SESSION['success'];
+  unset($_SESSION['success']);
 }
 ?>
 
@@ -59,7 +60,7 @@ if (isset($_SESSION['success'])) {
             <div class="owner-deco-circle-2"></div>
           </div>
         </section>
-        
+
         <!-- Right panel - Login form -->
         <section class="owner-form-panel">
           <h2 class="owner-form-title">Owner Login</h2>
@@ -111,7 +112,7 @@ if (isset($_SESSION['success'])) {
             <button type="submit" class="owner-login-button" name="ownersignin" value="LOGIN">LOGIN</button>
             
             <p class="owner-signup-link">
-              Need business access? <a href="../Sign Up/owner_sign_up.php" class="owner-highlight-link">Request account</a>
+              Need business account? <a href="owner_sign_up.php" class="owner-highlight-link">Click Here</a>
             </p>
           </form>
         </section>

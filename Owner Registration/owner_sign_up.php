@@ -165,7 +165,7 @@ $errors = is_array($errors) ? $errors : [];
             <button type="submit" class="signup-button" name="signup" value="REGISTER BUSINESS">REGISTER BUSINESS</button>
             
             <p class="login-link">
-              Already have a business account? <a href="../Owner Registration/owner_sign_in.php" class="highlight-link">Login here</a>
+              Already have a business account? <a href="owner_sign_in.php" class="highlight-link">Login here</a>
             </p>
           </form>
         </section>

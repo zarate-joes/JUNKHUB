@@ -17,7 +17,7 @@
 
     <div class="header">
 
-    <a href="../Landing Page/index.php">
+    <a href="../Landing Page/landingpage.html">
     <div class="logo">
     <img src="./pngs/Logo.png" alt="Logo">
     </div>
@@ -70,7 +70,7 @@
           <p class="hero-description">We're Here To Make Your Life Easier.</p>
           
           <div class="cta-container">
-            <a href="../Owner Registration/shopsignup.php" class="cta-button">
+            <a href="../Owner Registration/owner_sign_in.php" class="cta-button">
             Start Selling
             </a>
           </div>
@@ -98,7 +98,7 @@
     <span class="text-gold">Junk</span><span class="text-black">HUB</span>
     </h1>
 
-    <div class="description-container"> 
+    <div class="description-container">
         <div class="text-description">JunkHub is an e-commerce marketplace for 
                                       buying and selling recyclable and second-hand materials. 
                                       We connect junk shop owners, sellers, and buyers to promote 

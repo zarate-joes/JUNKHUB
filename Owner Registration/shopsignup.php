@@ -84,7 +84,7 @@ session_start();
         </div>
         
         <!-- Form sections -->
-        <form id="shopCreationForm" method="POST" action="shop-creation.php" enctype="multipart/form-data" class="form-content">
+        <form id="shopCreationForm" method="POST" action="../Backend/shop-creation.php" enctype="multipart/form-data" class="form-content">
           <!-- Shop Details Tab -->
           <section class="form-tab" id="shopDetailsTab">
             <section class="form-section">
@@ -387,7 +387,7 @@ session_start();
                 </svg>
                 BACK
               </button>
-              <button class="continue-button" id="launchShop" name="launchShop">
+              <button type="submit" class="continue-button" id="launchShop" name="launchShop">
                 LAUNCH SHOP
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
@@ -610,13 +610,12 @@ session_start();
         // Launch Shop
         if (launchShop) {
             launchShop.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                if (document.getElementById('agreeTerms').checked) {
-                    updateFormFields();
-                    document.getElementById('shopCreationForm').submit();
-                } else {
+                if (!document.getElementById('agreeTerms').checked) {
+                    e.preventDefault();
                     alert('Please agree to the Terms & Conditions before launching your shop.');
+                } else {
+                    // Explicitly submit the form
+                    document.getElementById('shopCreationForm').submit();
                 }
             });
         }
