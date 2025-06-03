@@ -7,8 +7,8 @@ if (!isset($pdo)) {
     die("Database connection failed");
 }
 
-// Verify owner is logged in
 if (!isset($_SESSION['owner']['id'])) {
+    error_log("Owner ID not set in session");
     header('Location: ../Owner Registration/owner_sign_in.php');
     exit();
 }
@@ -37,6 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
     if (empty($address)) $errors['fullAddress'] = 'Address is required';
     if (empty($barangay)) $errors['barangay'] = 'Barangay is required';
     
+    if (!empty($errors)) {
+        $_SESSION['errors'] = $errors;
+        $_SESSION['old'] = $_POST;
+        header('Location: ../Owner Registration/shopsignup.php');
+        exit();
+    }
     // Handle file upload
     // Handle file upload
     $logoPath = null;
@@ -106,18 +112,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
         try {
             $pdo->beginTransaction();
             
-            // Insert business
+            // In the business insertion part, add status:
             $stmt = $pdo->prepare('INSERT INTO businesses (
                     owner_id, business_name, description, logo_path, 
                     contact_phone, contact_email, address, barangay, 
-                    business_hours, special_requirements
+                    business_hours, special_requirements, status
                 ) VALUES (
                     :owner_id, :business_name, :description, :logo_path,
                     :contact_phone, :contact_email, :address, :barangay,
-                    :business_hours, :special_requirements
+                    :business_hours, :special_requirements, :status
                 )
             ');
-            
+
             $stmt->execute([
                 ':owner_id' => $ownerId,
                 ':business_name' => $businessName,
@@ -128,7 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
                 ':address' => $address,
                 ':barangay' => $barangay,
                 ':business_hours' => $businessHours,
-                ':special_requirements' => $specialRequirements
+                ':special_requirements' => $specialRequirements,
+                ':status' => 'pending' // Explicitly set status
             ]);
             
             $businessId = $pdo->lastInsertId();
@@ -148,8 +155,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
             }
             
             // Update owner with business_id
+            // To this (assuming the column is owner_id):
             $updateOwner = $pdo->prepare("
-                UPDATE owners SET business_id = ? WHERE id = ?
+                UPDATE owners SET business_id = ? WHERE owner_id = ?
             ");
             $updateOwner->execute([$businessId, $ownerId]);
             
@@ -166,7 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
         } catch (PDOException $e) {
             $pdo->rollBack();
             error_log("Business creation error: " . $e->getMessage());
-            $errors['database'] = 'Failed to create business. Please try again.';
+            $errors['database'] = 'Failed to create business. Please try again.'.$e->getMessage();
+            throw $e;
         }
     }
     
