@@ -300,16 +300,6 @@ a {
 
 
 
-.badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: red;
-  color: white;
-  padding: 1px 5px;
-  border-radius: 50%;
-  font-size: 10px;
-}
 
 
 
@@ -337,16 +327,7 @@ a {
   opacity: 0.9;
 }
 
-.message-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: red;
-  color: white;
-  padding: 1px 5px;
-  border-radius: 50%;
-  font-size: 10px;
-}
+
 
 
 
@@ -1179,3 +1160,6 @@ a {
 #shop-items-section {
   display: none;
 }
+
+
+

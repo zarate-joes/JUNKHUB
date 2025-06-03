@@ -67,6 +67,7 @@
         </ul>
       </nav>
       
+      
       <div class="logout-container">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
@@ -145,14 +146,6 @@
                 <p class="product-stock">In stock: 20kg</p>
                 <p class="product-category">Category: Plastic</p>
               </div>
-              <div class="product-actions">
-                <button class="btn btn-edit">
-                  <i class="fas fa-edit"></i> Edit
-                </button>
-                <button class="btn btn-remove">
-                  <i class="fas fa-trash"></i> Remove
-                </button>
-              </div>
             </div>
             
             <!-- Product Card 2 -->
@@ -163,14 +156,7 @@
                 <p class="product-price">₱10/kg</p>
                 <p class="product-stock">In stock: 8kg</p>
                 <p class="product-category">Category: Metal</p>
-              </div>
-              <div class="product-actions">
-                <button class="btn btn-edit">
-                  <i class="fas fa-edit"></i> Edit
-                </button>
-                <button class="btn btn-remove">
-                  <i class="fas fa-trash"></i> Remove
-                </button>
+
               </div>
             </div>
             
@@ -182,14 +168,7 @@
                 <p class="product-price">₱5/kg</p>
                 <p class="product-stock">In stock: 15kg</p>
                 <p class="product-category">Category: Paper</p>
-              </div>
-              <div class="product-actions">
-                <button class="btn btn-edit">
-                  <i class="fas fa-edit"></i> Edit
-                </button>
-                <button class="btn btn-remove">
-                  <i class="fas fa-trash"></i> Remove
-                </button>
+
               </div>
             </div>
           </div>
@@ -199,11 +178,7 @@
 <section class="orders-section">
   <div class="section-header">
     <h2>Recent Orders</h2>
-    <div class="order-filter">
-      <button class="filter-btn active">All</button>
-      <button class="filter-btn">Pending</button>
-      <button class="filter-btn">Completed</button>
-    </div>
+
   </div>
   
   <div class="orders-table">

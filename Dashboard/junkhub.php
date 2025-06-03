@@ -1,13 +1,12 @@
 <?php
 session_start();
-if(isset($_SESSION['user'])){
-    $user = $_SESSION['user'];
-
-}else{
+if(!isset($_SESSION['user'])){
     header("Location: index.php");
     exit();
 }
 
+// Get search term if it exists
+$searchTerm = isset($_GET['search']) ? strtolower(trim($_GET['search'])) : '';
 ?>
 
 
@@ -64,17 +63,18 @@ if(isset($_SESSION['user'])){
 
       <div class="notification-icon">
         <i class="fas fa-bell"></i>  
-        <span class="badge">3</span>
+        <span class="badge"></span>
       </div>
 
 <div class="message-icon">
   <i class="fas fa-envelope"></i>
-  <span class="message-badge">5</span>
+  <span class="message-badge"></span>
 </div>
 
-      <div class="search-container"> 
-        <input type="text" placeholder="Search...">
-      </div>
+<form class="search-container" method="get" action="">
+  <input type="text" name="search" placeholder="Search..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+  <button type="submit" style="display: none;"></button>
+</form>
 
 
   <div class="logo">
