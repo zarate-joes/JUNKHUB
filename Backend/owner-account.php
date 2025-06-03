@@ -73,11 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])) {
         $errors['terms'] = 'You must agree to the terms and conditions';
     }
 
-     // Check for existing owner (MODIFIED)
-    $stmt = $pdo->prepare('SELECT id FROM owners WHERE email = :email');
+    // Check for existing owner
+    $stmt = $pdo->prepare('SELECT owner_id FROM owners WHERE email = :email');
     $stmt->execute(['email' => $email]);
-    if ($stmt->fetch()) {
-        $errors['owner_exist'] = 'This email is already registered';
+    if($stmt->fetch()){
+        $errors['owner_exist'] = 'This email is already registered as an owner';
     }
 
     // If no errors, proceed with registration
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])) {
 
             // Insert owner WITHOUT business_id (MODIFIED)
             $stmt = $pdo->prepare('INSERT INTO owners 
-                (email, password, firstName, lastName, 	contactNumber, created_at) 
+                (email, password_hash, first_name, last_name, phone, created_at) 
                 VALUES (:email, :password, :firstName, :lastName, :contactNumber, :created_at)');
 
             $stmt->execute([
@@ -151,9 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ownersignin'])) {
     }
 
     try {
-        // Only check owners table
-        $stmt = $pdo->prepare("
-            SELECT id, email, password, firstName, lastName, created_at
+         // Check owners table
+        $stmt = $pdo->prepare("SELECT owner_id, email, password_hash, first_name, last_name, created_at
             FROM owners 
             WHERE email = :email
         ");
@@ -163,22 +162,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ownersignin'])) {
         $owner = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($owner) {
-            if (password_verify($password, $owner['password'])) {
+            if (password_verify($password, $owner['password_hash'])) {
                 session_regenerate_id(true);
                 
                 // Only store owner info in session
                 $_SESSION['owner'] = [
-                    'id' => $owner['id'],
+                    'id' => $owner['owner_id'],
                     'email' => $owner['email'],
-                    'firstName' => htmlspecialchars($owner['firstName']),
-                    'lastName' => htmlspecialchars($owner['lastName']),
+                    'firstName' => htmlspecialchars($owner['first_name']),
+                    'lastName' => htmlspecialchars($owner['last_name']),
                     'created_at' => $owner['created_at'],
                     'last_login' => time(),
                     'is_owner' => true  
                 ];
                 
                 
-                header('Location: ../Owner Dashboard/owner_dashboard.html');
+                header('Location: ../Owner Dashboard/owner_dashboard.php');
                 exit();
             }
         }

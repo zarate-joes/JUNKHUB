@@ -135,8 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
             
             // Insert materials
             if (!empty($materials)) {
-                $materialStmt = $pdo->prepare("
-                    INSERT INTO business_materials (business_id, material_type)
+                $materialStmt = $pdo->prepare("INSERT INTO business_materials (business_id, material_type)
                     VALUES (:business_id, :material_type)
                 ");
                 

@@ -1,1121 +1,921 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // Tab Navigation
-  const navItems = document.querySelectorAll('.nav-item');
-  const tabContents = document.querySelectorAll('.tab-content');
-  
-  navItems.forEach(item => {
-    item.addEventListener('click', function() {
-      // Remove active class from all nav items and tab contents
-      navItems.forEach(navItem => navItem.classList.remove('active'));
-      tabContents.forEach(content => content.classList.remove('active'));
-      
-      // Add active class to clicked nav item
-      this.classList.add('active');
-      
-      // Show corresponding tab content
-      const tabId = this.getAttribute('data-tab');
-      const activeTab = document.getElementById(tabId);
-      activeTab.classList.add('active');
-      
-      // Load content dynamically based on tab
-      loadTabContent(tabId);
-    });
-  });
+/**
+ * JunkHUB Owner Dashboard - Complete Integration
+ * Handles all data flows from signup → shop creation → dashboard
+ */
 
-  // Function to load tab content dynamically
-  function loadTabContent(tabId) {
-    switch(tabId) {
-      case 'products':
-        loadProducts();
-        break;
-      case 'orders':
-        loadOrders();
-        break;
-      case 'messages':
-        loadMessages();
-        break;
-      case 'analytics':
-        loadAnalytics();
-        break;
-      case 'settings':
-        loadSettings();
-        break;
-      default:
-        // Overview tab loads by default
-        break;
-    }
-  }
+// ======================
+// CORE DATA FUNCTIONS
+// ======================
 
-  // Add this to the existing owner_dashboard.js file
-
-  // Initialize messages data in localStorage if not exists
-  if (!localStorage.getItem('messages')) {
-    const initialMessages = [
-      {
-        id: 'M001',
-        subject: 'Price Inquiry',
-        content: 'Hi! I\'m interested in your plastic bottles. What\'s the minimum quantity you sell?',
-        from: 'John Doe',
-        time: '2 hours ago',
-        read: false,
-        type: 'inquiry'
-      },
-      {
-        id: 'M002',
-        subject: 'Order Confirmation',
-        content: 'Just wanted to confirm that my order has been processed. Thanks!',
-        from: 'Sarah Smith',
-        time: '1 day ago',
-        read: true,
-        type: 'order'
-      },
-      {
-        id: 'M003',
-        subject: 'Delivery Question',
-        content: 'Do you offer delivery for large quantities of scrap metal?',
-        from: 'Michael Johnson',
-        time: '3 days ago',
-        read: false,
-        type: 'inquiry'
-      }
-    ];
-    localStorage.setItem('messages', JSON.stringify(initialMessages));
-  }
-
-  // Load messages function
-  // Update the loadMessages function to match the table arrangement
-  function loadMessages() {
-    const messages = JSON.parse(localStorage.getItem('messages')) || [];
-    const messagesContainer = document.getElementById('messages-container');
-    const activeTab = document.querySelector('.messages-tabs .tab-btn.active')?.dataset.tab || 'inbox';
-    
-    if (!messagesContainer) return;
-    
-    // Clear existing messages
-    messagesContainer.innerHTML = '';
-    
-    // Create table structure
-    const messagesTable = document.createElement('div');
-    messagesTable.className = 'messages-table';
-    
-    // Create table header
-    const tableHeader = document.createElement('div');
-    tableHeader.className = 'table-header';
-    tableHeader.innerHTML = `
-      <div>From</div>
-      <div>Subject</div>
-      <div>Preview</div>
-      <div>Time</div>
-      <div>Status</div>
-      <div>Actions</div>
-    `;
-    messagesTable.appendChild(tableHeader);
-    
-    // Filter messages based on active tab
-    let filteredMessages = messages;
-    if (activeTab === 'unread') {
-      filteredMessages = messages.filter(message => !message.read);
-    }
-    
-    // Add messages to table
-    filteredMessages.forEach(message => {
-      const tableRow = document.createElement('div');
-      tableRow.className = `table-row message-card ${!message.read ? 'unread' : ''}`;
-      tableRow.dataset.id = message.id;
-      
-      tableRow.innerHTML = `
-        <div class="message-sender">
-          <div class="user-profile">
-            <img src="../Dashboard/pngs/prof.png" alt="User" width="30">
-            <span>${message.from}</span>
-          </div>
-        </div>
-        <div class="message-subject">
-          <h3>${message.subject}</h3>
-        </div>
-        <div class="message-preview">
-          <p>${message.content}</p>
-        </div>
-        <div class="message-time">
-          <span>${message.time}</span>
-        </div>
-        <div class="message-status">
-          <span class="status-badge ${message.read ? 'read' : 'unread'}">
-            ${message.read ? 'Read' : 'Unread'}
-          </span>
-        </div>
-        <div class="message-actions">
-          <button class="btn btn-reply">Reply</button>
-          <button class="btn ${message.read ? 'btn-mark-unread' : 'btn-mark-read'}">
-            ${message.read ? 'Mark Unread' : 'Mark Read'}
-          </button>
-          <button class="btn btn-delete">
-            <i class="fas fa-trash"></i> Delete
-          </button>
-        </div>
-      `;
-      
-      messagesTable.appendChild(tableRow);
-      messagesContainer.appendChild(messagesTable);
-      
-      // Add event listeners for the new message row
-      setupMessageCardEvents(tableRow, message);
-    });
-    
-    // Update tab counts
-    updateMessageCounts();
-  }
-
-  // Setup event listeners for message card
-  function setupMessageCardEvents(card, message) {
-    // Reply button
-    const replyBtn = card.querySelector('.btn-reply');
-    replyBtn.addEventListener('click', function() {
-      const modal = document.getElementById('reply-modal');
-      document.getElementById('reply-to').textContent = message.from;
-      document.getElementById('reply-subject').textContent = `Re: ${message.subject}`;
-      modal.classList.add('active');
-    });
-    
-    // Mark as read/unread button
-    const markBtn = card.querySelector('.btn-mark-read, .btn-mark-unread');
-    markBtn.addEventListener('click', function() {
-      const messages = JSON.parse(localStorage.getItem('messages'));
-      const index = messages.findIndex(m => m.id === message.id);
-      
-      if (index !== -1) {
-        messages[index].read = !messages[index].read;
-        localStorage.setItem('messages', JSON.stringify(messages));
-        loadMessages(); // Refresh the messages list
-        updateMessageCounts(); // Update the counts in tabs
-      }
-    });
-
-    const deleteBtn = card.querySelector('.btn-delete');
-    deleteBtn.addEventListener('click', function() {
-      if (confirm(`Are you sure you want to delete this message from ${message.from}?`)) {
-        const messages = JSON.parse(localStorage.getItem('messages'));
-        const updatedMessages = messages.filter(m => m.id !== message.id);
-        localStorage.setItem('messages', JSON.stringify(updatedMessages));
-        loadMessages(); // Refresh the messages list
-        updateMessageCounts(); // Update the counts in tabs
+/**
+ * Loads all dashboard data from backend
+ */
+async function loadDashboardData() {
+    try {
+        showLoader();
         
-        // Update notification badge count
-        updateNotificationBadge();
-      }
-    });
-  }
-
-  // Messages tabs functionality
-  function setupMessagesTabs() {
-    const tabs = document.querySelectorAll('.messages-tabs .tab-btn');
-    
-    tabs.forEach(tab => {
-      tab.addEventListener('click', function() {
-        // Remove active class from all tabs
-        tabs.forEach(t => t.classList.remove('active'));
+        const response = await fetch('../Backend/dashboard.php');
+        const data = await response.json();
         
-        // Add active class to clicked tab
-        this.classList.add('active');
-        
-        // Load messages for this tab
-        loadMessages();
-      });
-    });
-  }
-
-
-  // Update the loadTabContent function to include messages setup
-  function loadTabContent(tabId) {
-    switch(tabId) {
-      case 'products':
-        loadProducts();
-        break;
-      case 'orders':
-        loadOrders();
-        break;
-      case 'messages':
-        loadMessages();
-        setupMessagesTabs();
-        setupMessagesSearch();
-        break;
-      case 'analytics':
-        loadAnalytics();
-        break;
-      case 'settings':
-        loadSettings();
-        break;
-      default:
-        // Overview tab loads by default
-        break;
-    }
-  }
-
-  function updateNotificationBadge() {
-    const messages = JSON.parse(localStorage.getItem('messages')) || [];
-    const unreadCount = messages.filter(m => !m.read).length;
-    const badge = document.querySelector('.notification-badge');
-    
-    if (badge) {
-      badge.textContent = unreadCount;
-      if (unreadCount === 0) {
-        badge.style.display = 'none';
-      } else {
-        badge.style.display = 'flex';
-      }
-    }
-  }
-
-  // Load and render products
-  function loadProducts() {
-    const products = JSON.parse(localStorage.getItem('products')) || [];
-    const productsTable = document.querySelector('.products-table');
-    
-    if (!productsTable) return;
-    
-    // Clear existing rows (except header)
-    const rows = productsTable.querySelectorAll('.table-row:not(.table-header)');
-    rows.forEach(row => row.remove());
-    
-    // Add products to table
-    products.forEach(product => {
-      const row = document.createElement('div');
-      row.className = 'table-row';
-      row.dataset.id = product.id;
-      
-      row.innerHTML = `
-        <div class="product-cell">
-          <div class="product-icon">${product.name.charAt(0)}</div>
-          <div class="product-info">
-            <h3>${product.name}</h3>
-            <p>ID: ${product.id}</p>
-          </div>
-        </div>
-        <div>₱${product.price}/${product.unit}</div>
-        <div>
-          <input type="number" value="${product.stock}" min="0" class="stock-input">
-          <span>${product.unit}</span>
-        </div>
-        <div>${capitalizeFirstLetter(product.category)}</div>
-        <div>${product.category2}</div>
-        <div>
-          <label class="toggle-switch">
-            <input type="checkbox" ${product.status ? 'checked' : ''}>
-            <span class="slider"></span>
-          </label>
-          <span class="status-text">${product.status ? 'Available' : 'Unavailable'}</span>
-        </div>
-        <div class="actions-cell">
-          <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-          <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
-        </div>
-      `;
-      
-      productsTable.appendChild(row);
-      
-      // Add event listeners for the new row
-      setupProductRowEvents(row, product);
-    });
-  }
-
-  // Setup event listeners for product row
-  function setupProductRowEvents(row, product) {
-    // Toggle switch
-    const toggleSwitch = row.querySelector('.toggle-switch input');
-    const statusText = row.querySelector('.status-text');
-    
-    toggleSwitch.addEventListener('change', function() {
-      const products = JSON.parse(localStorage.getItem('products'));
-      const index = products.findIndex(p => p.id === product.id);
-      
-      if (index !== -1) {
-        products[index].status = this.checked;
-        localStorage.setItem('products', JSON.stringify(products));
-        statusText.textContent = this.checked ? 'Available' : 'Unavailable';
-      }
-    });
-    
-    // Stock input
-    const stockInput = row.querySelector('.stock-input');
-    stockInput.addEventListener('change', function() {
-      const products = JSON.parse(localStorage.getItem('products'));
-      const index = products.findIndex(p => p.id === product.id);
-      
-      if (index !== -1) {
-        products[index].stock = parseInt(this.value);
-        localStorage.setItem('products', JSON.stringify(products));
-      }
-    });
-    
-    // Edit button
-    const editBtn = row.querySelector('.btn-edit');
-    editBtn.addEventListener('click', function() {
-      openEditProductModal(product);
-    });
-    
-    // Delete button
-    const deleteBtn = row.querySelector('.btn-remove');
-    deleteBtn.addEventListener('click', function() {
-      if (confirm(`Are you sure you want to delete ${product.name}?`)) {
-        const products = JSON.parse(localStorage.getItem('products'));
-        const updatedProducts = products.filter(p => p.id !== product.id);
-        localStorage.setItem('products', JSON.stringify(updatedProducts));
-        row.remove();
-      }
-    });
-  }
-
-  // Open edit product modal (also used for adding new products)
-  function openEditProductModal(product = null) {
-    const modal = document.getElementById('add-product-modal');
-    const form = modal.querySelector('#product-form');
-    
-    if (product) {
-      // Editing existing product
-      modal.querySelector('.modal-header h3').textContent = 'Edit Product';
-      form.dataset.mode = 'edit';
-      form.dataset.id = product.id;
-      
-      // Fill form with product data
-      document.getElementById('product-name').value = product.name;
-      document.getElementById('product-category').value = product.category;
-      document.getElementById('product-category2').value = product.category2;
-      document.getElementById('product-price').value = product.price;
-      document.getElementById('product-stock').value = product.stock;
-      document.getElementById('product-unit').value = product.unit;
-      document.getElementById('product-description').value = product.description || '';
-    } else {
-      // Adding new product
-      modal.querySelector('.modal-header h3').textContent = 'Add New Product';
-      form.dataset.mode = 'add';
-      form.reset();
-    }
-    
-    modal.classList.add('active');
-  }
-
-  // Product form submission
-  const productForm = document.getElementById('product-form');
-  if (productForm) {
-    productForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const mode = this.dataset.mode;
-      const id = this.dataset.id || 'P' + Math.random().toString(36).substr(2, 4).toUpperCase();
-      
-      const product = {
-        id: id,
-        name: document.getElementById('product-name').value,
-        category: document.getElementById('product-category').value,
-        category2: document.getElementById('product-category2').value,
-        price: parseFloat(document.getElementById('product-price').value),
-        stock: parseInt(document.getElementById('product-stock').value),
-        unit: document.getElementById('product-unit').value,
-        description: document.getElementById('product-description').value,
-        status: true
-      };
-      
-      const products = JSON.parse(localStorage.getItem('products')) || [];
-      
-      if (mode === 'edit') {
-        // Update existing product
-        const index = products.findIndex(p => p.id === id);
-        if (index !== -1) {
-          products[index] = product;
+        if (data.success) {
+            // Handle incomplete shop setup
+            if (!data.data.business_id) {
+                renderSetupReminder();
+                return;
+            }
+            
+            // Update UI with loaded data
+            updateOwnerInfo(data.data);
+            updateBusinessStats(data.data);
+            updateRecentOrders(data.data.recent_orders || []);
+            updateRecentMessages(data.data.recent_messages || []);
+            
+        } else {
+            showError(data.error || 'Failed to load dashboard data');
         }
-      } else {
-        // Add new product
-        products.push(product);
-      }
-      
-      localStorage.setItem('products', JSON.stringify(products));
-      loadProducts();
-      this.closest('.modal').classList.remove('active');
-    });
-  }
-
-  // Add product button
-  const addProductBtn = document.getElementById('add-product');
-  if (addProductBtn) {
-    addProductBtn.addEventListener('click', function() {
-      openEditProductModal();
-    });
-  }
-
-  // Quick add product button (from overview)
-  const quickAddBtn = document.getElementById('quick-add-product');
-  if (quickAddBtn) {
-    quickAddBtn.addEventListener('click', function() {
-      openEditProductModal();
-    });
-  }
-
-  // Helper function
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  // Settings Tabs
-  const settingsTabs = document.querySelectorAll('.settings-tabs .tab-btn');
-  const tabPanes = document.querySelectorAll('.tab-pane');
-  
-  settingsTabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      settingsTabs.forEach(t => t.classList.remove('active'));
-      tabPanes.forEach(pane => pane.classList.remove('active'));
-      
-      this.classList.add('active');
-      const tabId = this.getAttribute('data-tab');
-      document.getElementById(`${tabId}-settings`).classList.add('active');
-    });
-  });
-  
-  // Messages Tabs
-  const messagesTabs = document.querySelectorAll('.messages-tabs .tab-btn');
-  
-  messagesTabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      messagesTabs.forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-      // Here you would typically load different message types via AJAX
-    });
-  });
-  
-  // Toggle Switches
-  const toggleSwitches = document.querySelectorAll('.toggle-switch input');
-  toggleSwitches.forEach(sw => {
-    sw.addEventListener('change', function() {
-      const statusText = this.closest('.toggle-switch').nextElementSibling;
-      if (this.checked) {
-        statusText.textContent = 'Available';
-      } else {
-        statusText.textContent = 'Unavailable';
-      }
-    });
-  });
-  
-  // Modal Handling
-  const modals = document.querySelectorAll('.modal');
-  const openModalButtons = document.querySelectorAll('[data-modal]');
-  const closeModalButtons = document.querySelectorAll('.close-modal');
-  
-  openModalButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const modalId = this.getAttribute('data-modal');
-      document.getElementById(modalId).classList.add('active');
-    });
-  });
-  
-  closeModalButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      this.closest('.modal').classList.remove('active');
-    });
-  });
-  
-  // Close modal when clicking outside
-  modals.forEach(modal => {
-    modal.addEventListener('click', function(e) {
-      if (e.target === this) {
-        this.classList.remove('active');
-      }
-    });
-  });
-
-  const viewAllMessagesBtn = document.querySelector('.bottom-section .btn-text[data-tab="messages"]');
-  if (viewAllMessagesBtn) {
-    viewAllMessagesBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Remove active class from all nav items and tab contents
-      document.querySelectorAll('.nav-item').forEach(navItem => navItem.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      
-      // Add active class to Messages nav item
-      document.querySelector('.nav-item[data-tab="messages"]').classList.add('active');
-      
-      // Show Messages tab content
-      document.getElementById('messages').classList.add('active');
-      
-      // Load Messages content
-      loadMessages();
-    });
-  }
-  
-  // Password Strength Checker
-  const passwordInput = document.getElementById('new-password');
-  if (passwordInput) {
-    passwordInput.addEventListener('input', function() {
-      const strengthBars = document.querySelectorAll('.strength-bar');
-      const strengthText = document.querySelector('.strength-text');
-      const password = this.value;
-      
-      // Reset
-      strengthBars.forEach(bar => bar.style.backgroundColor = '#ddd');
-      strengthText.textContent = '';
-      
-      if (password.length === 0) return;
-      
-      // Very simple strength checker
-      if (password.length < 6) {
-        strengthBars[0].style.backgroundColor = '#dc3545';
-        strengthText.textContent = 'Weak';
-      } else if (password.length < 10) {
-        strengthBars[0].style.backgroundColor = '#ffc107';
-        strengthBars[1].style.backgroundColor = '#ffc107';
-        strengthText.textContent = 'Medium';
-      } else {
-        strengthBars[0].style.backgroundColor = '#28a745';
-        strengthBars[1].style.backgroundColor = '#28a745';
-        strengthBars[2].style.backgroundColor = '#28a745';
-        strengthText.textContent = 'Strong';
-      }
-    });
-  }
-  
-  // Charts
-  if (document.getElementById('overviewChart')) {
-    const overviewCtx = document.getElementById('overviewChart').getContext('2d');
-    const overviewChart = new Chart(overviewCtx, {
-      type: 'line',
-      data: {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        datasets: [{
-          label: 'Sales (₱)',
-          data: [1200, 1900, 1500, 2000, 1800, 2200, 2400],
-          backgroundColor: 'rgba(255, 215, 0, 0.2)',
-          borderColor: 'rgba(255, 215, 0, 1)',
-          borderWidth: 2,
-          tension: 0.4,
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  }
-  
-  if (document.getElementById('salesChart')) {
-    const salesCtx = document.getElementById('salesChart').getContext('2d');
-    const salesChart = new Chart(salesCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        datasets: [{
-          label: 'Sales (₱)',
-          data: [3500, 4200, 3800, 4500],
-          backgroundColor: 'rgba(255, 215, 0, 0.2)',
-          borderColor: 'rgba(255, 215, 0, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  }
-  
-  if (document.getElementById('productsChart')) {
-    const productsCtx = document.getElementById('productsChart').getContext('2d');
-    const productsChart = new Chart(productsCtx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Plastic', 'Metal', 'Paper', 'Glass', 'Others'],
-        datasets: [{
-          data: [45, 30, 15, 5, 5],
-          backgroundColor: [
-            'rgba(255, 215, 0, 0.7)',
-            'rgba(62, 167, 106, 0.7)',
-            'rgba(255, 224, 102, 0.7)',
-            'rgba(255, 82, 82, 0.7)',
-            'rgba(113, 113, 113, 0.7)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'right'
-          }
-        }
-      }
-    });
-  }
-  
-  // Form Submissions
-  const forms = document.querySelectorAll('form');
-  forms.forEach(form => {
-    if (form.id !== 'product-form') {
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Form submitted! In a real application, this would save your data.');
-        
-        const modal = this.closest('.modal');
-        if (modal) {
-          modal.classList.remove('active');
-        }
-      });
+    } catch (error) {
+        console.error('Dashboard load error:', error);
+        showError('Network error - please try again');
+    } finally {
+        hideLoader();
     }
-  });
+}
 
-  // Logout
-  const logoutBtn = document.querySelector('.logout-container');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', function() {
-      if (confirm('Are you sure you want to logout?')) {
-        window.location.href = 'login.html';
-      }
-    });
-  }
+/**
+ * Updates owner information in the UI
+ */
+function updateOwnerInfo(ownerData) {
+    // Header profile
+    const usernameEl = document.querySelector('.username');
+    if (usernameEl && ownerData.first_name && ownerData.last_name) {
+        usernameEl.textContent = `${ownerData.first_name} ${ownerData.last_name}`;
+    }
+    
+    // Update profile image if exists
+    if (ownerData.profile_image) {
+        const profileImg = document.querySelector('.user-profile img');
+        if (profileImg) {
+            profileImg.src = `../uploads/profiles/${ownerData.profile_image}`;
+        }
+    }
+}
 
-  // Add this to the existing owner_dashboard.js file
+/**
+ * Updates business statistics
+ */
+function updateBusinessStats(data) {
+    if (!data.statistics) return;
+    
+    // Sales card
+    const salesValue = document.querySelector('.stats-card .stats-value');
+    if (salesValue) {
+        salesValue.textContent = `₱${data.statistics.total_sales?.toLocaleString() || '0'}`;
+    }
+    
+    // Products card - find the second stats card
+    const statsCards = document.querySelectorAll('.stats-card .stats-value');
+    if (statsCards[1]) {
+        statsCards[1].textContent = data.statistics.product_count || '0';
+    }
+    
+    // Orders card - find the third stats card
+    if (statsCards[2]) {
+        statsCards[2].textContent = data.statistics.pending_orders || '0';
+    }
+}
 
-  // Category Filter Functionality
-  function setupCategoryFilter() {
-    const categoryButtons = document.querySelectorAll('.category-filter .filter-btn');
+function updateRecentOrders(orders) {
+    const ordersContainer = document.querySelector('.orders-table');
+    if (!ordersContainer) return;
     
-    categoryButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        // Remove active class from all buttons
-        categoryButtons.forEach(btn => btn.classList.remove('active'));
-        
-        // Add active class to clicked button
-        this.classList.add('active');
-        
-        // Filter products
-        filterProducts(this.textContent.toLowerCase());
-      });
-    });
-  }
-
-  // Search Box Functionality
-  function setupSearchBox() {
-    const searchBox = document.querySelector('.search-box input');
-    const searchIcon = document.querySelector('.search-box i');
+    // Keep the header, replace the rows
+    const header = ordersContainer.querySelector('.table-header');
+    ordersContainer.innerHTML = '';
+    ordersContainer.appendChild(header);
     
-    if (!searchBox) return;
-    
-    const searchHandler = () => {
-      const searchTerm = searchBox.value.toLowerCase();
-      filterProducts('all', searchTerm);
-    };
-    
-    searchBox.addEventListener('input', searchHandler);
-    searchIcon.addEventListener('click', searchHandler);
-  }
-
-  // Combined Filter Function
-  // Update the filterProducts function to maintain the original table arrangement
-  function filterProducts(category = 'all', searchTerm = '') {
-    const products = JSON.parse(localStorage.getItem('products')) || [];
-    const productsTable = document.querySelector('.products-table');
-    
-    if (!productsTable) return;
-    
-    // Clear existing rows (except header)
-    const rows = productsTable.querySelectorAll('.table-row:not(.table-header)');
-    rows.forEach(row => row.remove());
-    
-    // Filter products
-    const filteredProducts = products.filter(product => {
-      const categoryMatch = category === 'all' || product.category.toLowerCase() === category;
-      const searchMatch = searchTerm === '' || 
-        product.name.toLowerCase().includes(searchTerm) || 
-        product.id.toLowerCase().includes(searchTerm);
-      return categoryMatch && searchMatch;
-    });
-    
-    // Add filtered products to table while maintaining original structure
-    filteredProducts.forEach(product => {
-      const row = document.createElement('div');
-      row.className = 'table-row';
-      row.dataset.id = product.id;
-      
-      row.innerHTML = `
-        <div class="product-cell">
-          <div class="product-icon">${product.name.charAt(0)}</div>
-          <div class="product-info">
-            <h3>${product.name}</h3>
-            <p>ID: ${product.id}</p>
-          </div>
-        </div>
-        <div>₱${product.price}/${product.unit}</div>
-        <div>
-          <input type="number" value="${product.stock}" min="0" class="stock-input">
-          <span>${product.unit}</span>
-        </div>
-        <div>${capitalizeFirstLetter(product.category)}</div>
-        <div>${product.category2}</div>
-        <div>
-          <label class="toggle-switch">
-            <input type="checkbox" ${product.status ? 'checked' : ''}>
-            <span class="slider"></span>
-          </label>
-          <span class="status-text">${product.status ? 'Available' : 'Unavailable'}</span>
-        </div>
-        <div class="actions-cell">
-          <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-          <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
-        </div>
-      `;
-      
-      productsTable.appendChild(row);
-      setupProductRowEvents(row, product);
-    });
-  }
-
-  // Update the loadProducts function to call these setup functions
-  function loadProducts() {
-      const products = JSON.parse(localStorage.getItem('products')) || [];
-      const productsTable = document.querySelector('.products-table');
-      
-      if (!productsTable) return;
-      
-      // Clear existing rows (except header)
-      const rows = productsTable.querySelectorAll('.table-row:not(.table-header)');
-      rows.forEach(row => row.remove());
-      
-      // Add products to table
-      products.forEach(product => {
+    orders.forEach(order => {
         const row = document.createElement('div');
         row.className = 'table-row';
-        row.dataset.id = product.id;
-        
         row.innerHTML = `
-          <div class="product-cell">
-            <div class="product-icon">${product.name.charAt(0)}</div>
-            <div class="product-info">
-              <h3>${product.name}</h3>
-              <p>ID: ${product.id}</p>
-            </div>
-          </div>
-          <div>₱${product.price}/${product.unit}</div>
-          <div>
-            <input type="number" value="${product.stock}" min="0" class="stock-input">
-            <span>${product.unit}</span>
-          </div>
-          <div>${capitalizeFirstLetter(product.category)}</div>
-          <div>${product.category2}</div>
-          <div>
-            <label class="toggle-switch">
-              <input type="checkbox" ${product.status ? 'checked' : ''}>
-              <span class="slider"></span>
-            </label>
-            <span class="status-text">${product.status ? 'Available' : 'Unavailable'}</span>
-          </div>
-          <div class="actions-cell">
-            <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-            <button class="btn btn-remove"><i class="fas fa-trash"></i></button>
-          </div>
+            <div>#${order.order_id}</div>
+            <div>${order.customer_name}</div>
+            <div>${order.items}</div>
+            <div>${order.order_date}</div>
+            <div><span class="status-badge ${order.status.toLowerCase()}">${order.status}</span></div>
+            <div><button class="btn btn-sm" onclick="viewOrder('${order.order_id}')">View</button></div>
         `;
-        
-        productsTable.appendChild(row);
-        setupProductRowEvents(row, product);
-      });
-      
-      // Set up filter and search functionality
-      setupCategoryFilter();
-      setupSearchBox();
-  }
-
-  // Update the loadTabContent function to ensure these are set up when switching tabs
-  function loadTabContent(tabId) {
-      switch(tabId) {
-        case 'products':
-          loadProducts();
-          break;
-        case 'orders':
-          loadOrders();
-          break;
-        case 'messages':
-          loadMessages();
-          break;
-        case 'analytics':
-          loadAnalytics();
-          break;
-        case 'settings':
-          loadSettings();
-          break;
-        default:
-          // Overview tab loads by default
-          break;
-      }
-  }
-
-  // Load initial tab (Overview)
-  loadTabContent('overview');
-  updateNotificationBadge();
-});
-
-
-function setupOrderSearch() {
-  const searchBox = document.querySelector('.orders-management .search-box input');
-  const searchIcon = document.querySelector('.orders-management .search-box i');
-  
-  if (!searchBox) return;
-  
-  const searchHandler = () => {
-    const searchTerm = searchBox.value.toLowerCase();
-    filterOrders(searchTerm);
-  };
-  
-  searchBox.addEventListener('input', searchHandler);
-  searchIcon.addEventListener('click', searchHandler);
-}
-
-// Function to filter orders based on search term
-function filterOrders(searchTerm = '') {
-  const ordersTable = document.querySelector('.orders-management .orders-table');
-  if (!ordersTable) return;
-  
-  const rows = ordersTable.querySelectorAll('.table-row:not(.table-header)');
-  
-  rows.forEach(row => {
-    const orderNumber = row.querySelector('div:nth-child(1)').textContent.toLowerCase();
-    const customerName = row.querySelector('div:nth-child(2)').textContent.toLowerCase();
-    const orderDate = row.querySelector('div:nth-child(3)').textContent.toLowerCase();
-    const orderItems = row.querySelector('div:nth-child(4)').textContent.toLowerCase();
-    const orderTotal = row.querySelector('div:nth-child(5)').textContent.toLowerCase();
-    
-    const matches = 
-      orderNumber.includes(searchTerm) ||
-      customerName.includes(searchTerm) ||
-      orderDate.includes(searchTerm) ||
-      orderItems.includes(searchTerm) ||
-      orderTotal.includes(searchTerm);
-    
-    row.style.display = matches ? '' : 'none';
-  });
-}
-
-
-function loadOrders() {
-  // Your existing order loading code...
-  
-  // Set up search functionality
-  setupOrderSearch();
-}
-
-// Update the loadTabContent function to ensure search is set up when switching to orders tab
-function loadTabContent(tabId) {
-  switch(tabId) {
-    case 'products':
-      loadProducts();
-      break;
-    case 'orders':
-      loadOrders();
-      break;
-    case 'messages':
-      loadMessages();
-      break;
-    case 'analytics':
-      loadAnalytics();
-      break;
-    case 'settings':
-      loadSettings();
-      break;
-    default:
-      // Overview tab loads by default
-      break;
-  }
-}
-
-
-
-const orderFilterButtons = document.querySelectorAll('.order-filter .filter-btn');
-const orderRows = document.querySelectorAll('.orders-management .table-row');
-
-orderFilterButtons.forEach(button => {
-  button.addEventListener('click', function() {
-    // Remove active class from all filter buttons
-    orderFilterButtons.forEach(btn => btn.classList.remove('active'));
-    
-    // Add active class to clicked button
-    this.classList.add('active');
-    
-    const filterValue = this.textContent.toLowerCase();
-    
-    // Filter order rows
-    orderRows.forEach(row => {
-      if (filterValue === 'all') {
-        row.style.display = 'table-row';
-      } else {
-        const statusBadge = row.querySelector('.status-badge, .status-select');
-        let statusText = '';
-        
-        if (statusBadge.classList.contains('status-badge')) {
-          statusText = statusBadge.textContent.toLowerCase();
-        } else if (statusBadge.classList.contains('status-select')) {
-          statusText = statusBadge.value.toLowerCase();
-        }
-        
-        if (statusText === filterValue) {
-          row.style.display = 'table-row';
-        } else {
-          row.style.display = 'none';
-        }
-      }
+        ordersContainer.appendChild(row);
     });
-  });
-});
+}
 
-// Also add this to handle changes in the status dropdown
-const statusSelects = document.querySelectorAll('.status-select');
-statusSelects.forEach(select => {
-  select.addEventListener('change', function() {
-    const activeFilter = document.querySelector('.order-filter .filter-btn.active');
-    if (activeFilter && activeFilter.textContent.toLowerCase() !== 'all') {
-      const filterValue = activeFilter.textContent.toLowerCase();
-      const row = this.closest('.table-row');
-      const currentStatus = this.value.toLowerCase();
-      
-      if (currentStatus === filterValue) {
-        row.style.display = 'table-row';
-      } else {
-        row.style.display = 'none';
-      }
+function updateRecentMessages(messages) {
+    const messagesContainer = document.querySelector('.messages-container .message-card');
+    if (!messagesContainer) return;
+    
+    const parent = messagesContainer.parentNode;
+    // Clear existing messages except header
+    const header = parent.querySelector('.section-header');
+    parent.innerHTML = '';
+    parent.appendChild(header);
+    
+    messages.forEach(message => {
+        const messageCard = document.createElement('div');
+        messageCard.className = 'message-card';
+        messageCard.innerHTML = `
+            <div class="message-header">
+                <h3>${message.subject}</h3>
+                <span class="message-time">${message.time}</span>
+            </div>
+            <p class="message-preview">${message.content.substring(0, 100)}...</p>
+            <div class="message-footer">
+                <span>From: ${message.from}</span>
+            </div>
+        `;
+        parent.appendChild(messageCard);
+    });
+}
+
+// ======================
+// SHOP SETUP HANDLING
+// ======================
+
+function renderSetupReminder() {
+    document.querySelector('.main-content').innerHTML = `
+        <div class="setup-reminder">
+            <div class="reminder-card">
+                <i class="fas fa-store-alt"></i>
+                <h2>Ready to Start Selling?</h2>
+                <p>Set up your shop to begin accepting orders and managing inventory</p>
+                <div class="setup-progress">
+                    <div class="progress-step completed">
+                        <span>1</span>
+                        <p>Account Created</p>
+                    </div>
+                    <div class="progress-connector"></div>
+                    <div class="progress-step current">
+                        <span>2</span>
+                        <p>Shop Setup</p>
+                    </div>
+                </div>
+                <a href="../Owner Registration/shopsignup.php" class="btn btn-primary btn-lg">
+                    <i class="fas fa-store"></i> Set Up Your Shop
+                </a>
+            </div>
+        </div>
+    `;
+}
+
+// ======================
+// PRODUCT MANAGEMENT
+// ======================
+
+async function loadProducts() {
+    try {
+        showLoader();
+        const response = await fetch('../Backend/get_products.php');
+        const data = await response.json();
+        
+        if (data.success) {
+            renderProductsTable(data.data);
+        } else {
+            showError('Failed to load products');
+        }
+    } catch (error) {
+        showError('Network error loading products');
+    } finally {
+        hideLoader();
     }
-  });
+}
+
+function renderProductsTable(products) {
+    const tableContainer = document.querySelector('.products-table');
+    if (!tableContainer) return;
+    
+    // Keep the header
+    const header = tableContainer.querySelector('.table-header');
+    tableContainer.innerHTML = '';
+    tableContainer.appendChild(header);
+    
+    products.forEach(product => {
+        const row = document.createElement('div');
+        row.className = 'table-row';
+        row.innerHTML = `
+            <div class="product-cell">
+                <div class="product-icon">${product.name.charAt(0)}</div>
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p>ID: ${product.product_id}</p>
+                </div>
+            </div>
+            <div>₱${product.price}/${product.unit}</div>
+            <div>
+                <input type="number" value="${product.stock}" min="0" class="stock-input" 
+                       onchange="updateStock('${product.product_id}', this.value)">
+                <span>${product.unit}</span>
+            </div>
+            <div>${product.category}</div>
+            <div>${product.category2}</div>
+            <div>
+                <label class="toggle-switch">
+                    <input type="checkbox" ${product.status === 'active' ? 'checked' : ''} 
+                           onchange="toggleProductStatus('${product.product_id}', this.checked)">
+                    <span class="slider"></span>
+                </label>
+                <span class="status-text">${product.status === 'active' ? 'Available' : 'Unavailable'}</span>
+            </div>
+            <div class="actions-cell">
+                <button class="btn btn-edit" onclick="editProduct('${product.product_id}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-remove" onclick="deleteProduct('${product.product_id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        tableContainer.appendChild(row);
+    });
+}
+
+async function saveProduct(formData) {
+    try {
+        showLoader();
+        const response = await fetch('../Backend/save_products.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        // Check for HTTP errors
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.error || `HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Product saved successfully');
+            loadProducts();
+            closeModal('add-product-modal');
+        } else {
+            // Show validation errors if they exist
+            if (result.errors) {
+                const errorMessages = Object.values(result.errors).join('\n');
+                showError(errorMessages);
+            } else {
+                showError(result.error || 'Failed to save product');
+            }
+        }
+    } catch (error) {
+        console.error('Save error:', error);
+        showError('Failed to save product: ' + error.message);
+    } finally {
+        hideLoader();
+    }
+}
+
+async function updateStock(productId, newStock) {
+    try {
+        const response = await fetch('../Backend/update_stock.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                stock: newStock
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Stock updated');
+        } else {
+            showError('Failed to update stock');
+            loadProducts(); // Reload to reset the input
+        }
+    } catch (error) {
+        showError('Network error');
+    }
+}
+
+async function toggleProductStatus(productId, isActive) {
+    try {
+        const response = await fetch('../Backend/toggle_product.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                status: isActive ? 'active' : 'inactive'
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Product status updated');
+        } else {
+            showError('Failed to update status');
+            loadProducts();
+        }
+    } catch (error) {
+        showError('Network error');
+    }
+}
+
+async function deleteProduct(productId) {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    
+    try {
+        const response = await fetch('../Backend/delete_product.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ product_id: productId })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Product deleted');
+            loadProducts();
+        } else {
+            showError('Failed to delete product');
+        }
+    } catch (error) {
+        showError('Network error');
+    }
+}
+
+// ======================
+// ORDER MANAGEMENT
+// ======================
+
+async function loadOrders() {
+    try {
+        showLoader();
+        const response = await fetch('../Backend/get_orders.php');
+        const data = await response.json();
+        
+        if (data.success) {
+            renderOrdersTable(data.data);
+            updateOrderSummary(data.summary);
+        } else {
+            showError('Failed to load orders');
+        }
+    } catch (error) {
+        showError('Network error loading orders');
+    } finally {
+        hideLoader();
+    }
+}
+
+function renderOrdersTable(orders) {
+    const tableContainer = document.querySelector('#orders .orders-table');
+    if (!tableContainer) return;
+    
+    const header = tableContainer.querySelector('.table-header');
+    tableContainer.innerHTML = '';
+    tableContainer.appendChild(header);
+    
+    orders.forEach(order => {
+        const row = document.createElement('div');
+        row.className = 'table-row';
+        row.innerHTML = `
+            <div>#${order.order_id}</div>
+            <div>
+                <div class="user-profile">
+                    <img src="../Dashboard/pngs/prof.png" alt="User" width="30">
+                    <span>${order.customer_name}</span>
+                </div>
+            </div>
+            <div>${order.order_date}</div>
+            <div>${order.items_count} items</div>
+            <div>₱${order.total}</div>
+            <div>
+                <select class="status-select" onchange="updateOrderStatus('${order.order_id}', this.value)">
+                    <option value="new" ${order.status === 'new' ? 'selected' : ''}>New</option>
+                    <option value="accepted" ${order.status === 'accepted' ? 'selected' : ''}>Accepted</option>
+                    <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+                    <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                </select>
+            </div>
+            <div class="order-actions">
+                <button class="btn btn-sm" onclick="viewOrderDetails('${order.order_id}')">View</button>
+                <button class="btn btn-sm btn-remove" onclick="cancelOrder('${order.order_id}')" 
+                        ${order.status === 'completed' || order.status === 'cancelled' ? 'disabled' : ''}>
+                    Cancel
+                </button>
+            </div>
+        `;
+        tableContainer.appendChild(row);
+    });
+}
+
+function updateOrderSummary(summary) {
+    const summaryCards = document.querySelectorAll('.order-summary .summary-value');
+    if (summaryCards.length >= 4) {
+        summaryCards[0].textContent = summary.total || '0';
+        summaryCards[1].textContent = summary.completed || '0';
+        summaryCards[2].textContent = summary.pending || '0';
+        summaryCards[3].textContent = summary.cancelled || '0';
+    }
+}
+
+async function updateOrderStatus(orderId, newStatus) {
+    try {
+        const response = await fetch('../Backend/update_order.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                order_id: orderId,
+                status: newStatus
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Order status updated');
+            loadOrders();
+        } else {
+            showError(result.error || 'Update failed');
+        }
+    } catch (error) {
+        showError('Network error during order update');
+    }
+}
+
+async function cancelOrder(orderId) {
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+    
+    await updateOrderStatus(orderId, 'cancelled');
+}
+
+function viewOrderDetails(orderId) {
+    // This would typically load order details and show in modal
+    openModal('order-details-modal');
+}
+
+// ======================
+// MESSAGE HANDLING
+// ======================
+
+let messagesData = [];
+
+async function loadMessages() {
+    try {
+        showLoader();
+        const response = await fetch('../Backend/get_messages.php');
+        const data = await response.json();
+        
+        if (data.success) {
+            messagesData = data.data;
+            renderMessages(messagesData);
+        } else {
+            showError('Failed to load messages');
+        }
+    } catch (error) {
+        showError('Network error loading messages');
+    } finally {
+        hideLoader();
+    }
+}
+
+function renderMessages(messages) {
+    const container = document.getElementById('messages-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    messages.forEach(message => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message-card ${!message.read ? 'unread' : ''}`;
+        messageDiv.innerHTML = `
+            <div class="message-header">
+                <h3>${message.subject}</h3>
+                <span class="message-time">${message.time}</span>
+                <span class="message-type ${message.type}">${message.type}</span>
+            </div>
+            <p class="message-preview">${message.content}</p>
+            <div class="message-footer">
+                <span>From: ${message.from}</span>
+                <div class="message-actions">
+                    <button class="btn btn-sm" onclick="replyToMessage('${message.id}')">Reply</button>
+                    <button class="btn btn-sm" onclick="markAsRead('${message.id}')">
+                        ${message.read ? 'Mark Unread' : 'Mark Read'}
+                    </button>
+                </div>
+            </div>
+        `;
+        container.appendChild(messageDiv);
+    });
+}
+
+function replyToMessage(messageId) {
+    const message = messagesData.find(m => m.id === messageId);
+    if (!message) return;
+    
+    document.getElementById('reply-to').textContent = message.from;
+    document.getElementById('reply-subject').textContent = `Re: ${message.subject}`;
+    openModal('reply-modal');
+}
+
+async function markAsRead(messageId) {
+    try {
+        const response = await fetch('../Backend/mark_message.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message_id: messageId })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            loadMessages();
+        }
+    } catch (error) {
+        showError('Network error');
+    }
+}
+
+// ======================
+// SETTINGS MANAGEMENT
+// ======================
+
+async function loadSettings() {
+    try {
+        const response = await fetch('../Backend/get_settings.php');
+        const data = await response.json();
+        
+        if (data.success) {
+            populateSettingsForm(data.data);
+        }
+    } catch (error) {
+        console.error('Failed to load settings:', error);
+    }
+}
+
+function populateSettingsForm(settings) {
+    document.getElementById('account-name').value = settings.full_name || '';
+    document.getElementById('account-email').value = settings.email || '';
+    document.getElementById('account-phone').value = settings.phone || '';
+    document.getElementById('account-business').value = settings.business_name || '';
+    document.getElementById('account-address').value = settings.address || '';
+    document.getElementById('shop-description').value = settings.description || '';
+}
+
+async function handleProfileUpdate(e) {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    formData.append('full_name', document.getElementById('account-name').value);
+    formData.append('email', document.getElementById('account-email').value);
+    formData.append('phone', document.getElementById('account-phone').value);
+    formData.append('business_name', document.getElementById('account-business').value);
+    formData.append('address', document.getElementById('account-address').value);
+    formData.append('description', document.getElementById('shop-description').value);
+    
+    const logoFile = document.getElementById('shop-logo').files[0];
+    if (logoFile) {
+        formData.append('logo', logoFile);
+    }
+    
+    try {
+        const response = await fetch('../Backend/update_profile.php', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Profile updated successfully');
+            loadDashboardData();
+        } else {
+            showError(result.error || 'Update failed');
+        }
+    } catch (error) {
+        showError('Network error during update');
+    }
+}
+
+async function handlePasswordChange(e) {
+    e.preventDefault();
+    
+    const formData = {
+        currentPassword: document.getElementById('current-password').value,
+        newPassword: document.getElementById('new-password').value,
+        confirmPassword: document.getElementById('confirm-password').value
+    };
+    
+    if (formData.newPassword !== formData.confirmPassword) {
+        showError('New passwords do not match');
+        return;
+    }
+    
+    try {
+        const response = await fetch('../Backend/update_password.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Password updated successfully');
+            document.getElementById('security-form').reset();
+        } else {
+            showError(result.error || 'Password update failed');
+        }
+    } catch (error) {
+        showError('Network error during password change');
+    }
+}
+
+// ======================
+// UI HELPERS
+// ======================
+
+function showLoader() {
+    // Create loader if doesn't exist
+    let loader = document.querySelector('.loading-overlay');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.className = 'loading-overlay';
+        loader.innerHTML = '<div class="spinner"></div>';
+        loader.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center;
+            justify-content: center; z-index: 9999;
+        `;
+        document.body.appendChild(loader);
+    }
+    loader.style.display = 'flex';
+}
+
+function hideLoader() {
+    const loader = document.querySelector('.loading-overlay');
+    if (loader) {
+        loader.style.display = 'none';
+    }
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.style.cssText = `
+        position: fixed; top: 20px; right: 20px; background: #4CAF50;
+        color: white; padding: 12px 24px; border-radius: 4px; z-index: 10000;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+function showError(message) {
+    const toast = document.createElement('div');
+    toast.className = 'error-notification';
+    toast.style.cssText = `
+        position: fixed; top: 20px; right: 20px; background: #f44336;
+        color: white; padding: 12px 24px; border-radius: 4px; z-index: 10000;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
+}
+
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// ======================
+// SEARCH AND FILTER
+// ======================
+
+function setupSearchBox() {
+    const searchBox = document.querySelector('#products .search-box input');
+    if (searchBox) {
+        searchBox.addEventListener('input', function() {
+            filterProducts(this.value);
+        });
+    }
+}
+
+function setupCategoryFilter() {
+    const filterButtons = document.querySelectorAll('#products .category-filter .filter-btn');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            filterProductsByCategory(this.textContent);
+        });
+    });
+}
+
+function filterProducts(searchTerm) {
+    const rows = document.querySelectorAll('#products .products-table .table-row');
+    rows.forEach(row => {
+        const productName = row.querySelector('.product-info h3').textContent.toLowerCase();
+        if (productName.includes(searchTerm.toLowerCase())) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function filterProductsByCategory(category) {
+    const rows = document.querySelectorAll('#products .products-table .table-row');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('div');
+        if (cells.length > 3) {
+            const productCategory = cells[3].textContent;
+            if (category === 'All' || productCategory === category) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+}
+
+// ======================
+// INITIALIZATION
+// ======================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial data load
+    loadDashboardData();
+    
+    // Tab navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            navItems.forEach(navItem => navItem.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            this.classList.add('active');
+            
+            const tabId = this.getAttribute('data-tab');
+            const activeTab = document.getElementById(tabId);
+            if (activeTab) {
+                activeTab.classList.add('active');
+                loadTabContent(tabId);
+            }
+        });
+    });
+
+    // Settings tabs
+    const settingsTabs = document.querySelectorAll('.settings-tabs .tab-btn');
+    const settingsPanes = document.querySelectorAll('.tab-pane');
+    
+    settingsTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            settingsTabs.forEach(t => t.classList.remove('active'));
+            settingsPanes.forEach(p => p.classList.remove('active'));
+            
+            this.classList.add('active');
+            const paneId = this.getAttribute('data-tab') + '-settings';
+            const pane = document.getElementById(paneId);
+            if (pane) {
+                pane.classList.add('active');
+            }
+        });
+    });
+    
+    // Modal handling
+    const closeButtons = document.querySelectorAll('.close-modal');
+    closeButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+    
+    // Add product button
+    const addProductBtn = document.getElementById('add-product');
+    if (addProductBtn) {
+        addProductBtn.addEventListener('click', () => openModal('add-product-modal'));
+    }
+    
+    // Product form submission
+    const productForm = document.getElementById('product-form');
+    if (productForm) {
+        productForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('product-name').value,
+                category: document.getElementById('product-category').value,
+                category2: document.getElementById('product-category2').value,
+                price: document.getElementById('product-price').value,
+                stock: document.getElementById('product-stock').value,
+                unit: document.getElementById('product-unit').value,
+                description: document.getElementById('product-description').value
+            };
+            
+            saveProduct(formData);
+        });
+    }
+    
+    // Profile form submission
+    const accountForm = document.querySelector('#account-settings .settings-form');
+    if (accountForm) {
+        accountForm.addEventListener('submit', handleProfileUpdate);
+    }
+    
+    // Security form submission
+    const securityForm = document.querySelector('#security-settings .settings-form');
+    if (securityForm) {
+        securityForm.addEventListener('submit', handlePasswordChange);
+    }
+    
+    // Reply form submission
+    const replyForm = document.getElementById('reply-form');
+    if (replyForm) {
+        replyForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Handle reply submission
+            showToast('Reply sent successfully');
+            closeModal('reply-modal');
+            this.reset();
+        });
+    }
+    
+    // Logo upload preview
+    const logoInput = document.getElementById('shop-logo');
+    if (logoInput) {
+        logoInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('logo-preview');
+                    if (preview) {
+                        preview.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Auto-refresh every 2 minutes
+    setInterval(loadDashboardData, 120000);
 });
 
-
-  // Profile click handler to navigate to settings
-  const userProfile = document.querySelector('.user-profile');
-  if (userProfile) {
-    userProfile.addEventListener('click', function() {
-      // Remove active class from all nav items and tab contents
-      document.querySelectorAll('.nav-item').forEach(navItem => navItem.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      
-      // Add active class to settings nav item
-      document.querySelector('.nav-item[data-tab="settings"]').classList.add('active');
-      
-      // Show settings tab content
-      document.getElementById('settings').classList.add('active');
-      
-      // Load settings content
-      loadSettings();
-    });
-  }
-
-
-  // Add this function to handle order cancellation
-function setupOrderCancellation() {
-  const cancelButtons = document.querySelectorAll('.orders-management .btn-remove');
-  
-  cancelButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.stopPropagation(); // Prevent event bubbling
-      
-      const row = this.closest('.table-row');
-      const orderNumber = row.querySelector('div:first-child').textContent;
-      
-      if (confirm(`Are you sure you want to cancel order ${orderNumber}?`)) {
-        // In a real app, you would send this to your backend
-        // For now, we'll just remove it from the UI
-        row.remove();
-        
-        // You could also update the status to "Cancelled" instead of removing
-        // const statusCell = row.querySelector('div:nth-child(6)');
-        // statusCell.innerHTML = '<span class="status-badge cancelled">Cancelled</span>';
-        // this.disabled = true;
-      }
-    });
-  });
-}
-
-// Update the loadOrders function to include cancellation setup
-function loadOrders() {
-  // Your existing order loading code...
-  
-  // Set up search functionality
-  setupOrderSearch();
-  
-  // Set up order cancellation
-  setupOrderCancellation();
-  
-  // Set up status filter
-  setupOrderStatusFilter();
-}
-
-// Add this function for status filtering
-function setupOrderStatusFilter() {
-  const orderFilterButtons = document.querySelectorAll('.order-filter .filter-btn');
-  
-  orderFilterButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      // Remove active class from all filter buttons
-      orderFilterButtons.forEach(btn => btn.classList.remove('active'));
-      
-      // Add active class to clicked button
-      this.classList.add('active');
-      
-      const filterValue = this.textContent.toLowerCase();
-      const orderRows = document.querySelectorAll('.orders-management .table-row:not(.table-header)');
-      
-      orderRows.forEach(row => {
-        if (filterValue === 'all') {
-          row.style.display = 'table-row';
-        } else {
-          const statusElement = row.querySelector('.status-badge, .status-select');
-          let statusText = '';
-          
-          if (statusElement.classList.contains('status-badge')) {
-            statusText = statusElement.textContent.toLowerCase();
-          } else if (statusElement.classList.contains('status-select')) {
-            statusText = statusElement.value.toLowerCase();
-          }
-          
-          row.style.display = statusText === filterValue ? 'table-row' : 'none';
-        }
-      });
-    });
-  });
-  
-  // Handle status select changes
-  const statusSelects = document.querySelectorAll('.status-select');
-  statusSelects.forEach(select => {
-    select.addEventListener('change', function() {
-      const activeFilter = document.querySelector('.order-filter .filter-btn.active');
-      if (activeFilter && activeFilter.textContent.toLowerCase() !== 'all') {
-        const row = this.closest('.table-row');
-        const currentStatus = this.value.toLowerCase();
-        const filterValue = activeFilter.textContent.toLowerCase();
-        
-        row.style.display = currentStatus === filterValue ? 'table-row' : 'none';
-      }
-      
-      // Update the status badge if it exists
-      const statusBadge = this.closest('div').querySelector('.status-badge');
-      if (statusBadge) {
-        statusBadge.className = 'status-badge ' + this.value;
-        statusBadge.textContent = this.options[this.selectedIndex].text;
-      }
-    });
-  });
+function loadTabContent(tabId) {
+    switch(tabId) {
+        case 'overview':
+            loadDashboardData();
+            break;
+        case 'products':
+            loadProducts();
+            setupCategoryFilter();
+            setupSearchBox();
+            break;
+        case 'orders':
+            loadOrders();
+            break;
+        case 'messages':
+            loadMessages();
+            break;
+        case 'settings':
+            loadSettings();
+            break;
+    }
 }

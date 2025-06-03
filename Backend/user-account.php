@@ -4,7 +4,7 @@ require_once 'dbconnect.php';
 session_start();
 $errors = [];
 
-//---------For user sign in--------------
+//---------For user sign up--------------
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $firstName = $_POST['firstName'];
@@ -15,9 +15,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     $created_at = date('Y-m-d H:i:s');
     $name = $firstName . ' ' . $lastName; 
 
-
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors['email'] = 'Invalid email format';
+        $errors['email'] = 'Invalid email format';
     }
 
     if(empty($firstName)) {
@@ -36,8 +35,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
         $contactNumber = preg_replace('/^\+639/', '09', $contactNumber);
     }
 
-        $hasError = false;
-
+    $hasError = false;
 
     if (strlen($password) < 12) {
         $errors['password_length'] = 'Password must be at least 12 characters long';
@@ -49,12 +47,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
         $hasError = true;
     }
 
-
     if (!preg_match('/[a-z]/', $password)) {
         $errors['password_lowercase'] = 'Password must contain at least one lowercase letter (a-z)';
         $hasError = true;
     }
-
 
     if (!preg_match('/[0-9]/', $password)) {
         $errors['password_number'] = 'Password must contain at least one number (0-9)';
@@ -73,6 +69,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
         $errors['terms'] = 'You must agree to the terms and conditions';
     }
 
+    // Check for existing user (updated table name)
     $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
     $stmt->execute(['email' => $email]);
     if($stmt->fetch()){
@@ -86,22 +83,24 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
         exit();
     }
 
-    // Insert user
+    // Insert user (updated column names)
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     try {
-    $stmt = $pdo->prepare('INSERT INTO users (email, password, firstName, lastName, contactNumber, created_at) VALUES(:email, :password, :firstName, :lastName, :contactNumber, :created_at)');
-    $stmt->execute([
-        'email' => $email,
-        'password' => $hashedPassword,
-        'firstName' => $firstName,
-        'lastName' => $lastName,
-        'contactNumber' => $contactNumber,
-        'created_at' => $created_at
-    ]);
-    
-    $_SESSION['success'] = 'Registration successful! Please login.';
-    header('Location: ../Sign In/sign_in.php'); 
-    exit();
+        $stmt = $pdo->prepare('INSERT INTO users 
+            (email, password_hash, first_name, last_name, phone, created_at) 
+            VALUES(:email, :password, :firstName, :lastName, :contactNumber, :created_at)');
+        $stmt->execute([
+            'email' => $email,
+            'password' => $hashedPassword,
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'contactNumber' => $contactNumber,
+            'created_at' => $created_at
+        ]);
+        
+        $_SESSION['success'] = 'Registration successful! Please login.';
+        header('Location: ../Sign In/sign_in.php'); 
+        exit();
     } catch (PDOException $e) {
         error_log('Database error: ' . $e->getMessage());
         $errors['database'] = 'An error occurred during registration. Please try again.';
@@ -113,7 +112,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
 }
 
 //---------For user sign in--------------
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
@@ -134,8 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
         exit();
     }
 
-    
-
     // 1. Connection check (with proper type verification)
     if (!isset($pdo) || !($pdo instanceof PDO)) {
         error_log("Critical: Database connection failed in login handler");
@@ -145,8 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
     }
 
     try {
-        // 2. Prepared statement with strict validation
-        $stmt = $pdo->prepare("SELECT id, email, password, firstName, lastName, created_at FROM users WHERE email = :email");
+        // 2. Prepared statement with strict validation (updated column names)
+        $stmt = $pdo->prepare("
+            SELECT user_id, email, password_hash, first_name, last_name, created_at 
+            FROM users 
+            WHERE email = :email
+        ");
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         
@@ -154,15 +154,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
 
         // 3. Secure authentication flow
         if ($user) {
-            if (password_verify($password, $user['password'])) {
+            if (password_verify($password, $user['password_hash'])) {
                 session_regenerate_id(true);
                 $_SESSION['user'] = [
-                    'id' => $user['id'],
+                    'id' => $user['user_id'], // Updated column name
                     'email' => $user['email'],
-                    'firstName' => htmlspecialchars($user['firstName']), // XSS protection
-                    'lastName' => htmlspecialchars($user['lastName']),
+                    'firstName' => htmlspecialchars($user['first_name']), // Updated column name
+                    'lastName' => htmlspecialchars($user['last_name']), // Updated column name
                     'created_at' => $user['created_at'],
-                    'last_login' => time() // Track activity
+                    'last_login' => time()
                 ];
                 
                 header("Cache-Control: no-store");
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
             }
         }
         
-        // 4. Generic error message (don't reveal which was wrong)
+        // 4. Generic error message
         $errors['login'] = 'Invalid credentials';
         
     } catch(PDOException $e) {
@@ -185,31 +185,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
             exit();
         }
     }
-    
 }
 
-// For remember me but I think this wasn't properly implemented; recheck
-
+// For remember me functionality
 if (!isset($_SESSION['user']) && isset($_COOKIE['remember'])) {
     list($userId, $token) = explode(':', $_COOKIE['remember']);
     
     try {
-        $stmt = $pdo->prepare("SELECT id, remember_token, token_expiry FROM users WHERE id = :id");
+        $stmt = $pdo->prepare("
+            SELECT user_id, remember_token, token_expiry 
+            FROM users 
+            WHERE user_id = :id
+        ");
         $stmt->execute(['id' => $userId]);
         $user = $stmt->fetch();
         
         if ($user && strtotime($user['token_expiry']) > time() && password_verify($token, $user['remember_token'])) {
             // Valid token - log the user in
-            $stmt = $pdo->prepare("SELECT id, email, firstName, lastName, created_at FROM users WHERE id = :id");
+            $stmt = $pdo->prepare("
+                SELECT user_id, email, first_name, last_name, created_at 
+                FROM users 
+                WHERE user_id = :id
+            ");
             $stmt->execute(['id' => $userId]);
             $userData = $stmt->fetch();
             
             session_regenerate_id(true);
             $_SESSION['user'] = [
-                'id' => $userData['id'],
+                'id' => $userData['user_id'],
                 'email' => $userData['email'],
-                'firstName' => htmlspecialchars($userData['firstName']),
-                'lastName' => htmlspecialchars($userData['lastName']),
+                'firstName' => htmlspecialchars($userData['first_name']),
+                'lastName' => htmlspecialchars($userData['last_name']),
                 'created_at' => $userData['created_at'],
                 'last_login' => time()
             ];
@@ -230,21 +236,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
     // ... existing email/password validation code ...
 
     try {
-        $stmt = $pdo->prepare("SELECT id, email, password, firstName, lastName, created_at FROM users WHERE email = :email");
+        $stmt = $pdo->prepare("
+            SELECT user_id, email, password_hash, first_name, last_name, created_at 
+            FROM users 
+            WHERE email = :email
+        ");
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            if (password_verify($password, $user['password'])) {
+            if (password_verify($password, $user['password_hash'])) {
                 session_regenerate_id(true);
                 
                 $_SESSION['user'] = [
-                    'id' => $user['id'],
+                    'id' => $user['user_id'],
                     'email' => $user['email'],
-                    'firstName' => htmlspecialchars($user['firstName']),
-                    'lastName' => htmlspecialchars($user['lastName']),
+                    'firstName' => htmlspecialchars($user['first_name']),
+                    'lastName' => htmlspecialchars($user['last_name']),
                     'created_at' => $user['created_at'],
                     'last_login' => time()
                 ];
@@ -254,14 +264,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
                     $token = bin2hex(random_bytes(32));
                     $expiry = time() + 60 * 60 * 24 * 30; // 30 days
                     
-                    $stmt = $pdo->prepare("UPDATE users SET remember_token = :token, token_expiry = :expiry WHERE id = :id");
+                    $stmt = $pdo->prepare("
+                        UPDATE users 
+                        SET remember_token = :token, token_expiry = :expiry 
+                        WHERE user_id = :id
+                    ");
                     $stmt->execute([
                         'token' => password_hash($token, PASSWORD_BCRYPT),
                         'expiry' => date('Y-m-d H:i:s', $expiry),
-                        'id' => $user['id']
+                        'id' => $user['user_id']
                     ]);
                     
-                    setcookie('remember', $user['id'] . ':' . $token, $expiry, '/', '', true, true);
+                    setcookie('remember', $user['user_id'] . ':' . $token, $expiry, '/', '', true, true);
                 }
                 
                 header("Cache-Control: no-store");
@@ -283,5 +297,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
         }
     }
 }
-
 ?>
