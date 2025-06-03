@@ -820,3 +820,121 @@ input:checked + .slider:before {
 .add-to-wishlist-btn:hover {
   color: #FF0000;
 }
+
+/* Add this to profile.css */
+.signout-rec {
+  width: 100%;
+  height: 60px;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  color: #DC3545; /* Red color for sign out */
+}
+
+.signout-rec:hover {
+  background-color: #F8D7DA; /* Light red background on hover */
+  transform: translateY(-2px);
+}
+
+.signout-rec::before {
+  content: "\f2f5"; /* Sign out icon */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-right: 12px;
+  color: #DC3545;
+}
+
+.signout-rec span {
+  font-size: 14px;
+}
+
+
+/* Add to profile.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 350px;
+  max-width: 90%;
+  padding: 25px;
+  text-align: center;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-container {
+  transform: translateY(0);
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.modal-message {
+  margin-bottom: 25px;
+  color: #666;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-btn {
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.modal-btn-confirm {
+  background-color: #DC3545;
+  color: white;
+  border: none;
+}
+
+.modal-btn-confirm:hover {
+  background-color: #c82333;
+}
+
+.modal-btn-cancel {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.modal-btn-cancel:hover {
+  background-color: #e2e6ea;
+}

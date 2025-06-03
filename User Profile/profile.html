@@ -34,7 +34,7 @@
     <div class="search-container"> 
       <input type="text" placeholder="Search..."></div>
 
-    <a href="../Landing Page/landingpage.html">
+    <a href="../Landing Page/index.php">
       <div class="logo">
       <img src="./pngs/Logo.png" alt="Logo"></div>
     </a>
@@ -57,6 +57,11 @@
         <div class="manageacc-rec" onclick="showSection('manage-account')"><span>Manage Account</span></div>
         <div class="myorders-rec" onclick="showSection('my-orders')"><span>My Orders</span></div>
         <div class="mywishlist-rec" onclick="showSection('my-wishlist')"><span>My Wishlist</span></div>
+            <div class="signout-rec" onclick="signOut()">
+              <span>Sign Out</span>
+            </div>
+
+
     </div>
     
     <div class="main-display">
@@ -133,7 +138,7 @@
             </div>
             <div class="order-items">
               <div class="order-item">
-                <img src="./pngs/item1.png" alt="Product" class="item-image">
+                <img src="./pngs/vintage.jpg" alt="Product" class="item-image">
                 <div class="item-details">
                   <h4>Vintage Camera</h4>
                   <p>Quantity: 1</p>
@@ -141,7 +146,7 @@
                 </div>
               </div>
               <div class="order-item">
-                <img src="./pngs/item2.png" alt="Product" class="item-image">
+                <img src="./pngs/antique.webp" alt="Product" class="item-image">
                 <div class="item-details">
                   <h4>Antique Clock</h4>
                   <p>Quantity: 1</p>
@@ -164,7 +169,7 @@
             </div>
             <div class="order-items">
               <div class="order-item">
-                <img src="./pngs/item3.png" alt="Product" class="item-image">
+                <img src="./pngs/retro.webp" alt="Product" class="item-image">
                 <div class="item-details">
                   <h4>Retro Record Player</h4>
                   <p>Quantity: 1</p>
@@ -190,12 +195,12 @@
         <div class="wishlist-grid">
           <div class="wishlist-item">
             <div class="wishlist-item-image">
-              <img src="./pngs/wish1.png" alt="Product">
+              <img src="./pngs/vintage.jpg" alt="Product">
               <button class="wishlist-remove-btn"><i class="fas fa-times"></i></button>
             </div>
             <div class="wishlist-item-details">
-              <h4>Mid-Century Modern Chair</h4>
-              <div class="price">$249.99</div>
+              <h4>Vintage Camera</h4>
+              <div class="price">₱ 249.99</div>
               <div class="stock-status in-stock">In Stock</div>
               <button class="add-to-cart-btn">Add to Cart</button>
             </div>
@@ -203,12 +208,12 @@
           
           <div class="wishlist-item">
             <div class="wishlist-item-image">
-              <img src="./pngs/wish2.png" alt="Product">
+              <img src="./pngs/antique.webp" alt="Product">
               <button class="wishlist-remove-btn"><i class="fas fa-times"></i></button>
             </div>
             <div class="wishlist-item-details">
-              <h4>Vintage Typewriter</h4>
-              <div class="price">$175.50 <span class="original-price">$219.99</span></div>
+              <h4>Antique Clock/h4>
+              <div class="price">₱ 175.50 <span class="original-price">₱ 219.99</span></div>
               <div class="stock-status in-stock">In Stock</div>
               <button class="add-to-cart-btn">Add to Cart</button>
             </div>
@@ -216,12 +221,12 @@
           
           <div class="wishlist-item">
             <div class="wishlist-item-image">
-              <img src="./pngs/wish3.png" alt="Product">
+              <img src="./pngs/retro.webp" alt="Product">
               <button class="wishlist-remove-btn"><i class="fas fa-times"></i></button>
             </div>
             <div class="wishlist-item-details">
-              <h4>Antique Brass Telescope</h4>
-              <div class="price">$320.00</div>
+              <h4>Retro Record Player</h4>
+              <div class="price">₱ 320.00</div>
               <div class="stock-status out-of-stock">Out of Stock</div>
               <button class="notify-me-btn">Notify Me</button>
             </div>
@@ -256,5 +261,18 @@
   </div>
 
   <script src="profile.js"></script>
+
+
+<div class="modal-overlay" id="signoutModal">
+  <div class="modal-container">
+    <h3 class="modal-title">Sign Out</h3>
+    <p class="modal-message">Are you sure you want to sign out?</p>
+    <div class="modal-buttons">
+      <button class="modal-btn modal-btn-cancel" id="cancelSignout">Cancel</button>
+      <button class="modal-btn modal-btn-confirm" id="confirmSignout">Sign Out</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

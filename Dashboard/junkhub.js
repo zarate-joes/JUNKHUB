@@ -21,23 +21,23 @@ document.addEventListener('DOMContentLoaded', function () {
   const shops = [
     {
       id: 1,
-      name: "Green Recycle Shop",
+      name: "2000K Junk Shop",
       image: "./pngs/shop-1.jfif", 
       rating: "★★★★☆",
-      location: "Manila",
+      location: "Cagayan de Oro City",
       items: [
         {
           name: "Aluminum Metal",
           price: "₱150.09 per kg",
           available: "Available: 500kg",
-          shop: "ⓘ Green Recycle Shop",
+          shop: "ⓘ 2000K Junk Shop",
           img: "./pngs/aluminum.png"
         },
         {
           name: "Plastic Bottles",
           price: "₱26.01 per kg",
           available: "Available: 1,000kg",
-          shop: "ⓘ Green Recycle Shop",
+          shop: "ⓘ 2000K Junk Shop",
           img: "./pngs/plastic.png"
         }
       ]
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
       name: "Eco-Friendly Junk",
       image: "./pngs/shop-2.jpg",
       rating: "★★★☆☆",
-      location: "Quezon City",
+      location: "Cagayan de Oro City",
       items: [
         {
           name: "Old Car Batteries",
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
       name: "Metro Scrap Dealer",
       image: "./pngs/Shop-3.jpg",
       rating: "★★★★★",
-      location: "Makati",
+      location: "Cagayan de Oro City",
       items: [
         {
           name: "Scrap Metal - Steel",
@@ -94,52 +94,57 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   // Render shops
-  function renderShops() {
-    const shopsWrapper = document.querySelector('.shops-wrapper');
-    shopsWrapper.innerHTML = '';
+function renderShops() {
+  const shopsWrapper = document.querySelector('.shops-wrapper');
+  shopsWrapper.innerHTML = '';
+  
+  const searchTerm = new URLSearchParams(window.location.search).get('search') || '';
+  
+  shops.forEach(shop => {
+    const shopElement = document.createElement('div');
+    shopElement.className = 'shop-container';
+    shopElement.dataset.shopId = shop.id;
     
-    shops.forEach(shop => {
-      const shopElement = document.createElement('div');
-      shopElement.className = 'shop-container';
-      shopElement.dataset.shopId = shop.id;
-      
-      shopElement.innerHTML = `
-        <img src="${shop.image}" alt="${shop.name}" class="shop-avatar">
-        <div class="shop-name">${shop.name}</div>
-        <div class="shop-rating">${shop.rating}</div>
-        <div class="shop-location">${shop.location}</div>
-      `;
-      
-      shopsWrapper.appendChild(shopElement);
-      
-      // Add click event to show shop items
-      shopElement.addEventListener('click', () => showShopItems(shop.id));
-    });
-  }
+    // Highlight search matches in shop name
+    let shopNameDisplay = shop.name;
+    if (searchTerm) {
+      const regex = new RegExp(searchTerm, 'gi');
+      shopNameDisplay = shop.name.replace(regex, match => `<span class="search-highlight">${match}</span>`);
+    }
+    
+    shopElement.innerHTML = `
+      <img src="${shop.image}" alt="${shop.name}" class="shop-avatar">
+      <div class="shop-name">${shopNameDisplay}</div>
+      <div class="shop-rating">${shop.rating}</div>
+      <div class="shop-location">${shop.location}</div>
+    `;
+    
+    shopsWrapper.appendChild(shopElement);
+    shopElement.addEventListener('click', () => showShopItems(shop.id));
+  });
+}
 
 
 // Show items for a specific shop
 function showShopItems(shopId) {
-
-  document.querySelectorAll('.shop-container').forEach(shop => {
-    shop.classList.remove('active');
-  });
-
-  const shop = shops.find(s => s.id == shopId);
-  if (!shop) return;
-  
-  const shopItemsContainer = document.getElementById('shop-items-container');
   const shopItemsSection = document.getElementById('shop-items-section');
+  const clickedShop = document.querySelector(`.shop-container[data-shop-id="${shopId}"]`);
+  const shop = shops.find(s => s.id == shopId);
   
+  if (!shop) return;
+
+  // If the same shop is clicked again and its items are already visible, hide them
   if (shopItemsSection.style.display === 'block' && 
       shopItemsSection.dataset.currentShop === shopId.toString()) {
     shopItemsSection.style.display = 'none';
     shopItemsSection.classList.remove('visible');
     shopItemsSection.dataset.currentShop = '';
+    if (clickedShop) clickedShop.classList.remove('active');
     return;
   }
-  
+
   // Otherwise, show the shop's items
+  const shopItemsContainer = document.getElementById('shop-items-container');
   shopItemsContainer.innerHTML = '';
   
   shop.items.forEach(item => {
@@ -161,19 +166,19 @@ function showShopItems(shopId) {
     
     shopItemsContainer.appendChild(itemElement);
   });
-  
-  // Add active class to the clicked shop container
-  const clickedShop = document.querySelector(`.shop-container[data-shop-id="${shopId}"]`);
-  if (clickedShop) {
-    clickedShop.classList.add('active');
-  }
-  
+
+  // Remove active class from all shops and add to clicked one
+  document.querySelectorAll('.shop-container').forEach(shopEl => {
+    shopEl.classList.remove('active');
+  });
+  if (clickedShop) clickedShop.classList.add('active');
+
+  // Show the shop items section
   shopItemsSection.style.display = 'block';
   shopItemsSection.classList.add('visible');
   shopItemsSection.dataset.currentShop = shopId;
   
   attachProductClickHandlers();
-  
   shopItemsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -212,31 +217,34 @@ const productSections = document.querySelectorAll('.product-section');
 const mainbg = document.querySelector('.mainbg');
 
 // Function to show only shops
+// Function to show only shops
 function showShops() {
-  shopSection.style.display = 'block';
-  productSections.forEach(section => {
+  document.querySelector('.shop-section').style.display = 'block';
+  document.querySelectorAll('.product-section').forEach(section => {
     section.style.display = 'none';
   });
   // Reset to default view (centered)
-  mainbg.style.margin = '55px auto 0 auto';
+  document.querySelector('.mainbg').style.margin = '55px auto 0 auto';
 }
 
 // Function to show only products
 function showProducts() {
-  shopSection.style.display = 'none';
-  productSections.forEach(section => {
+  document.querySelector('.shop-section').style.display = 'none';
+  document.querySelectorAll('.product-section').forEach(section => {
     section.style.display = 'block';
   });
   // Reset to default view (centered)
-  mainbg.style.margin = '55px auto 0 auto';
+  document.querySelector('.mainbg').style.margin = '55px auto 0 auto';
 }
 
 // Function to show both (home view)
 function showHome() {
-  shopSection.style.display = 'block';
-  productSections.forEach(section => {
+  document.querySelector('.shop-section').style.display = 'block';
+  document.querySelectorAll('.product-section').forEach(section => {
     section.style.display = 'block';
   });
+  // Reset to default view (centered)
+  document.querySelector('.mainbg').style.margin = '55px auto 0 auto';
 }
 
 // Add event listeners to category buttons
@@ -244,6 +252,13 @@ if (shopCat) {
   shopCat.addEventListener('click', function(e) {
     e.preventDefault();
     showShops();
+    // Hide the shop items section when switching to shops view
+    document.getElementById('shop-items-section').style.display = 'none';
+    document.getElementById('shop-items-section').classList.remove('visible');
+    // Remove active class from all shops
+    document.querySelectorAll('.shop-container').forEach(shop => {
+      shop.classList.remove('active');
+    });
     // Update clicked state
     document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
     this.classList.add('clicked');
@@ -254,6 +269,8 @@ if (productsCat) {
   productsCat.addEventListener('click', function(e) {
     e.preventDefault();
     showProducts();
+    // Hide the shop items section when switching to products view
+    document.getElementById('shop-items-section').style.display = 'none';
     // Update clicked state
     document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
     this.classList.add('clicked');
@@ -264,6 +281,8 @@ if (homeCat) {
   homeCat.addEventListener('click', function(e) {
     e.preventDefault();
     showHome();
+    // Hide the shop items section when switching to home view
+    document.getElementById('shop-items-section').style.display = 'none';
     // Update clicked state
     document.querySelectorAll('.shop-cat, .products-cat, .home-cat').forEach(el => el.classList.remove('clicked'));
     this.classList.add('clicked');
@@ -673,6 +692,47 @@ document.querySelector('.add-to-cart').addEventListener('click', function() {
 
 
 
+// Search functionality
+const searchInputs = document.querySelectorAll('.search-container input[type="text"]');
+
+searchInputs.forEach(searchInput => {
+  searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    
+    // Search shops
+    const shopContainers = document.querySelectorAll('.shop-container');
+    shopContainers.forEach(shop => {
+      const shopName = shop.querySelector('.shop-name').textContent.toLowerCase();
+      if (shopName.includes(searchTerm)) {
+        shop.style.display = 'flex';
+      } else {
+        shop.style.display = 'none';
+      }
+    });
+    
+    // Search products in main section
+    const productContainers = document.querySelectorAll('.product-container, .product-container0');
+    productContainers.forEach(product => {
+      const productName = product.querySelector('.product_name, .text1').textContent.toLowerCase();
+      if (productName.includes(searchTerm)) {
+        product.style.display = 'block';
+      } else {
+        product.style.display = 'none';
+      }
+    });
+    
+    // Search products in shop items section
+    const shopProductContainers = document.querySelectorAll('#shop-items-container .product-container');
+    shopProductContainers.forEach(product => {
+      const productName = product.querySelector('.product_name').textContent.toLowerCase();
+      if (productName.includes(searchTerm)) {
+        product.style.display = 'block';
+      } else {
+        product.style.display = 'none';
+      }
+    });
+  });
+});
 
 
   
