@@ -1447,3 +1447,25 @@ input:checked + .slider:before {
 .closed-checkbox input {
   margin: 0;
 }
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-delete:hover {
+  background-color: #d32f2f;
+}
+
+.btn-delete i {
+  font-size: 12px;
+}
