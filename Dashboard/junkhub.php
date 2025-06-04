@@ -1,13 +1,3 @@
-<?php
-session_start();
-if(!isset($_SESSION['user'])){
-    header("Location: index.php");
-    exit();
-}
-
-// Get search term if it exists
-$searchTerm = isset($_GET['search']) ? strtolower(trim($_GET['search'])) : '';
-?>
 
 
 <!DOCTYPE html>
