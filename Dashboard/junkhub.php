@@ -13,14 +13,13 @@ $searchTerm = isset($_GET['search']) ? strtolower(trim($_GET['search'])) : '';
 <!DOCTYPE html>
 <html>
 <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard - JunkHub</title>
   <link rel="stylesheet" href="junkhub.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <link rel="icon" type="image/pnglogo" href="../Images/teallogo22619-foad-200h.png">
 </head>
 <body>
 

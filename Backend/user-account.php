@@ -87,28 +87,34 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     try {
         $stmt = $pdo->prepare('INSERT INTO users 
-            (email, password_hash, first_name, last_name, phone, created_at) 
-            VALUES(:email, :password, :firstName, :lastName, :contactNumber, :created_at)');
+            (email, password_hash, first_name, last_name, phone, created_at, remember_token) 
+            VALUES(:email, :password, :firstName, :lastName, :contactNumber, :created_at, :remember_token)');
+
         $stmt->execute([
             'email' => $email,
             'password' => $hashedPassword,
             'firstName' => $firstName,
             'lastName' => $lastName,
             'contactNumber' => $contactNumber,
-            'created_at' => $created_at
+            'created_at' => date('Y-m-d'), // Matches DATE type in DB
+            'remember_token' => '' // Empty string for now
         ]);
         
         $_SESSION['success'] = 'Registration successful! Please login.';
+        error_log("About to redirect to sign_in.php");
+        var_dump($_SESSION); // Remove this after debugging
         header('Location: ../Sign In/sign_in.php'); 
         exit();
     } catch (PDOException $e) {
         error_log('Database error: ' . $e->getMessage());
+        error_log('SQL State: ' . $e->getCode());
+        error_log('Query: ' . $stmt->queryString);
         $errors['database'] = 'An error occurred during registration. Please try again.';
         $_SESSION['errors'] = $errors;
         $_SESSION['old'] = $_POST;
         header('Location: ../Sign Up/sign_up.php');
         exit();
-    }
+        }
 }
 
 //---------For user sign in--------------
@@ -142,8 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
 
     try {
         // 2. Prepared statement with strict validation (updated column names)
-        $stmt = $pdo->prepare("
-            SELECT user_id, email, password_hash, first_name, last_name, created_at 
+        $stmt = $pdo->prepare("SELECT user_id, email, password_hash, first_name, last_name, created_at 
             FROM users 
             WHERE email = :email
         ");
