@@ -102,7 +102,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])){
         
         $_SESSION['success'] = 'Registration successful! Please login.';
         error_log("About to redirect to sign_in.php");
-        var_dump($_SESSION); // Remove this after debugging
         header('Location: ../Sign In/sign_in.php'); 
         exit();
     } catch (PDOException $e) {
