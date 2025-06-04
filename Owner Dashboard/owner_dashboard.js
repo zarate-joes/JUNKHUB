@@ -200,8 +200,13 @@ function renderProductsTable(products) {
         const row = document.createElement('div');
         row.className = 'table-row';
         row.innerHTML = `
+            <div class="product-image-cell">
+                ${product.image ? 
+                    `<img src="../uploads/products/${product.image}" alt="${product.name}" width="50">` : 
+                    `<div class="product-icon">${product.name.charAt(0)}</div>`
+                }
+            </div>
             <div class="product-cell">
-                <div class="product-icon">${product.name.charAt(0)}</div>
                 <div class="product-info">
                     <h3>${product.name}</h3>
                     <p>ID: ${product.product_id}</p>
@@ -239,15 +244,47 @@ function renderProductsTable(products) {
 async function saveProduct(formData) {
     try {
         showLoader();
-        const response = await fetch('../Backend/save_products.php', {
+        
+        // Handle file upload
+        const imageInput = document.getElementById('product-image');
+        if (imageInput.files.length > 0) {
+            formData.image = imageInput.files[0];
+        }
+        
+        // Check if we're in edit mode
+        const form = document.getElementById('product-form');
+        const isEdit = form.dataset.editMode === 'true';
+        
+        // Create FormData for file upload
+        const fd = new FormData();
+        for (const key in formData) {
+            if (formData[key] instanceof File) {
+                fd.append(key, formData[key]);
+            } else {
+                fd.append(key, formData[key]);
+            }
+        }
+        
+        // Add product ID if editing
+        if (isEdit) {
+            fd.append('product_id', form.dataset.productId);
+        }
+        
+        // Determine the endpoint
+        const endpoint = isEdit ? '../Backend/edit_product.php' : '../Backend/save_products.php';
+        
+        const response = await fetch(endpoint, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
+            body: fd
         });
         
-        // Check for HTTP errors
+        // First check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            throw new Error(`Server returned: ${text.substring(0, 100)}`);
+        }
+
         if (!response.ok) {
             const errorData = await response.json().catch(() => null);
             throw new Error(errorData?.error || `HTTP error! status: ${response.status}`);
@@ -256,16 +293,25 @@ async function saveProduct(formData) {
         const result = await response.json();
         
         if (result.success) {
-            showToast('Product saved successfully');
+            showToast(isEdit ? 'Product updated successfully' : 'Product saved successfully');
             loadProducts();
             closeModal('add-product-modal');
+            form.reset();
+            document.getElementById('product-image-preview').style.display = 'none';
+            
+            // Reset edit mode
+            delete form.dataset.editMode;
+            delete form.dataset.productId;
+            
+            // Reset modal title
+            const modalTitle = document.querySelector('#add-product-modal h3');
+            if (modalTitle) modalTitle.textContent = 'Add New Product';
         } else {
-            // Show validation errors if they exist
             if (result.errors) {
                 const errorMessages = Object.values(result.errors).join('\n');
                 showError(errorMessages);
             } else {
-                showError(result.error || 'Failed to save product');
+                showError(result.error || (isEdit ? 'Failed to update product' : 'Failed to save product'));
             }
         }
     } catch (error) {
@@ -555,24 +601,101 @@ async function markAsRead(messageId) {
 
 async function loadSettings() {
     try {
+        showLoader();
         const response = await fetch('../Backend/get_settings.php');
         const data = await response.json();
         
         if (data.success) {
             populateSettingsForm(data.data);
+        } else {
+            showError(data.error || 'Failed to load settings');
         }
     } catch (error) {
-        console.error('Failed to load settings:', error);
+        console.error('Settings load error:', error);
+        showError('Network error loading settings');
+    } finally {
+        hideLoader();
     }
 }
 
 function populateSettingsForm(settings) {
-    document.getElementById('account-name').value = settings.full_name || '';
-    document.getElementById('account-email').value = settings.email || '';
-    document.getElementById('account-phone').value = settings.phone || '';
-    document.getElementById('account-business').value = settings.business_name || '';
-    document.getElementById('account-address').value = settings.address || '';
-    document.getElementById('shop-description').value = settings.description || '';
+    // Owner Information
+    setValueIfExists('account-name', `${settings.owner.first_name} ${settings.owner.last_name}`);
+    setValueIfExists('account-email', settings.owner.email);
+    setValueIfExists('account-phone', settings.owner.phone);
+
+    // Business Information
+    if (settings.business) {
+        setValueIfExists('account-business', settings.business.business_name);
+        setValueIfExists('account-address', settings.business.address);
+        setValueIfExists('shop-description', settings.business.description);
+        
+        // Business Hours - parse the hours string if it exists
+        if (settings.business.business_hours) {
+            try {
+                // Assuming business_hours is in format like "9AM-5PM"
+                const hoursParts = settings.business.business_hours.split('-');
+                if (hoursParts.length === 2) {
+                    const openTime = convertTo24HourFormat(hoursParts[0].trim());
+                    const closeTime = convertTo24HourFormat(hoursParts[1].trim());
+                    
+                    // Set Monday-Friday hours
+                    const mondayFridayInputs = document.querySelectorAll('.day-hours:nth-child(1) input[type="time"]');
+                    if (mondayFridayInputs.length >= 2) {
+                        mondayFridayInputs[0].value = openTime;
+                        mondayFridayInputs[1].value = closeTime;
+                    }
+                }
+            } catch (e) {
+                console.error('Error parsing business hours:', e);
+            }
+        }
+
+        // Logo preview
+        const logoPreview = document.getElementById('logo-preview');
+        if (logoPreview) {
+            if (settings.business.logo_path) {
+                logoPreview.src = `../uploads/logos/${settings.business.logo_path}`;
+            } else {
+                logoPreview.src = '../Dashboard/pngs/prof.png';
+            }
+        }
+    }
+
+    // Profile image in header
+    const profileImage = document.querySelector('.user-profile img');
+    if (profileImage && settings.owner.profile_image) {
+        profileImage.src = `../uploads/profiles/${settings.owner.profile_image}`;
+    }
+
+    // Update username in header
+    const usernameElement = document.querySelector('.username');
+    if (usernameElement) {
+        usernameElement.textContent = `${settings.owner.first_name} ${settings.owner.last_name}`;
+    }
+}
+
+// Helper function to convert AM/PM time to 24-hour format
+function convertTo24HourFormat(timeStr) {
+    const time = timeStr.toLowerCase();
+    const [hoursStr, period] = time.split(/(am|pm)/);
+    let hours = parseInt(hoursStr);
+    
+    if (period === 'pm' && hours < 12) {
+        hours += 12;
+    } else if (period === 'am' && hours === 12) {
+        hours = 0;
+    }
+    
+    return `${hours.toString().padStart(2, '0')}:00`;
+}
+
+// Helper function to safely set form values
+function setValueIfExists(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.value = value || '';
+    }
 }
 
 async function handleProfileUpdate(e) {
@@ -585,6 +708,12 @@ async function handleProfileUpdate(e) {
     formData.append('business_name', document.getElementById('account-business').value);
     formData.append('address', document.getElementById('account-address').value);
     formData.append('description', document.getElementById('shop-description').value);
+    
+    // Business hours would need more complex handling
+    // This is a simplified version
+    const businessHours = document.querySelector('.business-hours input[type="time"]')?.value + 
+                         '-' + document.querySelectorAll('.business-hours input[type="time"]')[1]?.value;
+    formData.append('business_hours', businessHours);
     
     const logoFile = document.getElementById('shop-logo').files[0];
     if (logoFile) {
@@ -601,7 +730,7 @@ async function handleProfileUpdate(e) {
         
         if (result.success) {
             showToast('Profile updated successfully');
-            loadDashboardData();
+            loadSettings(); // Refresh the settings
         } else {
             showError(result.error || 'Update failed');
         }
@@ -637,12 +766,68 @@ async function handlePasswordChange(e) {
         
         if (result.success) {
             showToast('Password updated successfully');
-            document.getElementById('security-form').reset();
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
         } else {
             showError(result.error || 'Password update failed');
         }
     } catch (error) {
         showError('Network error during password change');
+    }
+}
+
+async function editProduct(productId) {
+    try {
+        showLoader();
+        
+        // Fetch product data
+        const response = await fetch('../Backend/get_oneproduct.php?id=' + productId);
+        const data = await response.json();
+        
+        if (data.success) {
+            // Populate the form
+            document.getElementById('product-name').value = data.data.name;
+            document.getElementById('product-category').value = data.data.category;
+            document.getElementById('product-category2').value = data.data.category2;
+            document.getElementById('product-price').value = data.data.price;
+            document.getElementById('product-stock').value = data.data.stock;
+            document.getElementById('product-unit').value = data.data.unit;
+            document.getElementById('product-description').value = data.data.description || '';
+            
+            // Set the current status
+            const statusCheckbox = document.querySelector('#add-product-modal input[type="checkbox"]');
+            if (statusCheckbox) {
+                statusCheckbox.checked = data.data.status === 'active';
+            }
+            
+            // Show image preview if exists
+            const previewContainer = document.getElementById('product-image-preview');
+            const previewImg = document.getElementById('product-preview-img');
+            if (data.data.image) {
+                previewImg.src = `../uploads/products/${data.data.image}`;
+                previewContainer.style.display = 'block';
+            } else {
+                previewContainer.style.display = 'none';
+            }
+            
+            // Update the form to know we're editing
+            const form = document.getElementById('product-form');
+            form.dataset.editMode = 'true';
+            form.dataset.productId = productId;
+            
+            // Update modal title
+            const modalTitle = document.querySelector('#add-product-modal h3');
+            if (modalTitle) modalTitle.textContent = 'Edit Product';
+            
+            openModal('add-product-modal');
+        } else {
+            showError(data.error || 'Failed to load product data');
+        }
+    } catch (error) {
+        showError('Network error loading product data');
+    } finally {
+        hideLoader();
     }
 }
 
@@ -743,10 +928,22 @@ function setupCategoryFilter() {
 }
 
 function filterProducts(searchTerm) {
-    const rows = document.querySelectorAll('#products .products-table .table-row');
+    const rows = document.querySelectorAll('#products .products-table .table-row:not(.table-header)');
+    const activeCategory = document.querySelector('#products .category-filter .filter-btn.active')?.textContent;
+    
     rows.forEach(row => {
-        const productName = row.querySelector('.product-info h3').textContent.toLowerCase();
-        if (productName.includes(searchTerm.toLowerCase())) {
+        const productName = row.querySelector('.product-info h3')?.textContent.toLowerCase() || '';
+        const productId = row.querySelector('.product-info p')?.textContent.toLowerCase() || '';
+        
+        // Check if product matches search term AND active category filter
+        const matchesSearch = productName.includes(searchTerm.toLowerCase()) || 
+                             productId.includes(searchTerm.toLowerCase());
+        
+        const matchesCategory = activeCategory === 'All' || 
+                               row.querySelector('div:nth-child(5)')?.textContent === activeCategory ||
+                               row.querySelector('div:nth-child(6)')?.textContent === activeCategory;
+        
+        if (matchesSearch && matchesCategory) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
@@ -755,16 +952,19 @@ function filterProducts(searchTerm) {
 }
 
 function filterProductsByCategory(category) {
-    const rows = document.querySelectorAll('#products .products-table .table-row');
+    const rows = document.querySelectorAll('#products .products-table .table-row:not(.table-header)');
     rows.forEach(row => {
-        const cells = row.querySelectorAll('div');
-        if (cells.length > 3) {
-            const productCategory = cells[3].textContent;
-            if (category === 'All' || productCategory === category) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+        // Get the category cell - it should be the 5th cell (index 4) based on your table structure
+        const categoryCell = row.querySelector('div:nth-child(5)'); // 5th column is category
+        const secondaryCategoryCell = row.querySelector('div:nth-child(6)'); // 6th column is category2
+        
+        if (category === 'All') {
+            row.style.display = '';
+        } else if (categoryCell && (categoryCell.textContent === category || 
+                  (secondaryCategoryCell && secondaryCategoryCell.textContent === category))) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
         }
     });
 }
@@ -845,7 +1045,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 price: document.getElementById('product-price').value,
                 stock: document.getElementById('product-stock').value,
                 unit: document.getElementById('product-unit').value,
-                description: document.getElementById('product-description').value
+                description: document.getElementById('product-description').value,
+                status: document.getElementById('product-status').checked ? 'active' : 'inactive'
             };
             
             saveProduct(formData);
@@ -855,13 +1056,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Profile form submission
     const accountForm = document.querySelector('#account-settings .settings-form');
     if (accountForm) {
-        accountForm.addEventListener('submit', handleProfileUpdate);
+        accountForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleProfileUpdate(e);
+        });
     }
     
     // Security form submission
     const securityForm = document.querySelector('#security-settings .settings-form');
     if (securityForm) {
-        securityForm.addEventListener('submit', handlePasswordChange);
+        securityForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handlePasswordChange(e);
+        });
     }
     
     // Reply form submission
@@ -893,6 +1100,52 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Add this to the DOMContentLoaded event listener
+    const productImageInput = document.getElementById('product-image');
+    if (productImageInput) {
+        productImageInput.addEventListener('change', function() {
+            const preview = document.getElementById('product-preview-img');
+            const previewContainer = document.getElementById('product-image-preview');
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+
+    // Logout button functionality
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+        if (confirm('Are you sure you want to logout?')) {
+        window.location.href = '../Backend/logout.php';
+        }
+    });
+    }
+
+    // Initialize search and filter with 'All' category selected by default
+    const categoryFilter = document.querySelector('#products .category-filter');
+    if (categoryFilter) {
+        // Add 'All' button if it doesn't exist
+        if (!categoryFilter.querySelector('.filter-btn[data-category="All"]')) {
+            allButton.setAttribute('data-category', 'All');
+            categoryFilter.prepend(allButton);
+        }
+        
+        setupCategoryFilter();
+    }
+    
+    setupSearchBox();
+    
+
     
     // Auto-refresh every 2 minutes
     setInterval(loadDashboardData, 120000);

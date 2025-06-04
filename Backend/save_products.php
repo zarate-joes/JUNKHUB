@@ -10,7 +10,17 @@ if (!isset($_SESSION['owner'])) {
 }
 
 $ownerId = $_SESSION['owner']['id'];
-$input = json_decode(file_get_contents('php://input'), true);
+
+// Get form data
+$input = [
+    'name' => $_POST['name'] ?? '',
+    'category' => $_POST['category'] ?? '',
+    'category2' => $_POST['category2'] ?? '',
+    'price' => $_POST['price'] ?? 0,
+    'stock' => $_POST['stock'] ?? 0,
+    'unit' => $_POST['unit'] ?? '',
+    'description' => $_POST['description'] ?? ''
+];
 
 // Validate required fields
 $requiredFields = ['name', 'category', 'category2', 'price', 'stock', 'unit'];
@@ -48,10 +58,37 @@ try {
         exit;
     }
 
+    // Handle image upload
+    $imageName = null;
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../uploads/products/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $fileExt = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+        $imageName = uniqid('prod_') . '.' . $fileExt;
+        $uploadPath = $uploadDir . $imageName;
+
+        // Validate image
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $fileType = mime_content_type($_FILES['image']['tmp_name']);
+        
+        if (!in_array($fileType, $allowedTypes)) {
+            echo json_encode(['success' => false, 'error' => 'Only JPG, PNG, and GIF images are allowed']);
+            exit;
+        }
+
+        if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+            echo json_encode(['success' => false, 'error' => 'Failed to upload image']);
+            exit;
+        }
+    }
+
     // Insert new product
     $stmt = $pdo->prepare("INSERT INTO products 
-        (business_id, name, description, category, category2, price, stock, unit, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'active')
+        (business_id, name, description, category, category2, price, stock, unit, image, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')
     ");
     
     $success = $stmt->execute([
@@ -62,12 +99,17 @@ try {
         htmlspecialchars($input['category2'], ENT_QUOTES, 'UTF-8'),
         $input['price'],
         $input['stock'],
-        $input['unit']
+        $input['unit'],
+        $imageName
     ]);
 
     if ($success) {
         echo json_encode(['success' => true, 'product_id' => $pdo->lastInsertId()]);
     } else {
+        // If we uploaded an image but failed to save the product, delete the image
+        if ($imageName && file_exists($uploadPath)) {
+            unlink($uploadPath);
+        }
         echo json_encode(['success' => false, 'error' => 'Failed to save product']);
     }
 

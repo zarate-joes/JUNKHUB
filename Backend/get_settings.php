@@ -12,59 +12,42 @@ if (!isset($_SESSION['owner'])) {
 $ownerId = $_SESSION['owner']['id'];
 
 try {
-    // Get owner and business info
+    // Get owner info
     $stmt = $pdo->prepare("SELECT 
-            o.first_name, o.last_name, o.email, o.phone,
-            b.business_name, b.address, b.description, b.logo_path as logo
-        FROM owners o
-        LEFT JOIN businesses b ON o.owner_id = b.owner_id
-        WHERE o.owner_id = ?
+            owner_id, first_name, last_name, email, phone, profile_image,
+            created_at, updated_at, status
+        FROM owners 
+        WHERE owner_id = ?
     ");
     $stmt->execute([$ownerId]);
-    $settings = $stmt->fetch();
+    $ownerData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$settings) {
-        echo json_encode(['success' => false, 'error' => 'Settings not found']);
+    if (!$ownerData) {
+        echo json_encode(['success' => false, 'error' => 'Owner not found']);
         exit;
     }
 
-    // Combine names for full_name field
-    $settings['full_name'] = $settings['first_name'] . ' ' . $settings['last_name'];
-
-    echo json_encode(['success' => true, 'data' => $settings]);
-
-    // Check if business exists
-    $stmt = $pdo->prepare("SELECT business_id FROM businesses WHERE owner_id = ?");
+    // Get business info
+    $stmt = $pdo->prepare("SELECT 
+            business_id, business_name, description, address, logo_path,
+            contact_phone, contact_email, barangay, business_hours, 
+            special_requirements, status
+        FROM businesses 
+        WHERE owner_id = ?
+    ");
     $stmt->execute([$ownerId]);
-    $business = $stmt->fetch();
+    $businessData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$business) {
-        // Create default business if none exists
-        $defaultBusiness = [
-            'business_name' => $_SESSION['owner']['first_name'] . "'s Business",
-            'contact_email' => $_SESSION['owner']['email'],
-            'contact_phone' => $_SESSION['owner']['phone'] ?? '',
-            'status' => 'active'
-        ];
-        
-        $stmt = $pdo->prepare("INSERT INTO businesses 
-            (owner_id, business_name, description, contact_phone, contact_email, 
-             address, barangay, business_hours, status)
-            VALUES 
-            (?, ?, '', ?, ?, '', '', '9AM-5PM', ?)
-        ");
-        $stmt->execute([
-            $ownerId,
-            $defaultBusiness['business_name'],
-            $defaultBusiness['contact_phone'],
-            $defaultBusiness['contact_email'],
-            $defaultBusiness['status']
-        ]);
-        
-        $businessId = $pdo->lastInsertId();
-    } else {
-        $businessId = $business['business_id'];
-    }
+    // Prepare response
+    $response = [
+        'success' => true,
+        'data' => [
+            'owner' => $ownerData,
+            'business' => $businessData ?: null
+        ]
+    ];
+
+    echo json_encode($response);
 
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
