@@ -344,7 +344,7 @@ async function updateStock(productId, newStock) {
             loadProducts(); // Reload to reset the input
         }
     } catch (error) {
-        showError('Network error');
+        showError('Network error2');
     }
 }
 
@@ -370,7 +370,7 @@ async function toggleProductStatus(productId, isActive) {
             loadProducts();
         }
     } catch (error) {
-        showError('Network error');
+        showError('Network error3');
     }
 }
 
@@ -395,7 +395,7 @@ async function deleteProduct(productId) {
             showError('Failed to delete product');
         }
     } catch (error) {
-        showError('Network error');
+        showError('Network error4');
     }
 }
 
@@ -591,7 +591,7 @@ async function markAsRead(messageId) {
             loadMessages();
         }
     } catch (error) {
-        showError('Network error');
+        showError('Network error1');
     }
 }
 

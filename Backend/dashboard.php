@@ -1,10 +1,18 @@
 <?php
 require_once 'dbconnect.php';
+session_set_cookie_params([
+    'lifetime' => 86400,
+    'path' => '/',
+    'domain' => $_SERVER['HTTP_HOST'],
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
 session_start();
 
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['owner'])) {
+if (!isset($_SESSION['owner']) || empty($_SESSION['owner']['id'])) {
     echo json_encode(['success' => false, 'error' => 'Unauthorized access']);
     exit;
 }
