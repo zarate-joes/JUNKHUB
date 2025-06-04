@@ -16,6 +16,16 @@ if (!isset($_SESSION['owner']['id'])) {
 
 
 $ownerId = $_SESSION['owner']['id'];
+// Verify owner exists
+$checkOwner = $pdo->prepare("SELECT 1 FROM owners WHERE owner_id = ?");
+$checkOwner->execute([$ownerId]);
+if (!$checkOwner->fetch()) {
+    session_destroy(); // Clear invalid session
+    $_SESSION['error'] = "Your account no longer exists. Please register again.";
+    header('Location: ../Owner Registration/owner_sign_in.php');
+    exit();
+}
+
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
@@ -139,6 +149,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['launchShop'])) {
             ]);
             
             $businessId = $pdo->lastInsertId();
+            
+            $tableExists = $pdo->query("SHOW TABLES LIKE 'business_materials'")->rowCount() > 0;
+            if (!$tableExists) {
+                die("Required business_materials table is missing");
+            }
             
             // Insert materials
             if (!empty($materials)) {

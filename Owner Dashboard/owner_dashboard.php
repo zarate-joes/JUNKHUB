@@ -68,7 +68,7 @@
       </nav>
       
       
-      <div class="logout-container">
+      <div class="logout-container" id="logout-btn">
         <i class="fas fa-sign-out-alt"></i>
         <span>Logout</span>
       </div>
@@ -325,6 +325,7 @@
 
   <div class="products-table">
     <div class="table-header">
+      <div>Image</div>
       <div>Product</div>
       <div>Price</div>
       <div>Stock</div>
@@ -468,6 +469,23 @@
                   <div class="form-group">
                     <label for="product-description">Description (Optional)</label>
                     <textarea id="product-description" rows="3"></textarea>
+                  </div>
+                  <div class="form-group">
+                      <label>Status</label>
+                      <div class="toggle-container">
+                          <label class="toggle-switch">
+                              <input type="checkbox" id="product-status" checked>
+                              <span class="slider"></span>
+                          </label>
+                          <span class="status-text">Active</span>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="product-image">Product Image</label>
+                    <input type="file" id="product-image" accept="image/*">
+                    <div class="image-preview" id="product-image-preview" style="margin-top: 10px; display: none;">
+                      <img id="product-preview-img" src="#" alt="Product Preview" style="max-width: 200px; max-height: 200px;">
+                    </div>
                   </div>
                   <div class="form-actions">
                     <button type="button" class="btn btn-cancel close-modal">Cancel</button>

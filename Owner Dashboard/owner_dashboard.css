@@ -1469,3 +1469,24 @@ input:checked + .slider:before {
 .btn-delete i {
   font-size: 12px;
 }
+
+.product-image-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+.product-image-cell img {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
