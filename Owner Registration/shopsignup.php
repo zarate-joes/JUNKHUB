@@ -84,7 +84,7 @@ session_start();
         </div>
         
         <!-- Form sections -->
-        <form id="shopCreationForm" method="POST" action="../Backend/shop-creation.php" enctype="multipart/form-data" class="form-content">
+        <form id="shopCreationForm" method="POST" action="../Backend/owner-account.php" enctype="multipart/form-data" class="form-content">
           <!-- Shop Details Tab -->
           <section class="form-tab" id="shopDetailsTab">
             <section class="form-section">
@@ -126,14 +126,38 @@ session_start();
               <div class="form-group">
                 <label for="contactPhone">Contact Phone <span class="required">*</span></label>
                 <input type="tel" id="contactPhone" name="contactPhone" placeholder="Enter your phone number" required
-                       value="<?php echo isset($_SESSION['old']['contactPhone']) ? htmlspecialchars($_SESSION['old']['contactPhone']) : ''; ?>">
-              </div>
-              
-              <div class="form-group">
+                      value="<?php 
+                            // First check for form validation errors
+                            if (isset($_SESSION['old']['contactPhone'])) {
+                                echo htmlspecialchars($_SESSION['old']['contactPhone']);
+                            } 
+                            // Then check for owner session data
+                            elseif (isset($_SESSION['owner']['phone'])) {
+                                echo htmlspecialchars($_SESSION['owner']['phone']);
+                            }
+                            // Finally check for owner registration data (if coming directly from signup)
+                            elseif (isset($_SESSION['owner_registration']['contactNumber'])) {
+                                echo htmlspecialchars($_SESSION['owner_registration']['contactNumber']);
+                            }
+                      ?>">
+            </div>
+
+            <div class="form-group">
                 <label for="contactEmail">Contact Email <span class="required">*</span></label>
                 <input type="email" id="contactEmail" name="contactEmail" placeholder="Enter your email address" required
-                       value="<?php echo isset($_SESSION['old']['contactEmail']) ? htmlspecialchars($_SESSION['old']['contactEmail']) : ''; ?>">
-              </div>
+                      value="<?php 
+                            if (isset($_SESSION['old']['contactEmail'])) {
+                                echo htmlspecialchars($_SESSION['old']['contactEmail']);
+                            } 
+                            elseif (isset($_SESSION['owner']['email'])) {
+                                echo htmlspecialchars($_SESSION['owner']['email']);
+                            }
+                            // For direct registration flow
+                            elseif (isset($_SESSION['owner_registration']['email'])) {
+                                echo htmlspecialchars($_SESSION['owner_registration']['email']);
+                            }
+                      ?>">
+            </div>
             </section>
             
             <section class="form-section">
@@ -399,6 +423,7 @@ session_start();
           <?php
           // Clear old session data after use
           unset($_SESSION['old']);
+          unset($_SESSION['owner_registration']);
           ?>
         </form>
       </div>

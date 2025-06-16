@@ -168,6 +168,11 @@ body {
 
 .notification-icon:hover {
   color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.notification-icon:active, .user-profile:active {
+    transform: scale(0.95);
 }
 
 .notification-badge {
@@ -191,6 +196,7 @@ body {
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .user-profile:hover {
@@ -201,6 +207,7 @@ body {
 
 .user-profile img:hover {
   transition: var(--transition);
+  transform: scale(0.95);
 }
 
 
@@ -209,6 +216,8 @@ body {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .user-profile .username {
@@ -1489,4 +1498,87 @@ input:checked + .slider:before {
     max-height: 200px;
     border-radius: 4px;
     margin-top: 10px;
+}
+
+/* Materials Grid Styles */
+.materials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.material-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.material-item input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.material-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.material-icon {
+    margin-right: 8px;
+    font-size: 1.2em;
+}
+
+.material-name {
+    font-size: 0.9em;
+}
+
+/* Logout Modal Styles */
+.logout-modal-content {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.logout-modal-content h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.logout-modal-content p {
+    color: #666;
+    margin-bottom: 24px;
+}
+
+#cancel-logout {
+    padding: 8px 16px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#cancel-logout:hover {
+    background: #e0e0e0;
+}
+
+#confirm-logout {
+    padding: 8px 16px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#confirm-logout:hover {
+    background: #d32f2f;
 }

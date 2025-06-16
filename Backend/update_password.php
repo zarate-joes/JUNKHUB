@@ -1,36 +1,54 @@
 <?php
-require_once 'dbconnect.php';
+header('Content-Type: application/json');
 session_start();
 
-header('Content-Type: application/json');
+require_once 'dbconnect.php';
 
-if (!isset($_SESSION['owner'])) {
-    echo json_encode(['success' => false, 'error' => 'Unauthorized access']);
+// Check if user is logged in
+if (!isset($_SESSION["owner_id"])) {
+    echo json_encode(["success" => false, "error" => "Session expired. Please login again."]);
     exit;
 }
 
-$input = json_decode(file_get_contents('php://input'), true);
-$ownerId = $_SESSION['owner']['id'];
+// Get input data
+$data = json_decode(file_get_contents("php://input"), true);
 
-try {
-    // Verify current password
-    $stmt = $pdo->prepare("SELECT password_hash FROM owners WHERE owner_id = ?");
-    $stmt->execute([$ownerId]);
-    $owner = $stmt->fetch();
-
-    if (!$owner || !password_verify($input['currentPassword'], $owner['password_hash'])) {
-        echo json_encode(['success' => false, 'error' => 'Current password is incorrect']);
-        exit;
-    }
-
-    // Update password
-    $newHash = password_hash($input['newPassword'], PASSWORD_BCRYPT);
-    $stmt = $pdo->prepare("UPDATE owners SET password_hash = ? WHERE owner_id = ?");
-    $stmt->execute([$newHash, $ownerId]);
-
-    echo json_encode(['success' => true]);
-
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+// Validate input
+if (empty($data['currentPassword']) || empty($data['newPassword']) || empty($data['confirmPassword'])) {
+    echo json_encode(["success" => false, "error" => "All fields are required."]);
+    exit;
 }
-?>
+
+if ($data['newPassword'] !== $data['confirmPassword']) {
+    echo json_encode(["success" => false, "error" => "New passwords do not match."]);
+    exit;
+}
+
+// Verify current password
+$stmt = $conn->prepare("SELECT password FROM owners WHERE owner_id = ?");
+$stmt->bind_param("i", $_SESSION["owner_id"]);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows !== 1) {
+    echo json_encode(["success" => false, "error" => "User not found."]);
+    exit;
+}
+
+$owner = $result->fetch_assoc();
+
+if (!password_verify($data['currentPassword'], $owner["password"])) {
+    echo json_encode(["success" => false, "error" => "Current password is incorrect."]);
+    exit;
+}
+
+// Update password
+$newHash = password_hash($data['newPassword'], PASSWORD_DEFAULT);
+$updateStmt = $conn->prepare("UPDATE owners SET password = ? WHERE owner_id = ?");
+$updateStmt->bind_param("si", $newHash, $_SESSION["owner_id"]);
+
+if ($updateStmt->execute()) {
+    echo json_encode(["success" => true, "message" => "Password updated successfully."]);
+} else {
+    echo json_encode(["success" => false, "error" => "Database error. Please try again."]);
+}

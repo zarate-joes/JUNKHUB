@@ -79,7 +79,7 @@ $errors = is_array($errors) ? $errors : [];
               <p>' . $errors['owner_exist'] . '</p></div>';
           }
           ?>
-          <form id="owner-signup-form" class="signup-form" method="POST" action="../Backend/owner-account.php" novalidate>
+          <form id="owner-signup-form" class="signup-form" method="POST" action="../Backend/owner-account.php" enctype="multipart/form-data" novalidate>
             <div class="form-row">
               <div class="form-group">
                 <label for="firstName">First Name:</label>
@@ -149,6 +149,58 @@ $errors = is_array($errors) ? $errors : [];
                 }
               ?>
             </div>
+
+            <div class="form-group">
+              <label for="id_type">ID Type:</label>
+              <select id="id_type" name="id_type" required>
+                  <option value="">Select ID Type</option>
+                  <option value="Driver's License" <?= isset($old['id_type']) && $old['id_type'] === "Driver's License" ? 'selected' : '' ?>>Driver's License</option>
+                  <option value="Passport" <?= isset($old['id_type']) && $old['id_type'] === "Passport" ? 'selected' : '' ?>>Passport</option>
+                  <option value="SSS" <?= isset($old['id_type']) && $old['id_type'] === "SSS" ? 'selected' : '' ?>>SSS ID</option>
+                  <option value="UMID" <?= isset($old['id_type']) && $old['id_type'] === "UMID" ? 'selected' : '' ?>>UMID</option>
+                  <option value="PhilHealth" <?= isset($old['id_type']) && $old['id_type'] === "PhilHealth" ? 'selected' : '' ?>>PhilHealth ID</option>
+                  <option value="PRC" <?= isset($old['id_type']) && $old['id_type'] === "PRC" ? 'selected' : '' ?>>PRC ID</option>
+                  <option value="Voter's ID" <?= isset($old['id_type']) && $old['id_type'] === "Voter's ID" ? 'selected' : '' ?>>Voter's ID</option>
+                  <option value="Other" <?= isset($old['id_type']) && $old['id_type'] === "Other" ? 'selected' : '' ?>>Other Government ID</option>
+              </select>
+              <?php
+              if(isset($errors['id_type'])){
+                  echo '<div class="error"><p>'. $errors['id_type'] .'</p></div>';
+              }
+              ?>
+          </div>
+
+          <div class="form-group">
+              <label for="id_number">ID Number:</label>
+              <input type="text" id="id_number" name="id_number" placeholder="Enter your ID number" value="<?= htmlspecialchars($old['id_number'] ?? '') ?>" required>
+              <?php
+              if(isset($errors['id_number'])){
+                  echo '<div class="error"><p>'. $errors['id_number'] .'</p></div>';
+              }
+              ?>
+          </div>
+
+          <div class="form-group">
+              <label for="id_front">Front of ID (Image):</label>
+              <input type="file" id="id_front" name="id_front" accept="image/*" required>
+              <small>Upload a clear photo of the front side of your ID</small>
+              <?php
+              if(isset($errors['id_front'])){
+                  echo '<div class="error"><p>'. $errors['id_front'] .'</p></div>';
+              }
+              ?>
+          </div>
+
+          <div class="form-group">
+              <label for="id_back">Back of ID (Image):</label>
+              <input type="file" id="id_back" name="id_back" accept="image/*" required>
+              <small>Upload a clear photo of the back side of your ID</small>
+              <?php
+              if(isset($errors['id_back'])){
+                  echo '<div class="error"><p>'. $errors['id_back'] .'</p></div>';
+              }
+              ?>
+          </div>
 
             <div class="form-group checkbox-group">
               <input type="checkbox" id="terms" name="terms" required>

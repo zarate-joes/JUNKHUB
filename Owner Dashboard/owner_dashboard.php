@@ -1,13 +1,21 @@
+<?php
+session_start();
 
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="<?= $_SESSION['csrf_token'] ?>">
   <title>Owner Dashboard | JunkHUB</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="owner_dashboard.css">
   <link rel="icon" type="image/pnglogo" href="../Images/teallogo22619-foad-200h.png">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,13 +25,13 @@
     <header class="main-header">
         <div class="header-content">
             <div class="notification-icon">
-            <i class="fas fa-bell"></i>
-            <span class="notification-badge">3</span>
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
             </div>
-<div class="user-profile" data-tab="settings">
-  <img src="../Dashboard/pngs/prof.png" alt="User Profile">
-  <span class="username">John Doe</span>
-</div>
+            <div class="user-profile" data-tab="settings">
+              <img src="../Dashboard/pngs/prof.png" alt="User Profile">
+              <span class="username">John Doe</span>
+            </div>
         </div>
         <div class="header-divider"></div>
     </header>
@@ -968,6 +976,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="account-barangay">Barangay</label>
+                    <input type="text" id="account-barangay" value="" placeholder="Enter your barangay" required>
+                </div>
+
+                <div class="form-group">
                   <label for="shop-logo">Shop Logo</label>
                   <div class="logo-upload-container">
                     <div class="logo-preview">
@@ -980,37 +993,45 @@
                   </div>
                 </div>
 
+                <!-- Add materials section if needed -->
                 <div class="form-group">
-                  <label>Business Hours</label>
-                  <div class="business-hours">
-                    <div class="day-hours">
-                      <label>Monday - Friday</label>
-                      <div class="time-inputs">
-                        <input type="time" value="08:00">
-                        <span>to</span>
-                        <input type="time" value="17:00">
-                      </div>
+                    <label>Accepted Materials</label>
+                    <div class="materials-grid">
+                        <!-- This will be populated by JavaScript -->
                     </div>
-                    <div class="day-hours">
-                      <label>Saturday</label>
-                      <div class="time-inputs">
-                        <input type="time" value="09:00">
-                        <span>to</span>
-                        <input type="time" value="15:00">
-                      </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Business Hours</label>
+                    <div class="business-hours">
+                        <div class="day-hours">
+                            <label>Monday - Friday</label>
+                            <div class="time-inputs">
+                                <input type="time" id="weekday-open" value="08:00">
+                                <span>to</span>
+                                <input type="time" id="weekday-close" value="17:00">
+                            </div>
+                        </div>
+                        <div class="day-hours">
+                            <label>Saturday</label>
+                            <div class="time-inputs">
+                                <input type="time" id="saturday-open" value="09:00">
+                                <span>to</span>
+                                <input type="time" id="saturday-close" value="15:00">
+                            </div>
+                        </div>
+                        <div class="day-hours">
+                            <label>Sunday</label>
+                            <div class="time-inputs">
+                                <input type="time" id="sunday-open" value="09:00" disabled>
+                                <span>to</span>
+                                <input type="time" id="sunday-close" value="12:00" disabled>
+                                <label class="closed-checkbox">
+                                    <input type="checkbox" id="sunday-closed" checked> Closed
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="day-hours">
-                      <label>Sunday</label>
-                      <div class="time-inputs">
-                        <input type="time" value="09:00" disabled>
-                        <span>to</span>
-                        <input type="time" value="12:00" disabled>
-                        <label class="closed-checkbox">
-                          <input type="checkbox" checked> Closed
-                        </label>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 <div class="form-actions">
@@ -1026,11 +1047,11 @@
               <form class="settings-form">
                 <div class="form-group">
                   <label for="current-password">Current Password</label>
-                  <input type="password" id="current-password" placeholder="Enter current password">
+                  <input type="password" id="current-password" class="password-input" placeholder="Enter current password">
                 </div>
                 <div class="form-group">
                   <label for="new-password">New Password</label>
-                  <input type="password" id="new-password" placeholder="Enter new password">
+                  <input type="password" id="new-password" class="password-input" placeholder="Enter new password">
                   <div class="password-strength">
                     <span class="strength-bar weak"></span>
                     <span class="strength-bar medium"></span>
@@ -1040,7 +1061,7 @@
                 </div>
                 <div class="form-group">
                   <label for="confirm-password">Confirm New Password</label>
-                  <input type="password" id="confirm-password" placeholder="Confirm new password">
+                  <input type="password" id="confirm-password" class="password-input" placeholder="Confirm new password">
                 </div>
                 <div class="form-actions">
                   <button type="button" class="btn btn-cancel">Cancel</button>

@@ -721,3 +721,19 @@ input:valid:not(:placeholder-shown) {
 .checkbox-group {
   transition: var(--transition);
 }
+
+/* Add to owner_sign_up.css */
+.form-group input[type="file"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8em;
+    color: #666;
+}

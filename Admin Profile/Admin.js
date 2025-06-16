@@ -39,16 +39,36 @@ document.addEventListener('DOMContentLoaded', function () {
         case 'Manage Users':
           loadUsersContent();
           break;
+        case 'Review Owner Accounts':
+          loadReviewOwnersContent();
+          break;
       }
     });
   });
   
-  // Sign out confirmation button
+  // Enhanced Sign out confirmation button
   signoutConfirmBtn.addEventListener('click', function() {
-    // In a real application, you would perform sign out logic here
-    alert('You have been signed out');
-    // Then redirect to login page
-    window.location.href = '../Landing Page/index.html';
+    // Show loading state
+    const originalText = signoutConfirmBtn.innerHTML;
+    signoutConfirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing Out...';
+    signoutConfirmBtn.disabled = true;
+    
+    // Perform logout via AJAX
+    fetch('../Backend/logout.php')
+      .then(response => {
+        if (response.ok) {
+          // Redirect to login page after successful logout
+          window.location.href = '../Landing Page/index.php';
+        } else {
+          throw new Error('Logout failed');
+        }
+      })
+      .catch(error => {
+        console.error('Logout error:', error);
+        signoutConfirmBtn.innerHTML = originalText;
+        signoutConfirmBtn.disabled = false;
+        alert('Logout failed. Please try again.');
+      });
   });
   
   // Sign out cancel button
@@ -856,6 +876,7 @@ document.querySelector('.report-container button:last-child').addEventListener('
 
 
 
+// In the loadUsersContent() function in Admin.js
 function loadUsersContent() {
   mainContent.innerHTML = `
     <div class="content-header">
@@ -863,352 +884,996 @@ function loadUsersContent() {
       <div class="breadcrumb">Home / Manage Users</div>
     </div>
     
-    <div class="users-filters" style="
-      display: flex;
-      gap: 20px;
-      margin-bottom: 30px;
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.05);
-      flex-wrap: wrap;
-    ">
-      <div class="filter-group" style="display: flex; align-items: center; gap: 10px;">
-        <label for="user-role" style="font-weight: 600; color: #293840;">Role:</label>
-        <select id="user-role" style="
-          padding: 8px 12px;
-          border: 1px solid #e0e0e0;
-          border-radius: 4px;
-          background-color: white;
-        ">
+    <div class="users-filters">
+      <div class="filter-group">
+        <label for="user-role">Role:</label>
+        <select id="user-role">
           <option value="all">All Users</option>
-          <option value="admin">Admin</option>
-          <option value="collector">Collector</option>
-          <option value="user">Regular User</option>
+          <option value="owner">Owner</option>
+          <option value="user">User</option>
         </select>
       </div>
       
-      <div class="filter-group" style="display: flex; align-items: center; gap: 10px;">
-        <label for="user-status" style="font-weight: 600; color: #293840;">Status:</label>
-        <select id="user-status" style="
-          padding: 8px 12px;
-          border: 1px solid #e0e0e0;
-          border-radius: 4px;
-          background-color: white;
-        ">
+      <div class="filter-group">
+        <label for="user-status">Status:</label>
+        <select id="user-status">
           <option value="all">All Statuses</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
+          <option value="pending">Pending</option>
           <option value="suspended">Suspended</option>
         </select>
       </div>
       
-      <div class="search-users" style="position: relative; flex-grow: 1;">
-        <input type="text" placeholder="Search users..." style="
-          padding: 8px 16px 8px 35px;
-          border: 1px solid #e0e0e0;
-          border-radius: 20px;
-          outline: none;
-          width: 100%;
-          max-width: 300px;
-        ">
-        <i class="fas fa-search" style="
-          position: absolute;
-          left: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #6c757d;
-        "></i>
+      <div class="search-users">
+        <input type="text" id="user-search" placeholder="Search users...">
+        <i class="fas fa-search"></i>
       </div>
       
-      <button class="add-user-btn" style="
-        background-color: #293840;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      ">
+      <button class="add-user-btn">
         <i class="fas fa-plus"></i>
         Add User
       </button>
     </div>
     
-    <div class="users-table-container" style="
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.05);
-    ">
-      <table class="users-table" style="width: 100%; border-collapse: collapse;">
+    <div class="users-table-container">
+      <table class="users-table">
         <thead>
-          <tr style="background-color: #f8f9fa;">
-            <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0;">User</th>
-            <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0;">Email</th>
-            <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0;">Role</th>
-            <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0;">Status</th>
-            <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0;">Joined</th>
-            <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0;">Actions</th>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Joined</th>
+            <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 10px;">
-              <img src="./pngs/prof.png" alt="User" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
-              <span>John Doe</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">john.doe@example.com</td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <span class="role-badge" style="
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                background-color: #d1e7dd;
-                color: #0f5132;
-              ">Admin</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <span class="status-badge" style="
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                background-color: #d1e7dd;
-                color: #0f5132;
-              ">Active</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">2023-01-15</td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <button class="action-btn view-btn" data-user="101"><i class="fas fa-eye"></i></button>
-              <button class="action-btn edit-btn" data-user="101"><i class="fas fa-edit"></i></button>
-              <button class="action-btn delete-btn" data-user="101"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 10px;">
-              <img src="./pngs/prof.png" alt="User" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
-              <span>Jane Smith</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">jane.smith@example.com</td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <span class="role-badge" style="
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                background-color: #cce5ff;
-                color: #004085;
-              ">Collector</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <span class="status-badge" style="
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                background-color: #fff3cd;
-                color: #856404;
-              ">Pending</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">2023-02-20</td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <button class="action-btn view-btn" data-user="102"><i class="fas fa-eye"></i></button>
-              <button class="action-btn edit-btn" data-user="102"><i class="fas fa-edit"></i></button>
-              <button class="action-btn delete-btn" data-user="102"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 10px;">
-              <img src="./pngs/prof.png" alt="User" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
-              <span>Robert Johnson</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">robert.j@example.com</td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <span class="role-badge" style="
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                background-color: #f8d7da;
-                color: #721c24;
-              ">User</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <span class="status-badge" style="
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                background-color: #f8d7da;
-                color: #721c24;
-              ">Suspended</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">2023-03-10</td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <button class="action-btn view-btn" data-user="103"><i class="fas fa-eye"></i></button>
-              <button class="action-btn edit-btn" data-user="103"><i class="fas fa-edit"></i></button>
-              <button class="action-btn delete-btn" data-user="103"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 10px;">
-              <img src="./pngs/prof.png" alt="User" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
-              <span>Emily Davis</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">emily.d@example.com</td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <span class="role-badge" style="
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                background-color: #f8d7da;
-                color: #721c24;
-              ">User</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <span class="status-badge" style="
-                padding: 5px 10px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                background-color: #d1e7dd;
-                color: #0f5132;
-              ">Active</span>
-            </td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">2023-04-05</td>
-            <td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0;">
-              <button class="action-btn view-btn" data-user="104"><i class="fas fa-eye"></i></button>
-              <button class="action-btn edit-btn" data-user="104"><i class="fas fa-edit"></i></button>
-              <button class="action-btn delete-btn" data-user="104"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
+        <tbody id="users-table-body">
+          <tr><td colspan="6" class="loading">Loading users...</td></tr>
         </tbody>
       </table>
       
-      <div class="pagination" style="
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        margin-top: 20px;
-      ">
-        <button class="page-btn disabled" style="
-          width: 35px;
-          height: 35px;
-          border-radius: 4px;
-          border: 1px solid #e0e0e0;
-          background-color: white;
-          color: #293840;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        "><i class="fas fa-chevron-left"></i></button>
-        <button class="page-btn active" style="
-          width: 35px;
-          height: 35px;
-          border-radius: 4px;
-          border: 1px solid #e0e0e0;
-          background-color: #293840;
-          color: white;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        ">1</button>
-        <button class="page-btn" style="
-          width: 35px;
-          height: 35px;
-          border-radius: 4px;
-          border: 1px solid #e0e0e0;
-          background-color: white;
-          color: #293840;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        ">2</button>
-        <button class="page-btn" style="
-          width: 35px;
-          height: 35px;
-          border-radius: 4px;
-          border: 1px solid #e0e0e0;
-          background-color: white;
-          color: #293840;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        ">3</button>
-        <button class="page-btn" style="
-          width: 35px;
-          height: 35px;
-          border-radius: 4px;
-          border: 1px solid #e0e0e0;
-          background-color: white;
-          color: #293840;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        "><i class="fas fa-chevron-right"></i></button>
+      <div class="pagination">
+        <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+    
+    <!-- Add User Modal -->
+    <div class="modal" id="add-user-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Add New User</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="add-user-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="user-type">User Type</label>
+                <select id="user-type" name="user_type" required>
+                  <option value="user">Regular User</option>
+                  <option value="owner">Business Owner</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="pending">Pending</option>
+                  <option value="suspended">Suspended</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first_name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last_name" required>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" required>
+              </div>
+            </div>
+            
+            <div class="form-group password-toggle">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required>
+              <i class="fas fa-eye toggle-icon" id="toggle-password"></i>
+              <div class="form-hint">Minimum 8 characters</div>
+            </div>
+            
+            <!-- Owner-specific fields (hidden by default) -->
+            <div id="owner-fields" style="display: none;">
+              <div class="form-group">
+                <label for="business-name">Business Name</label>
+                <input type="text" id="business-name" name="business_name">
+              </div>
+              
+              <div class="form-group">
+                <label for="business-address">Business Address</label>
+                <input type="text" id="business-address" name="business_address">
+              </div>
+            </div>
+            
+            <div class="modal-footer">
+              <button type="button" class="cancel-btn">Cancel</button>
+              <button type="submit" class="submit-btn">
+                <i class="fas fa-user-plus"></i>
+                Add User
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Edit User Modal -->
+    <div class="modal" id="edit-user-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Edit User</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-user-form">
+            <input type="hidden" id="edit-user-id" name="user_id">
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="edit-user-type">User Type</label>
+                <select id="edit-user-type" name="user_type" required>
+                  <option value="user">Regular User</option>
+                  <option value="owner">Business Owner</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="edit-status">Status</label>
+                <select id="edit-status" name="status" required>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="pending">Pending</option>
+                  <option value="suspended">Suspended</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="edit-first-name">First Name</label>
+                <input type="text" id="edit-first-name" name="first_name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="edit-last-name">Last Name</label>
+                <input type="text" id="edit-last-name" name="last_name" required>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="edit-email">Email</label>
+                <input type="email" id="edit-email" name="email" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="edit-phone">Phone</label>
+                <input type="tel" id="edit-phone" name="phone" required>
+              </div>
+            </div>
+            
+            <div class="form-group password-toggle">
+              <label for="edit-password">New Password</label>
+              <input type="password" id="edit-password" name="password" placeholder="Leave blank to keep current">
+              <i class="fas fa-eye toggle-icon" id="edit-toggle-password"></i>
+              <div class="form-hint">Minimum 8 characters</div>
+            </div>
+            
+            <!-- Owner-specific fields (hidden by default) -->
+            <div id="edit-owner-fields" style="display: none;">
+              <div class="form-group">
+                <label for="edit-business-name">Business Name</label>
+                <input type="text" id="edit-business-name" name="business_name">
+              </div>
+              
+              <div class="form-group">
+                <label for="edit-business-address">Business Address</label>
+                <input type="text" id="edit-business-address" name="business_address">
+              </div>
+            </div>
+            
+            <div class="modal-footer">
+              <button type="button" class="cancel-btn">Cancel</button>
+              <button type="submit" class="submit-btn">
+                <i class="fas fa-save"></i>
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   `;
 
-  // Add event listeners for action buttons
-  document.querySelectorAll('.view-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const userId = this.getAttribute('data-user');
-      viewUser(userId);
+  // Load initial user data
+  loadUsersData();
+
+  // Set up event listeners
+  document.getElementById('user-role').addEventListener('change', loadUsersData);
+  document.getElementById('user-status').addEventListener('change', loadUsersData);
+  document.getElementById('user-search').addEventListener('input', loadUsersData);
+  
+  // Add user modal functionality
+  document.querySelector('.add-user-btn').addEventListener('click', () => {
+    document.getElementById('add-user-modal').style.display = 'flex';
+  });
+  
+  // Close modal buttons
+  document.querySelectorAll('.close-modal, .cancel-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.closest('.modal').style.display = 'none';
+      }
     });
   });
-
-  document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const userId = this.getAttribute('data-user');
-      editUser(userId);
+  
+  // Close modal when clicking outside
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.style.display = 'none';
+      }
     });
   });
-
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const userId = this.getAttribute('data-user');
-      deleteUser(userId);
-    });
+  
+  // Toggle owner fields based on user type
+  document.getElementById('user-type').addEventListener('change', (e) => {
+    document.getElementById('owner-fields').style.display = 
+      e.target.value === 'owner' ? 'block' : 'none';
   });
-
-  // Add event listener for add user button
-  document.querySelector('.add-user-btn').addEventListener('click', function() {
-    addUser();
+  
+  document.getElementById('edit-user-type').addEventListener('change', (e) => {
+    document.getElementById('edit-owner-fields').style.display = 
+      e.target.value === 'owner' ? 'block' : 'none';
   });
+  
+  // Password toggle functionality
+  document.getElementById('toggle-password').addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.classList.toggle('fa-eye-slash');
+  });
+  
+  document.getElementById('edit-toggle-password').addEventListener('click', function() {
+    const passwordInput = document.getElementById('edit-password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.classList.toggle('fa-eye-slash');
+  });
+  
+  // Form submissions
+  document.getElementById('add-user-form').addEventListener('submit', addNewUser);
+  document.getElementById('edit-user-form').addEventListener('submit', updateUser);
 }
 
-// User action functions
-function viewUser(userId) {
-  alert(`Viewing user #${userId}`);
-  // In a real application, you would show a modal or redirect to a user detail page
-}
-
+// Enhanced editUser function
 function editUser(userId) {
-  alert(`Editing user #${userId}`);
-  // In a real application, you would show an edit form
+  // Show loading state in modal
+  const modal = document.getElementById('edit-user-modal');
+  const modalBody = modal.querySelector('.modal-body');
+  modalBody.innerHTML = `
+    <div style="text-align: center; padding: 40px;">
+      <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
+      <p>Loading user data...</p>
+    </div>
+  `;
+  modal.style.display = 'flex';
+  
+  // Store the original form HTML from the template
+  const originalFormHTML = `
+    <form id="edit-user-form">
+      <input type="hidden" id="edit-user-id" name="user_id">
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-user-type">User Type</label>
+          <select id="edit-user-type" name="user_type" required>
+            <option value="user">Regular User</option>
+            <option value="owner">Business Owner</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="edit-status">Status</label>
+          <select id="edit-status" name="status" required>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="pending">Pending</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-first-name">First Name</label>
+          <input type="text" id="edit-first-name" name="first_name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="edit-last-name">Last Name</label>
+          <input type="text" id="edit-last-name" name="last_name" required>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-email">Email</label>
+          <input type="email" id="edit-email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="edit-phone">Phone</label>
+          <input type="tel" id="edit-phone" name="phone" required>
+        </div>
+      </div>
+      
+      <div class="form-group password-toggle">
+        <label for="edit-password">New Password</label>
+        <input type="password" id="edit-password" name="password" placeholder="Leave blank to keep current">
+        <i class="fas fa-eye toggle-icon" id="edit-toggle-password"></i>
+        <div class="form-hint">Minimum 8 characters</div>
+      </div>
+      
+      <!-- Owner-specific fields (hidden by default) -->
+      <div id="edit-owner-fields" style="display: none;">
+        <div class="form-group">
+          <label for="edit-business-name">Business Name</label>
+          <input type="text" id="edit-business-name" name="business_name">
+        </div>
+        
+        <div class="form-group">
+          <label for="edit-business-address">Business Address</label>
+          <input type="text" id="edit-business-address" name="business_address">
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn">Cancel</button>
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-save"></i>
+          Save Changes
+        </button>
+      </div>
+    </form>
+  `;
+  
+  // Fetch user data
+  fetch(`../Backend/get_users.php?id=${userId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(user => {
+      if (user.error) {
+        throw new Error(user.error);
+      }
+      
+      // Populate the modal with the form
+      modalBody.innerHTML = originalFormHTML;
+      
+      // Populate the edit form
+      document.getElementById('edit-user-id').value = user.id;
+      document.getElementById('edit-user-type').value = user.role;
+      document.getElementById('edit-status').value = user.status;
+      document.getElementById('edit-first-name').value = user.first_name;
+      document.getElementById('edit-last-name').value = user.last_name;
+      document.getElementById('edit-email').value = user.email;
+      document.getElementById('edit-phone').value = user.phone;
+      
+      // Show owner fields if user is an owner
+      const ownerFields = document.getElementById('edit-owner-fields');
+      if (user.role === 'owner') {
+        ownerFields.style.display = 'block';
+        document.getElementById('edit-business-name').value = user.business_name || '';
+        document.getElementById('edit-business-address').value = user.business_address || '';
+      } else {
+        ownerFields.style.display = 'none';
+      }
+      
+      // Reattach event listeners
+      document.getElementById('edit-user-form').addEventListener('submit', updateUser);
+      document.getElementById('edit-user-type').addEventListener('change', (e) => {
+        document.getElementById('edit-owner-fields').style.display = 
+          e.target.value === 'owner' ? 'block' : 'none';
+      });
+      document.getElementById('edit-toggle-password').addEventListener('click', function() {
+        const passwordInput = document.getElementById('edit-password');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+      });
+      modal.querySelector('.close-modal').addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+      modal.querySelector('.cancel-btn').addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching user:', error);
+      modalBody.innerHTML = `<div class="error-message">Failed to load user data: ${error.message}</div>`;
+    });
+}
+
+// Update user function
+function updateUser(e) {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+  const userId = formData.get('user_id');
+  
+  // Show loading state
+  const submitBtn = form.querySelector('.submit-btn');
+  const originalText = submitBtn.innerHTML;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  submitBtn.disabled = true;
+  
+  fetch('../Backend/update_user.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('User updated successfully!');
+      document.getElementById('edit-user-modal').style.display = 'none';
+      loadUsersData(); // Refresh the user list
+    } else {
+      alert(data.error || 'Failed to update user');
+    }
+  })
+  .catch(error => {
+    console.error('Error updating user:', error);
+    alert('Failed to update user. Please try again.');
+  })
+  .finally(() => {
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
+  });
+}
+
+function loadUsersData() {
+  const roleFilter = document.getElementById('user-role').value;
+  const statusFilter = document.getElementById('user-status').value;
+  const searchQuery = document.getElementById('user-search').value;
+  
+  fetch(`../Backend/get_users.php?role=${roleFilter}&status=${statusFilter}&search=${searchQuery}`)
+    .then(response => response.json())
+    .then(data => {
+      const tbody = document.getElementById('users-table-body');
+      tbody.innerHTML = '';
+      
+      if (data.error) {
+        tbody.innerHTML = `<tr><td colspan="6" class="error">${data.error}</td></tr>`;
+        return;
+      }
+      
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="no-results">No users found</td></tr>`;
+        return;
+      }
+      
+      data.forEach(user => {
+        const row = document.createElement('tr');
+        
+        // Determine role and status badges
+        const roleBadge = user.role === 'owner' ? 
+          '<span class="role-badge owner">Owner</span>' : 
+          '<span class="role-badge user">User</span>';
+          
+        const statusBadge = `<span class="status-badge ${user.status}">${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span>`;
+        
+        row.innerHTML = `
+          <td>
+            <div class="user-info">
+              ${user.profile_image ? `<img src="../${user.profile_image}" alt="${user.first_name}">` : ''}
+              <span>${user.first_name} ${user.last_name}</span>
+            </div>
+          </td>
+          <td>${user.email}</td>
+          <td>${roleBadge}</td>
+          <td>${statusBadge}</td>
+          <td>${new Date(user.created_at).toLocaleDateString()}</td>
+          <td>
+            <button class="action-btn edit-btn" data-user-id="${user.id}"><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete-btn" data-user-id="${user.id}"><i class="fas fa-trash"></i></button>
+          </td>
+        `;
+        
+        tbody.appendChild(row);
+      });
+      
+      // Add event listeners to action buttons
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const userId = e.currentTarget.getAttribute('data-user-id');
+          editUser(userId);
+        });
+      });
+      
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const userId = e.target.closest('button').getAttribute('data-user-id');
+          deleteUser(userId);
+        });
+      });
+    })
+    .catch(error => {
+      console.error('Error loading users:', error);
+      document.getElementById('users-table-body').innerHTML = 
+        `<tr><td colspan="6" class="error">Failed to load users. Please try again.</td></tr>`;
+    });
+}
+
+function addNewUser(e) {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+  
+  fetch('../Backend/add_user.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('User added successfully!');
+      form.reset();
+      document.getElementById('add-user-modal').style.display = 'none';
+      loadUsersData(); // Refresh the user list
+    } else {
+      alert(data.error || 'Failed to add user');
+    }
+  })
+  .catch(error => {
+    console.error('Error adding user:', error);
+    alert('Failed to add user. Please try again.');
+  });
 }
 
 function deleteUser(userId) {
-  if (confirm(`Are you sure you want to delete user #${userId}?`)) {
-    alert(`User #${userId} deleted`);
-    // In a real application, you would make an API call to delete the user
-    // Then refresh the users table
+  if (confirm(`Are you sure you want to delete this user?`)) {
+    fetch(`../Backend/delete_user.php?id=${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          loadUsersData(); // Refresh the user list
+        } else {
+          alert(data.error || 'Failed to delete user');
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting user:', error);
+        alert('Failed to delete user. Please try again.');
+      });
   }
 }
 
-function addUser() {
-  alert('Opening add user form');
-  // In a real application, you would show a form to add a new user
+
+// For Review Owner Accounts tab ----------------
+function loadReviewOwnersContent() {
+  mainContent.innerHTML = `
+    <div class="content-header">
+      <h2>Review Owner Accounts</h2>
+      <div class="breadcrumb">Home / Review Owner Accounts</div>
+    </div>
+    
+    <div class="filter-controls">
+      <select id="status-filter">
+        <option value="pending">Show Pending</option>
+        <option value="all">Show All</option>
+        <option value="approved">Show Approved</option>
+        <option value="rejected">Show Rejected</option>
+      </select>
+    </div>
+    
+    <div class="owners-list-container">
+      <div class="owners-list-header">
+        <div>Owner Name</div>
+        <div>Business Name</div>
+        <div>Email</div>
+        <div>Status</div>
+        <div>Actions</div>
+      </div>
+      <div class="owners-list" id="owners-list">
+        <!-- Owner applications will be loaded here -->
+        <div class="loading-spinner">
+          <i class="fas fa-spinner fa-spin"></i> Loading owner applications...
+        </div>
+      </div>
+    </div>
+    
+    <!-- Rejection Modal (hidden by default) -->
+    <div class="rejection-modal" id="rejection-modal">
+      <div class="rejection-modal-content">
+        <h3>Reject Application</h3>
+        <textarea id="rejection-reason" placeholder="Enter reason for rejection..."></textarea>
+        <div class="modal-buttons">
+          <button class="cancel-rejection">Cancel</button>
+          <button class="confirm-rejection">Confirm Rejection</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Load owner applications
+  loadOwnerApplications();
+
+  // Set up event listeners
+  document.getElementById('status-filter').addEventListener('change', loadOwnerApplications);
+  
+  // Modal event listeners will be set up after loading data
+}
+
+function loadOwnerApplications() {
+  const statusFilter = document.getElementById('status-filter').value;
+  const ownersList = document.getElementById('owners-list');
+  
+  ownersList.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading owner applications...</div>';
+  
+  fetch(`../Backend/get_owner_applications.php?status=${statusFilter}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        ownersList.innerHTML = `<div class="error-message">${data.error}</div>`;
+        return;
+      }
+      
+      if (data.length === 0) {
+        ownersList.innerHTML = '<div class="no-results">No owner applications found</div>';
+        return;
+      }
+      
+      ownersList.innerHTML = '';
+      
+      data.forEach(owner => {
+        const ownerElement = document.createElement('div');
+        ownerElement.className = 'owner-application';
+        ownerElement.dataset.ownerId = owner.owner_id;
+        
+        let statusBadge = '';
+        if (owner.status === 'pending') {
+          statusBadge = '<span class="status-badge pending">Pending</span>';
+        } else if (owner.status === 'approved') {
+          statusBadge = '<span class="status-badge approved">Approved</span>';
+        } else {
+          statusBadge = '<span class="status-badge rejected">Rejected</span>';
+        }
+        
+        ownerElement.innerHTML = `
+          <div>${owner.first_name} ${owner.last_name}</div>
+          <div>${owner.business_name || 'N/A'}</div>
+          <div>${owner.email}</div>
+          <div>${statusBadge}</div>
+          <div class="action-buttons">
+            ${owner.status === 'pending' ? 
+              `<button class="accept-btn" data-owner-id="${owner.owner_id}">Accept</button>
+               <button class="reject-btn" data-owner-id="${owner.owner_id}">Reject</button>` : 
+              ''}
+            <button class="view-btn" data-owner-id="${owner.owner_id}">View</button>
+          </div>
+        `;
+        
+        ownersList.appendChild(ownerElement);
+      });
+      
+      // Set up event listeners for buttons
+      document.querySelectorAll('.accept-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const ownerId = this.getAttribute('data-owner-id');
+          if (confirm(`Are you sure you want to approve this owner application?`)) {
+            updateOwnerStatus(ownerId, 'approved');
+          }
+        });
+      });
+      
+      document.querySelectorAll('.reject-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const ownerId = this.getAttribute('data-owner-id');
+          showRejectionModal(ownerId);
+        });
+      });
+      
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const ownerId = this.getAttribute('data-owner-id');
+          viewOwnerDetails(ownerId);
+        });
+      });
+      
+      // Set up modal buttons
+      document.querySelector('.cancel-rejection')?.addEventListener('click', hideRejectionModal);
+      document.querySelector('.confirm-rejection')?.addEventListener('click', confirmRejection);
+    })
+    .catch(error => {
+      ownersList.innerHTML = `<div class="error-message">Failed to load owner applications: ${error.message}</div>`;
+    });
+}
+
+function showRejectionModal(ownerId) {
+  const modal = document.getElementById('rejection-modal');
+  modal.dataset.ownerId = ownerId;
+  modal.style.display = 'flex';
+}
+
+function hideRejectionModal() {
+  document.getElementById('rejection-modal').style.display = 'none';
+}
+
+function confirmRejection() {
+  const modal = document.getElementById('rejection-modal');
+  const ownerId = modal.dataset.ownerId;
+  const reason = document.getElementById('rejection-reason').value;
+  
+  if (!reason) {
+    alert('Please provide a reason for rejection');
+    return;
+  }
+  
+  updateOwnerStatus(ownerId, 'rejected', reason);
+  hideRejectionModal();
+}
+
+function updateOwnerStatus(ownerId, status, reason = '') {
+  fetch('../Backend/update_owner_status.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      owner_id: ownerId,
+      status: status,
+      reason: reason
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      loadOwnerApplications();
+    } else {
+      alert(data.error || 'Failed to update owner status');
+    }
+  })
+  .catch(error => {
+    alert('Error updating owner status: ' + error.message);
+  });
+}
+
+function viewOwnerDetails(ownerId) {
+  // Fetch owner details
+  fetch(`../Backend/get_owner_applications.php?status=all`)
+    .then(response => response.json())
+    .then(data => {
+      const owner = data.find(o => o.owner_id == ownerId);
+      if (!owner) {
+        alert('Owner details not found');
+        return;
+      }
+      
+      // Create modal HTML
+      const modalHTML = `
+        <div class="owner-details-modal" id="owner-details-modal">
+          <div class="owner-details-content">
+            <div class="owner-details-header">
+              <h3>Owner & Business Details</h3>
+              <button class="close-modal">&times;</button>
+            </div>
+            <div class="owner-details-body">
+              <div class="owner-section">
+                <div class="section-title">Owner Information</div>
+                ${owner.profile_image ? `<img src="../${owner.profile_image}" class="profile-image" alt="Profile">` : ''}
+                <div class="detail-row">
+                  <div class="detail-label">Name:</div>
+                  <div class="detail-value">${owner.first_name} ${owner.last_name}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Email:</div>
+                  <div class="detail-value">${owner.email}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Phone:</div>
+                  <div class="detail-value">${owner.phone || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Status:</div>
+                  <div class="detail-value">
+                    <span class="status-badge ${owner.status}">
+                      ${owner.status.charAt(0).toUpperCase() + owner.status.slice(1)}
+                    </span>
+                  </div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Registered:</div>
+                  <div class="detail-value">${new Date(owner.owner_created).toLocaleDateString()}</div>
+                </div>
+              </div>
+              
+              <div class="business-section">
+                <div class="section-title">Business Information</div>
+                ${owner.logo_path ? `<img src="${owner.logo_path}" class="business-logo" alt="Business Logo">` : ''}
+                <div class="detail-row">
+                  <div class="detail-label">Business Name:</div>
+                  <div class="detail-value">${owner.business_name || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Description:</div>
+                  <div class="detail-value">${owner.business_description || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Address:</div>
+                  <div class="detail-value">${owner.business_address || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Barangay:</div>
+                  <div class="detail-value">${owner.barangay || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Contact Phone:</div>
+                  <div class="detail-value">${owner.contact_phone || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Contact Email:</div>
+                  <div class="detail-value">${owner.contact_email || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Business Hours:</div>
+                  <div class="detail-value">${owner.business_hours || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Special Requirements:</div>
+                  <div class="detail-value">${owner.special_requirements || 'None'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Materials Accepted:</div>
+                  <div class="detail-value">
+                    <div class="materials-list">
+                      ${owner.materials_accepted ? 
+                        owner.materials_accepted.split(', ').map(material => 
+                          `<span class="material-tag">${material}</span>`
+                        ).join('') : 
+                        'N/A'}
+                    </div>
+                  </div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Business Status:</div>
+                  <div class="detail-value">
+                    <span class="status-badge ${owner.business_status}">
+                      ${owner.business_status ? owner.business_status.charAt(0).toUpperCase() + owner.business_status.slice(1) : 'N/A'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="verification-section">
+                <div class="section-title">Verification Details</div>
+                <div class="detail-row">
+                  <div class="detail-label">ID Type:</div>
+                  <div class="detail-value">${owner.id_type || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">ID Number:</div>
+                  <div class="detail-value">${owner.id_number || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Verification Status:</div>
+                  <div class="detail-value">
+                    <span class="status-badge ${owner.verification_status}">
+                      ${owner.verification_status ? owner.verification_status.charAt(0).toUpperCase() + owner.verification_status.slice(1) : 'N/A'}
+                    </span>
+                  </div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">ID Images:</div>
+                  <div class="detail-value">
+                    <div class="id-images">
+                      ${owner.id_front_image ? `<img src="../uploads/ids/${owner.id_front_image}" class="id-image" alt="ID Front">` : 'No front image'}
+                      ${owner.id_back_image ? `<img src="../uploads/ids/${owner.id_back_image}" class="id-image" alt="ID Back">` : 'No back image'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Add modal to the DOM
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      
+      // Show modal
+      const modal = document.getElementById('owner-details-modal');
+      modal.style.display = 'flex';
+      
+      // Close modal when clicking the X button
+      modal.querySelector('.close-modal').addEventListener('click', () => {
+        modal.remove();
+      });
+      
+      // Close modal when clicking outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+
+      setupImageModal();
+    })
+    .catch(error => {
+      console.error('Error fetching owner details:', error);
+      alert('Failed to load owner details');
+    });
+}
+
+function setupImageModal() {
+  // Create modal elements
+  const modalHTML = `
+    <div id="imageModal" class="image-modal">
+      <span class="close-image-modal">&times;</span>
+      <div class="image-modal-content">
+        <img id="modalImage" src="" alt="Enlarged view">
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+  
+  // Add click handlers for all ID images
+  document.querySelectorAll('.id-image').forEach(img => {
+    img.addEventListener('click', function() {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      modal.style.display = 'block';
+      modalImg.src = this.src;
+    });
+  });
+  
+  // Close modal when clicking X
+  document.querySelector('.close-image-modal').addEventListener('click', function() {
+    document.getElementById('imageModal').style.display = 'none';
+  });
+  
+  // Close modal when clicking outside image
+  document.getElementById('imageModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.style.display = 'none';
+    }
+  });
 }
 
 
 
 
-
-
-
-  
 });
 

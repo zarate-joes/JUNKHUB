@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['admin'])) {
+    header('Location: ../Owner Registration/owner_sign_in.php');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,19 +22,18 @@
   <div class="header">
     <div class="divider-line"></div>
 
-    <a href="../User Profile/User.html">
+    <a href="admin_profile.php">
       <div class="profile-icon">
         <img src="./pngs/prof.png" alt="Profile">
       </div>
+      <div class="admin-text">
+        <span>Admin</span>
+      </div>
     </a>
-
-    <div class="admin-text">
-      <span>admin</span>
-    </div>
 
     <div class="notification-icon">
       <i class="fas fa-bell"></i>  
-      <span class="badge">3</span>
+      <span class="badge">1</span>
     </div>
 
     <div class="search-container"> 
@@ -68,6 +75,11 @@
       <div class="menu-item">
         <i class="fas fa-users-cog"></i>
         <span>Manage Users</span>
+      </div>
+
+      <div class="menu-item">
+        <i class="fas fa-user-check"></i>
+        <span>Review Owner Accounts</span>
       </div>
       
       <div class="menu-item sign-out">
@@ -169,13 +181,18 @@
 
 
 
-  <!-- Sign Out Confirmation Modal -->
+
+<!-- Sign Out Confirmation Modal -->
 <div class="signout-modal">
   <div class="signout-modal-content">
-    <h3>Are you sure you want to sign out?</h3>
+    <div class="signout-modal-header">
+      <i class="fas fa-sign-out-alt"></i>
+      <h3>Confirm Sign Out</h3>
+    </div>
+    <p>Are you sure you want to sign out of your admin account?</p>
     <div class="signout-modal-buttons">
-      <button class="signout-confirm-btn">Sign Out</button>
       <button class="signout-cancel-btn">Cancel</button>
+      <button class="signout-confirm-btn">Sign Out</button>
     </div>
   </div>
 </div>

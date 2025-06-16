@@ -244,7 +244,7 @@ function renderProductsTable(products) {
 async function saveProduct(formData) {
     try {
         showLoader();
-        
+
         // Handle file upload
         const imageInput = document.getElementById('product-image');
         if (imageInput.files.length > 0) {
@@ -618,33 +618,34 @@ async function loadSettings() {
     }
 }
 
+// Add this function to populate the form
 function populateSettingsForm(settings) {
     // Owner Information
-    setValueIfExists('account-name', `${settings.owner.first_name} ${settings.owner.last_name}`);
-    setValueIfExists('account-email', settings.owner.email);
-    setValueIfExists('account-phone', settings.owner.phone);
+    if (settings.owner.first_name && settings.owner.last_name) {
+        document.getElementById('account-name').value = `${settings.owner.first_name} ${settings.owner.last_name}`;
+    } else {
+        document.getElementById('account-name').value = '';
+    }
+    document.getElementById('account-email').value = settings.owner.email;
+    document.getElementById('account-phone').value = settings.owner.phone;
 
     // Business Information
     if (settings.business) {
-        setValueIfExists('account-business', settings.business.business_name);
-        setValueIfExists('account-address', settings.business.address);
-        setValueIfExists('shop-description', settings.business.description);
-        
+        document.getElementById('account-business').value = settings.business.business_name || '';
+        document.getElementById('shop-description').value = settings.business.description || '';
+        document.getElementById('account-address').value = settings.business.address || '';
+        document.getElementById('account-barangay').value = settings.business.barangay || ''; // Add this line
+
         // Business Hours - parse the hours string if it exists
         if (settings.business.business_hours) {
             try {
-                // Assuming business_hours is in format like "9AM-5PM"
                 const hoursParts = settings.business.business_hours.split('-');
                 if (hoursParts.length === 2) {
                     const openTime = convertTo24HourFormat(hoursParts[0].trim());
                     const closeTime = convertTo24HourFormat(hoursParts[1].trim());
                     
-                    // Set Monday-Friday hours
-                    const mondayFridayInputs = document.querySelectorAll('.day-hours:nth-child(1) input[type="time"]');
-                    if (mondayFridayInputs.length >= 2) {
-                        mondayFridayInputs[0].value = openTime;
-                        mondayFridayInputs[1].value = closeTime;
-                    }
+                    document.getElementById('weekday-open').value = openTime;
+                    document.getElementById('weekday-close').value = closeTime;
                 }
             } catch (e) {
                 console.error('Error parsing business hours:', e);
@@ -655,10 +656,37 @@ function populateSettingsForm(settings) {
         const logoPreview = document.getElementById('logo-preview');
         if (logoPreview) {
             if (settings.business.logo_path) {
-                logoPreview.src = `../uploads/logos/${settings.business.logo_path}`;
+                logoPreview.src = `${settings.business.logo_path}`;
             } else {
                 logoPreview.src = '../Dashboard/pngs/prof.png';
             }
+        }
+        
+        // Populate materials grid
+        const materialsGrid = document.querySelector('.materials-grid');
+        if (materialsGrid) {
+            const materials = [
+                { id: 'material-plastic', value: 'plastic', label: 'Plastic', icon: '♻️' },
+                { id: 'material-paper', value: 'paper', label: 'Paper', icon: '📄' },
+                { id: 'material-metal', value: 'metal', label: 'Metal', icon: '🔩' },
+                { id: 'material-glass', value: 'glass', label: 'Glass', icon: '🍶' },
+                { id: 'material-electronics', value: 'electronics', label: 'Electronics', icon: '💻' },
+                { id: 'material-textiles', value: 'textiles', label: 'Textiles', icon: '👕' }
+            ];
+            
+            materialsGrid.innerHTML = '';
+            materials.forEach(material => {
+                const isChecked = settings.materials && settings.materials.includes(material.value);
+                materialsGrid.innerHTML += `
+                    <div class="material-item">
+                        <input type="checkbox" id="${material.id}" name="materials[]" value="${material.value}" ${isChecked ? 'checked' : ''}>
+                        <label for="${material.id}">
+                            <span class="material-icon">${material.icon}</span>
+                            <span class="material-name">${material.label}</span>
+                        </label>
+                    </div>
+                `;
+            });
         }
     }
 
@@ -667,19 +695,22 @@ function populateSettingsForm(settings) {
     if (profileImage && settings.owner.profile_image) {
         profileImage.src = `../uploads/profiles/${settings.owner.profile_image}`;
     }
-
-    // Update username in header
-    const usernameElement = document.querySelector('.username');
-    if (usernameElement) {
-        usernameElement.textContent = `${settings.owner.first_name} ${settings.owner.last_name}`;
-    }
 }
 
-// Helper function to convert AM/PM time to 24-hour format
+
+// Helper function to convert AM/PM to 24-hour format
 function convertTo24HourFormat(timeStr) {
+    if (!timeStr) return '';
+    
+    // If already in 24-hour format (HH:MM)
+    if (/^\d{2}:\d{2}$/.test(timeStr)) {
+        return timeStr;
+    }
+    
+    // Handle AM/PM format
     const time = timeStr.toLowerCase();
-    const [hoursStr, period] = time.split(/(am|pm)/);
-    let hours = parseInt(hoursStr);
+    const [timePart, period] = time.split(/(am|pm)/);
+    let [hours, minutes] = timePart.split(':').map(Number);
     
     if (period === 'pm' && hours < 12) {
         hours += 12;
@@ -687,7 +718,7 @@ function convertTo24HourFormat(timeStr) {
         hours = 0;
     }
     
-    return `${hours.toString().padStart(2, '0')}:00`;
+    return `${hours.toString().padStart(2, '0')}:${(minutes || 0).toString().padStart(2, '0')}`;
 }
 
 // Helper function to safely set form values
@@ -701,26 +732,47 @@ function setValueIfExists(elementId, value) {
 async function handleProfileUpdate(e) {
     e.preventDefault();
     
-    const formData = new FormData();
-    formData.append('full_name', document.getElementById('account-name').value);
-    formData.append('email', document.getElementById('account-email').value);
-    formData.append('phone', document.getElementById('account-phone').value);
-    formData.append('business_name', document.getElementById('account-business').value);
-    formData.append('address', document.getElementById('account-address').value);
-    formData.append('description', document.getElementById('shop-description').value);
-    
-    // Business hours would need more complex handling
-    // This is a simplified version
-    const businessHours = document.querySelector('.business-hours input[type="time"]')?.value + 
-                         '-' + document.querySelectorAll('.business-hours input[type="time"]')[1]?.value;
-    formData.append('business_hours', businessHours);
-    
-    const logoFile = document.getElementById('shop-logo').files[0];
-    if (logoFile) {
-        formData.append('logo', logoFile);
-    }
-    
     try {
+        showLoader();
+        
+        const formData = new FormData();
+        
+        // Get name parts - make them optional for updates
+        const fullName = document.getElementById('account-name').value.trim();
+        if (fullName) {
+            const nameParts = fullName.split(' ');
+            formData.append('first_name', nameParts[0]);
+            formData.append('last_name', nameParts.slice(1).join(' ') || '');
+        }
+        
+        formData.append('email', document.getElementById('account-email').value);
+        formData.append('phone', document.getElementById('account-phone').value);
+        
+        // Business information
+        formData.append('business_name', document.getElementById('account-business').value);
+        formData.append('description', document.getElementById('shop-description').value);
+        formData.append('address', document.getElementById('account-address').value);
+        formData.append('barangay', document.getElementById('account-barangay').value);
+        
+        // Business hours
+        const weekdayOpen = document.getElementById('weekday-open').value;
+        const weekdayClose = document.getElementById('weekday-close').value;
+        formData.append('business_hours', `${weekdayOpen}-${weekdayClose}`);
+        
+        // Collect materials
+        const materials = [];
+        document.querySelectorAll('input[name="materials[]"]:checked').forEach(checkbox => {
+            materials.push(checkbox.value);
+        });
+        formData.append('materials', JSON.stringify(materials));
+        
+        // Handle logo upload
+        const logoInput = document.getElementById('shop-logo');
+        if (logoInput.files.length > 0) {
+            formData.append('logo', logoInput.files[0]);
+        }
+        
+        // Send to server
         const response = await fetch('../Backend/update_profile.php', {
             method: 'POST',
             body: formData
@@ -730,52 +782,181 @@ async function handleProfileUpdate(e) {
         
         if (result.success) {
             showToast('Profile updated successfully');
-            loadSettings(); // Refresh the settings
+            loadSettings();
         } else {
-            showError(result.error || 'Update failed');
+            showError(result.error || 'Failed to update profile');
         }
     } catch (error) {
-        showError('Network error during update');
+        console.error('Update error:', error);
+        showError('Failed to update profile: ' + error.message);
+    } finally {
+        hideLoader();
     }
+}
+
+function checkPasswordStrength(password) {
+    let strength = 0;
+    
+    // Length check
+    if (password.length >= 8) strength++;
+    
+    // Contains uppercase
+    if (/[A-Z]/.test(password)) strength++;
+    
+    // Contains lowercase
+    if (/[a-z]/.test(password)) strength++;
+    
+    // Contains number
+    if (/[0-9]/.test(password)) strength++;
+    
+    // Contains special char
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    
+    return strength;
+}
+
+// Add this to your initialization code
+function setupPasswordVisibilityToggle() {
+    // Wait for security tab to be active
+    document.querySelector('.tab-btn[data-tab="security"]').addEventListener('click', function() {
+        // Give a small delay to ensure the inputs are visible
+        setTimeout(() => {
+            const passwordInputs = document.querySelectorAll('#security-settings input[type="password"]');
+            
+            passwordInputs.forEach(input => {
+                // Skip if already has toggle
+                if (input.parentNode.querySelector('.password-toggle')) return;
+                
+                const container = document.createElement('div');
+                container.style.position = 'relative';
+                container.style.display = 'inline-block';
+                container.style.width = '100%';
+                
+                // Wrap the input in the container
+                input.parentNode.insertBefore(container, input);
+                container.appendChild(input);
+                
+                // Add some padding to the input to make space for the icon
+                input.style.paddingRight = '35px';
+                
+                // Create the toggle button
+                const toggle = document.createElement('button');
+                toggle.type = 'button';
+                toggle.className = 'password-toggle';
+                toggle.innerHTML = '<i class="fas fa-eye"></i>';
+                toggle.style.cssText = `
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    color: #666;
+                    padding: 5px;
+                `;
+                
+                // Add hover effect
+                toggle.addEventListener('mouseenter', () => {
+                    toggle.style.color = '#333';
+                });
+                toggle.addEventListener('mouseleave', () => {
+                    toggle.style.color = '#666';
+                });
+                
+                // Toggle password visibility
+                toggle.addEventListener('click', () => {
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    
+                    // Update icon
+                    const icon = toggle.querySelector('i');
+                    if (type === 'password') {
+                        icon.className = 'fas fa-eye';
+                        icon.setAttribute('title', 'Show password');
+                    } else {
+                        icon.className = 'fas fa-eye-slash';
+                        icon.setAttribute('title', 'Hide password');
+                    }
+                });
+                
+                container.appendChild(toggle);
+            });
+        }, 100);
+    });
 }
 
 async function handlePasswordChange(e) {
     e.preventDefault();
-    
-    const formData = {
-        currentPassword: document.getElementById('current-password').value,
-        newPassword: document.getElementById('new-password').value,
-        confirmPassword: document.getElementById('confirm-password').value
-    };
-    
-    if (formData.newPassword !== formData.confirmPassword) {
-        showError('New passwords do not match');
+
+    // Show confirmation dialog
+    if (!confirm("Are you sure you want to change your password?")) {
         return;
     }
-    
+
+    const currentPassword = document.getElementById('current-password').value.trim();
+    const newPassword = document.getElementById('new-password').value.trim();
+    const confirmPassword = document.getElementById('confirm-password').value.trim();
+
+    // Client-side validation
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        showError('All fields are required.');
+        return;
+    }
+
+    if (newPassword.length < 8) {
+        showError('Password must be at least 8 characters.');
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        showError('New passwords do not match.');
+        return;
+    }
+
+    const strength = checkPasswordStrength(newPassword);
+    if (strength < 3) {
+        showError('Password is too weak. Include uppercase, lowercase, numbers, and special characters.');
+        return;
+    }
+
+    showLoader();
+
     try {
         const response = await fetch('../Backend/update_password.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify({ 
+                currentPassword, 
+                newPassword, 
+                confirmPassword 
+            })
         });
-        
+
         const result = await response.json();
         
-        if (result.success) {
-            showToast('Password updated successfully');
-            document.getElementById('current-password').value = '';
-            document.getElementById('new-password').value = '';
-            document.getElementById('confirm-password').value = '';
-        } else {
-            showError(result.error || 'Password update failed');
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || 'Password update failed.');
         }
+
+        showToast('Password updated successfully!');
+        document.getElementById('security-form').reset();
+        
+        // Optional: Auto-logout after successful change
+        setTimeout(() => {
+            window.location.href = '../Backend/logout.php?password_changed=1';
+        }, 2000);
+        
     } catch (error) {
-        showError('Network error during password change');
+        console.error('Password change error:', error);
+        showError(error.message || 'Failed to update password. Please try again.');
+    } finally {
+        hideLoader();
     }
 }
+
 
 async function editProduct(productId) {
     try {
@@ -970,13 +1151,96 @@ function filterProductsByCategory(category) {
 }
 
 // ======================
+// LOGOUT FUNCTIONALITY
+// ======================
+
+function setupLogout() {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showLogoutConfirmation();
+        });
+    }
+}
+
+function showLogoutConfirmation() {
+    const modal = document.createElement('div');
+    modal.className = 'logout-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    `;
+    
+    modal.innerHTML = `
+        <div class="logout-modal-content" style="
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        ">
+            <h3 style="margin-top: 0;">Confirm Logout</h3>
+            <p>Are you sure you want to logout from your account?</p>
+            <div style="display: flex; justify-content: center; gap: 12px; margin-top: 24px;">
+                <button id="cancel-logout" style="
+                    padding: 8px 16px;
+                    background: #f0f0f0;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                ">Cancel</button>
+                <button id="confirm-logout" style="
+                    padding: 8px 16px;
+                    background: #f44336;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                ">Logout</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    document.getElementById('cancel-logout').addEventListener('click', function() {
+        modal.remove();
+    });
+    
+    document.getElementById('confirm-logout').addEventListener('click', function() {
+        window.location.href = '../Backend/logout.php';
+    });
+}
+
+// ======================
 // INITIALIZATION
 // ======================
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initial data load
     loadDashboardData();
-    
+    setupLogout();
+    setupPasswordVisibilityToggle();
+
+    // Add password strength meter
+    const newPasswordInput = document.getElementById('new-password');
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', function() {
+            const strength = checkPasswordStrength(this.value);
+            updatePasswordStrengthMeter(strength);
+        });
+    }
+
     // Tab navigation
     const navItems = document.querySelectorAll('.nav-item');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -996,6 +1260,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
 
     // Settings tabs
     const settingsTabs = document.querySelectorAll('.settings-tabs .tab-btn');
@@ -1121,14 +1386,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Logout button functionality
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-    logoutBtn.addEventListener('click', function() {
-        if (confirm('Are you sure you want to logout?')) {
-        window.location.href = '../Backend/logout.php';
-        }
-    });
+    const settingsForm = document.querySelector('#account-settings .settings-form');
+    if (settingsForm) {
+        settingsForm.addEventListener('submit', handleProfileUpdate);
+    }    
+    // Cancel button
+    const cancelBtn = document.querySelector('#account-settings .btn-cancel');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            // Reload settings to discard changes
+            loadSettings();
+        });
+    }
+
+    const notificationIcon = document.querySelector('.notification-icon');
+    if (notificationIcon) {
+        notificationIcon.addEventListener('click', function() {
+            // Find and click the messages tab
+            const messagesTab = document.querySelector('.nav-item[data-tab="messages"]');
+            if (messagesTab) messagesTab.click();
+        });
+    }
+
+    // Add click handler for user profile
+    const userProfile = document.querySelector('.user-profile');
+    if (userProfile) {
+        userProfile.addEventListener('click', function() {
+            // Find and click the settings tab
+            const settingsTab = document.querySelector('.nav-item[data-tab="settings"]');
+            if (settingsTab) settingsTab.click();
+        });
     }
 
     // Initialize search and filter with 'All' category selected by default
@@ -1150,6 +1437,38 @@ document.addEventListener('DOMContentLoaded', function() {
     // Auto-refresh every 2 minutes
     setInterval(loadDashboardData, 120000);
 });
+
+function updatePasswordStrengthMeter(strength) {
+    const newPasswordInput = document.getElementById('new-password'); // Add this line
+    let meter = document.getElementById('password-strength-meter');
+    if (!meter) {
+        meter = document.createElement('div');
+        meter.id = 'password-strength-meter';
+        meter.style.height = '5px';
+        meter.style.marginTop = '5px';
+        meter.style.borderRadius = '2px';
+        meter.style.transition = 'all 0.3s ease';
+        if (newPasswordInput) { // Add null check
+            newPasswordInput.parentNode.appendChild(meter);
+        }
+    }
+    
+    // Set meter color and width based on strength
+    let color, width;
+    if (strength <= 1) {
+        color = '#ff4444';
+        width = '25%';
+    } else if (strength <= 3) {
+        color = '#ffbb33';
+        width = strength === 2 ? '50%' : '75%';
+    } else {
+        color = '#00C851';
+        width = '100%';
+    }
+    
+    meter.style.backgroundColor = color;
+    meter.style.width = width;
+}
 
 function loadTabContent(tabId) {
     switch(tabId) {
